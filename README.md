@@ -1,0 +1,1 @@
+This is a project with the main purpose of collecting data on how humans interact and react to market movements to try to make money

@@ -1,0 +1,172 @@
+.main-loop {
+  background-color: #0f0f0f;
+  width: 100%;
+  min-width: 1440px;
+  min-height: 1024px;
+  position: relative;
+}
+
+.main-loop .rectangle {
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  width: 920px;
+  height: 761px;
+  background-color: #d9d9d9;
+  border-radius: 26px;
+}
+
+.main-loop .sell-button {
+  position: absolute;
+  top: 876px;
+  left: 690px;
+  width: 159px;
+  height: 63px;
+}
+
+.main-loop .div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 157px;
+  height: 63px;
+  background-color: #f23645;
+  border-radius: 31.5px;
+}
+
+.main-loop .text-wrapper {
+  position: absolute;
+  top: 13px;
+  left: 43px;
+  font-family: "Roboto-Regular", Helvetica;
+  font-weight: 400;
+  color: #ffffff;
+  font-size: 32px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.main-loop .buy-button {
+  position: absolute;
+  top: 876px;
+  left: 192px;
+  width: 159px;
+  height: 63px;
+}
+
+.main-loop .rectangle-2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 157px;
+  height: 63px;
+  background-color: #2962ff;
+  border-radius: 31.5px;
+}
+
+.main-loop .text-wrapper-2 {
+  position: absolute;
+  top: 14px;
+  left: 49px;
+  font-family: "Roboto-Regular", Helvetica;
+  font-weight: 400;
+  color: #ffffff;
+  font-size: 32px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.main-loop .forward-button {
+  position: absolute;
+  top: 856px;
+  left: 470px;
+  width: 104px;
+  height: 104px;
+}
+
+.main-loop .trade-history {
+  position: absolute;
+  top: 240px;
+  left: 1040px;
+  width: 342px;
+  height: 720px;
+}
+
+.main-loop .rectangle-3 {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 340px;
+  height: 660px;
+  background-color: #d9d9d9;
+  border-radius: 0px 0px 26px 26px;
+}
+
+.main-loop .rectangle-4 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 340px;
+  height: 60px;
+  background-color: #afafaf;
+  border-radius: 26px 26px 0px 0px;
+}
+
+.main-loop .text-wrapper-3 {
+  position: absolute;
+  top: 11px;
+  left: 74px;
+  font-family: "Roboto-Regular", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 32px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.main-loop .current-balance {
+  position: absolute;
+  top: 60px;
+  left: 1040px;
+  width: 342px;
+  height: 140px;
+}
+
+.main-loop .rectangle-5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 340px;
+  height: 140px;
+  background-color: #d9d9d9;
+  border-radius: 27px;
+}
+
+.main-loop .text-wrapper-4 {
+  position: absolute;
+  top: 18px;
+  left: 42px;
+  font-family: "Roboto-Regular", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 36px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.main-loop .text-wrapper-5 {
+  position: absolute;
+  top: 142px;
+  left: 1174px;
+  font-family: "Roboto-Regular", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 32px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}

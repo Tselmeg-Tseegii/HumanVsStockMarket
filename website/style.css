@@ -78,14 +78,6 @@
   white-space: nowrap;
 }
 
-.main-loop .forward-button {
-  position: absolute;
-  top: 856px;
-  left: 470px;
-  width: 104px;
-  height: 104px;
-}
-
 .main-loop .trade-history {
   position: absolute;
   top: 240px;

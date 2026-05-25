@@ -1,5 +1,7 @@
 {
+  "type": "module",
   "dependencies": {
+    "express": "^5.2.1",
     "lightweight-charts": "^5.2.0"
   }
 }

@@ -2,23 +2,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta charset="utf-8" />
-<link rel="stylesheet" href="globals.css">
-<link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="globals.css">
+    <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
-<div class="main-loop" ><div class="rectangle" ></div>
-<div class="sell-button" ><div class="div" ></div>
-<div class="text-wrapper" >SELL</div></div>
-<div class="buy-button" ><div class="rectangle-2" ></div>
-<div class="text-wrapper-2" >BUY</div></div>
-<img class="forward-button" src="img/forward-button.png" />
-<div class="trade-history" ><div class="rectangle-3" ></div>
-<div class="rectangle-4" ></div>
-<div class="text-wrapper-3" >Trade History</div></div>
-<div class="current-balance" ><div class="rectangle-5" ></div>
-<div class="text-wrapper-4" >Current Balance</div></div>
-<div class="text-wrapper-5" >$676</div></div>
+    <div class="main-loop" >
+        <div class="chart-rectangle" ></div>
+
+        <div class="sell-button" >
+            <div class="sell-button-rectangle" ></div>
+            <div class="sell-text" >SELL</div>
+        </div>
+        
+        <div class="buy-button" >
+            <div class="buy-button-rectangle" ></div>
+            <div class="buy-text" >BUY</div>
+        </div>
+
+        <img class="forward-button" src="img/forward-button.png" />
+
+        <div class="trade-history" >
+            <div class="trade-history-rectangle" ></div>
+            <div class="header-rectangle" ></div>
+            <div class="header-text" >Trade History</div>
+        </div>
+
+        <div class="current-balance" >
+            <div class="current-balance-rectangle" ></div>
+            <div class="balance-header-text" >Current Balance</div>
+            <div class="current-balance-amount-text" >$676</div>
+        </div>
+    </div>
+
+    <script src="chart_setup.js"></script>
 </body>
 </html>

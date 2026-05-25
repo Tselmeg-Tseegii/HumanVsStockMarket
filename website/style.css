@@ -6,7 +6,7 @@
   position: relative;
 }
 
-.main-loop .rectangle {
+.main-loop .chart-rectangle {
   position: absolute;
   top: 60px;
   left: 60px;
@@ -24,7 +24,7 @@
   height: 63px;
 }
 
-.main-loop .div {
+.main-loop .sell-button-rectangle {
   position: absolute;
   top: 0;
   left: 0;
@@ -34,7 +34,7 @@
   border-radius: 31.5px;
 }
 
-.main-loop .text-wrapper {
+.main-loop .sell-text {
   position: absolute;
   top: 13px;
   left: 43px;
@@ -55,7 +55,7 @@
   height: 63px;
 }
 
-.main-loop .rectangle-2 {
+.main-loop .buy-button-rectangle {
   position: absolute;
   top: 0;
   left: 0;
@@ -65,7 +65,7 @@
   border-radius: 31.5px;
 }
 
-.main-loop .text-wrapper-2 {
+.main-loop .buy-text {
   position: absolute;
   top: 14px;
   left: 49px;
@@ -94,7 +94,7 @@
   height: 720px;
 }
 
-.main-loop .rectangle-3 {
+.main-loop .trade-history-rectangle {
   position: absolute;
   top: 60px;
   left: 0;
@@ -104,7 +104,7 @@
   border-radius: 0px 0px 26px 26px;
 }
 
-.main-loop .rectangle-4 {
+.main-loop .header-rectangle {
   position: absolute;
   top: 0;
   left: 0;
@@ -114,7 +114,7 @@
   border-radius: 26px 26px 0px 0px;
 }
 
-.main-loop .text-wrapper-3 {
+.main-loop .header-text {
   position: absolute;
   top: 11px;
   left: 74px;
@@ -135,7 +135,7 @@
   height: 140px;
 }
 
-.main-loop .rectangle-5 {
+.main-loop .current-balance-rectangle {
   position: absolute;
   top: 0;
   left: 0;
@@ -145,7 +145,7 @@
   border-radius: 27px;
 }
 
-.main-loop .text-wrapper-4 {
+.main-loop .balance-header-text {
   position: absolute;
   top: 18px;
   left: 42px;
@@ -158,7 +158,7 @@
   white-space: nowrap;
 }
 
-.main-loop .text-wrapper-5 {
+.main-loop .current-balance-amount-text {
   position: absolute;
   top: 142px;
   left: 1174px;

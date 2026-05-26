@@ -70,13 +70,23 @@ eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpa
 
 /***/ },
 
+/***/ "./website/chart_data.js"
+/*!*******************************!*\
+  !*** ./website/chart_data.js ***!
+  \*******************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   candleStickData: () => (/* binding */ candleStickData)\n/* harmony export */ });\n\nconst candleStickData = [\n    { time: '2018-12-22', open: 75.16, high: 82.84, low: 36.16, close: 45.72 },\n    { time: '2018-12-23', open: 45.12, high: 53.90, low: 45.12, close: 48.09 },\n    { time: '2018-12-24', open: 60.71, high: 60.71, low: 53.39, close: 59.29 },\n    { time: '2018-12-25', open: 68.26, high: 68.26, low: 59.04, close: 60.50 },\n    { time: '2018-12-26', open: 67.71, high: 105.85, low: 66.67, close: 91.04 },\n    { time: '2018-12-27', open: 91.04, high: 121.40, low: 82.70, close: 111.40 },\n    { time: '2018-12-28', open: 111.51, high: 142.83, low: 103.34, close: 131.25 },\n    { time: '2018-12-29', open: 131.33, high: 151.17, low: 77.68, close: 96.43 },\n    { time: '2018-12-30', open: 106.33, high: 110.20, low: 90.39, close: 98.10 },\n    { time: '2018-12-31', open: 109.87, high: 114.69, low: 85.66, close: 111.26 },\n]\n\n//# sourceURL=webpack:///./website/chart_data.js?\n}");
+
+/***/ },
+
 /***/ "./website/chart_setup.js"
 /*!********************************!*\
   !*** ./website/chart_setup.js ***!
   \********************************/
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var lightweight_charts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lightweight-charts */ \"./node_modules/lightweight-charts/dist/lightweight-charts.development.mjs\");\n\n\nconst chartOptions = {\n    crosshair: {\n        mode: 0\n    }\n}\n\nconst chartRectangle = document.querySelector('.main-loop .chart-rectangle')\n\nconst chart = (0,lightweight_charts__WEBPACK_IMPORTED_MODULE_0__.createChart)(chartRectangle, chartOptions)\n\nconst candleStickSeries = chart.addSeries(lightweight_charts__WEBPACK_IMPORTED_MODULE_0__.CandlestickSeries, {\n    upColor: '#26a69a',\n    downColor: '#ef5350', \n    borderVisible: false,\n    wickUpColor: '#26a69a',\n    wickDownColor: '#ef5350'\n})\n\ncandleStickSeries.setData([\n    { time: '2018-12-22', open: 75.16, high: 82.84, low: 36.16, close: 45.72 },\n    { time: '2018-12-23', open: 45.12, high: 53.90, low: 45.12, close: 48.09 },\n    { time: '2018-12-24', open: 60.71, high: 60.71, low: 53.39, close: 59.29 },\n    { time: '2018-12-25', open: 68.26, high: 68.26, low: 59.04, close: 60.50 },\n    { time: '2018-12-26', open: 67.71, high: 105.85, low: 66.67, close: 91.04 },\n    { time: '2018-12-27', open: 91.04, high: 121.40, low: 82.70, close: 111.40 },\n    { time: '2018-12-28', open: 111.51, high: 142.83, low: 103.34, close: 131.25 },\n    { time: '2018-12-29', open: 131.33, high: 151.17, low: 77.68, close: 96.43 },\n    { time: '2018-12-30', open: 106.33, high: 110.20, low: 90.39, close: 98.10 },\n    { time: '2018-12-31', open: 109.87, high: 114.69, low: 85.66, close: 111.26 },\n]);\n\nchart.timeScale().fitContent();\n\n\n\n//# sourceURL=webpack:///./website/chart_setup.js?\n}");
+eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var lightweight_charts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lightweight-charts */ \"./node_modules/lightweight-charts/dist/lightweight-charts.development.mjs\");\n/* harmony import */ var _chart_data_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chart_data.js */ \"./website/chart_data.js\");\n\n\n\n\nconst chartOptions = {\n    crosshair: {\n        mode: 0\n    }\n}\n\nconst chartRectangle = document.querySelector('.main-loop .chart-rectangle')\n\nconst chart = (0,lightweight_charts__WEBPACK_IMPORTED_MODULE_0__.createChart)(chartRectangle, chartOptions)\n\nconst candleStickSeries = chart.addSeries(lightweight_charts__WEBPACK_IMPORTED_MODULE_0__.CandlestickSeries, {\n    upColor: '#26a69a',\n    downColor: '#ef5350', \n    borderVisible: false,\n    wickUpColor: '#26a69a',\n    wickDownColor: '#ef5350'\n})\n\ncandleStickSeries.setData(_chart_data_js__WEBPACK_IMPORTED_MODULE_1__.candleStickData);\n\nchart.timeScale().fitContent();\n\n\n\n//# sourceURL=webpack:///./website/chart_setup.js?\n}");
 
 /***/ }
 

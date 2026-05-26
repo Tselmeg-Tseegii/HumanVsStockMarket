@@ -3,30 +3,50 @@ import path from 'path'
 import {
     fileURLToPath
 } from 'url'
+import { isTypedArray } from 'util/types'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const dataAPIUrl = 'https://api.twelvedata.com/time_series?symbol=XAU/USD&start_date=2026-3-1&end_date=2026-3-9&interval=15min&apikey='
 const symbol = 'XAU/USD'
-const startingDate = '2026-3-1'
-const endingDate = '2026-3-9'
+const timezone = 'UTC'
+const startingDate = '2026-3-1T23:00:00'
+const endingDate = '2026-3-6T21:30:00'
 const interval = '15min'
+const order = 'asc'
 const apiKey = process.env.TWELVEDATA_MY_API_KEY
 
-const dataAPIUrl = `https://api.twelvedata.com/time_series?
-                    symbol=${symbol}&
-                    start_date=${startingDate}&
-                    end_date=${endingDate}&
-                    interval=${interval}&
-                    apikey=${apiKey}`
+const dataAPIUrl = [`https://api.twelvedata.com/time_series?`,
+                    `symbol=${symbol}&`,
+                    `timezone=${timezone}&`,
+                    `start_date=${startingDate}&`,
+                    `end_date=${endingDate}&`,
+                    `interval=${interval}&`,
+                    `order=${order}&`,
+                    `apikey=${apiKey}`].join('')
 
 async function getDataFromAPIAndSetFile() {
     const response = await fetch(dataAPIUrl)
 
     const candleData = await response.json()
 
-    await fs.writeFile(path.join(__dirname, 'website', 'chart_data.json'), JSON.stringify(candleData, null, 2))
+    const formattedCandleData = candleData['values'].map(candle => {
+
+        const {datetime, open, high, low, close} = candle
+
+        const dateObject = new Date(datetime)
+        const epochSec = Math.floor(dateObject.getTime() / 1000)
+
+        return {
+            time: epochSec,
+            open: Number(open),
+            high: Number(high),
+            low: Number(low),
+            close: Number(close)
+        }
+    })
+
+    await fs.writeFile(path.join(__dirname, 'website', 'chart_data.json'), JSON.stringify(formattedCandleData, null, 2))
 }
 
 getDataFromAPIAndSetFile()

@@ -1,12 +1,13 @@
 import {
     CandlestickSeries,
-    createChart
+    createChart,
+    CrosshairMode,
+    LastPriceAnimationMode
 } from 'lightweight-charts'
 
 const chartOptions = {
-    crosshair: {
-        mode: 0
-    }
+    CrosshairMode: 0,
+    LastPriceAnimationMode: 1
 }
 
 const chartRectangle = document.querySelector('.main-loop .chart-rectangle')

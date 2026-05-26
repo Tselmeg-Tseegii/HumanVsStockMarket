@@ -6,8 +6,8 @@ import {
 } from 'lightweight-charts'
 
 const chartOptions = {
-    CrosshairMode: 0,
-    LastPriceAnimationMode: 1
+    CrosshairMode: CrosshairMode.Normal,
+    LastPriceAnimationMode: LastPriceAnimationMode.OnDataUpdate
 }
 
 const chartRectangle = document.querySelector('.main-loop .chart-rectangle')
@@ -22,14 +22,52 @@ const candleStickSeries = chart.addSeries(CandlestickSeries, {
     wickDownColor: '#ef5350'
 })
 
-async function getChartDataAndSet() {
+candleStickSeries.priceScale().applyOptions({
+    autoScale: true,
+    scaleMargins: {
+        top: 0.2,
+        bottom: 0.2
+    }
+})
+
+async function getChartDataAndUpdate() {
     const response = await fetch('./chart_data.json')
     const candleStickData = await response.json()
 
-    candleStickSeries.setData(candleStickData);
+    const initialCandleStickData = candleStickData.splice(0, 25)
 
-    chart.timeScale().fitContent();
+    candleStickSeries.setData(initialCandleStickData)
+
+    const numCandleSpaceOnRight = 5
+    chart.timeScale().applyOptions({
+        rightOffset: numCandleSpaceOnRight
+    })
+    chart.timeScale().fitContent()
+
+    let previousCandle = initialCandleStickData.at(-1)
+
+    const screenRadius = 50
+    candleStickSeries.applyOptions({
+        autoscaleInfoProvider: () => {
+            return {
+                priceRange: {
+                    minValue: previousCandle.close - screenRadius,
+                    maxValue: previousCandle.close + screenRadius
+                }
+            }
+        }
+    })
+
+    for (let i = 0; i < candleStickData.length; i++) {
+        const newCandle = candleStickData[i]
+        candleStickSeries.update(newCandle)
+
+        const delay = (ms) => new Promise(resolverFunc => setTimeout(resolverFunc, ms))
+        await delay(1000)
+
+        previousCandle = newCandle
+    }
 }
 
-getChartDataAndSet()
+getChartDataAndUpdate()
 

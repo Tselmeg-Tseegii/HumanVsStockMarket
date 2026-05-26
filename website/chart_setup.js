@@ -3,10 +3,6 @@ import {
     createChart
 } from 'lightweight-charts'
 
-import {
-    candleStickData
-} from './chart_data.js'
-
 const chartOptions = {
     crosshair: {
         mode: 0
@@ -25,7 +21,14 @@ const candleStickSeries = chart.addSeries(CandlestickSeries, {
     wickDownColor: '#ef5350'
 })
 
-candleStickSeries.setData(candleStickData);
+async function getChartDataAndSet() {
+    const response = await fetch('./chart_data.json')
+    const candleStickData = await response.json()
 
-chart.timeScale().fitContent();
+    candleStickSeries.setData(candleStickData);
+
+    chart.timeScale().fitContent();
+}
+
+getChartDataAndSet()
 

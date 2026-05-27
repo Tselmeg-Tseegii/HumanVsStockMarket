@@ -5,6 +5,7 @@ import {
     TradeExecute,
     TRADE_EXED,
 } from "./trade_execution.js"
+import { CurrentProfitRender } from "./current_profit_render.js"
 
 const INITIAL_DATA_EVENT = "INITIAL DATA"
 const NEW_CANDLE_EVENT = "NEW CANDLE"
@@ -15,6 +16,7 @@ await priceDataContainer.initialiseItSelfWithData()
 const evenBroadCaster = new EventBroadCaster()
 const mainChart = new Chart()
 const tradeExecuter = new TradeExecute(evenBroadCaster)
+const currentProfitRender = new CurrentProfitRender()
 
 evenBroadCaster.on(INITIAL_DATA_EVENT, (data) => {mainChart.initialiseChartWithData(data)})
 evenBroadCaster.distribute(INITIAL_DATA_EVENT, priceDataContainer.getInitialData())
@@ -23,6 +25,7 @@ evenBroadCaster.on(NEW_CANDLE_EVENT, (candle) => {mainChart.updateChartWithCandl
 evenBroadCaster.on(NEW_CANDLE_EVENT, (candle) => {tradeExecuter.updateCurrCandle(candle)})
 
 evenBroadCaster.on(TRADE_EXED, (tradeInfo) => {mainChart.handleTradeExecution(tradeInfo)})
+evenBroadCaster.on(TRADE_EXED, (tradeInfo) => {currentProfitRender.updateBalance(tradeInfo)})
 
 const intervalID = setInterval(() => {
     const newCandle = priceDataContainer.getNextCandle()

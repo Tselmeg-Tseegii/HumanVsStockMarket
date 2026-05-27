@@ -38,7 +38,8 @@ export class TradeExecute {
             this.eventBroadCaster.distribute(TRADE_EXED, {
                 type: TRADE_EXE_BOUGHT,
                 price: this.currCandle.close,
-                time: this.currCandle.time
+                time: this.currCandle.time,
+                currProfit: this.currProfit
             })
         } else if (tradeType === 'sell') {
             this.isBuy = false
@@ -46,7 +47,8 @@ export class TradeExecute {
             this.eventBroadCaster.distribute(TRADE_EXED, {
                 type: TRADE_EXE_SOLD,
                 price: this.currCandle.close,
-                time: this.currCandle.time
+                time: this.currCandle.time,
+                currProfit: this.currProfit
             })
         }
         this.lastExecutionPrice = this.currCandle.close
@@ -71,6 +73,7 @@ export class TradeExecute {
             type: TRADE_CLOSED,
             time: this.currCandle.time,
             price: this.currCandle.close,
+            currProfit: this.currProfit
         })
     }
 }

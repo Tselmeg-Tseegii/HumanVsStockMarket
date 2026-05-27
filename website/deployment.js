@@ -74,9 +74,9 @@ eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpa
 /*!********************************!*\
   !*** ./website/chart_setup.js ***!
   \********************************/
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+(__webpack_module__, __webpack_exports__, __webpack_require__) {
 
-eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var lightweight_charts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lightweight-charts */ \"./node_modules/lightweight-charts/dist/lightweight-charts.development.mjs\");\n\n\nconst chartOptions = {\n    CrosshairMode: lightweight_charts__WEBPACK_IMPORTED_MODULE_0__.CrosshairMode.Normal,\n    LastPriceAnimationMode: lightweight_charts__WEBPACK_IMPORTED_MODULE_0__.LastPriceAnimationMode.OnDataUpdate\n}\n\nconst chartRectangle = document.querySelector('.main-loop .chart-rectangle')\n\nconst chart = (0,lightweight_charts__WEBPACK_IMPORTED_MODULE_0__.createChart)(chartRectangle, chartOptions)\n\nconst candleStickSeries = chart.addSeries(lightweight_charts__WEBPACK_IMPORTED_MODULE_0__.CandlestickSeries, {\n    upColor: '#26a69a',\n    downColor: '#ef5350', \n    borderVisible: false,\n    wickUpColor: '#26a69a',\n    wickDownColor: '#ef5350'\n})\n\ncandleStickSeries.priceScale().applyOptions({\n    autoScale: true,\n    scaleMargins: {\n        top: 0.2,\n        bottom: 0.2\n    }\n})\n\nasync function getChartDataAndUpdate() {\n    const response = await fetch('./chart_data.json')\n    const candleStickData = await response.json()\n\n    const initialCandleStickData = candleStickData.splice(0, 25)\n\n    candleStickSeries.setData(initialCandleStickData)\n\n    const numCandleSpaceOnRight = 5\n    chart.timeScale().applyOptions({\n        rightOffset: numCandleSpaceOnRight\n    })\n    chart.timeScale().fitContent()\n\n    let previousCandle = initialCandleStickData.at(-1)\n\n    const screenRadius = 50\n    candleStickSeries.applyOptions({\n        autoscaleInfoProvider: () => {\n            return {\n                priceRange: {\n                    minValue: previousCandle.close - screenRadius,\n                    maxValue: previousCandle.close + screenRadius\n                }\n            }\n        }\n    })\n\n    for (let i = 0; i < candleStickData.length; i++) {\n        const newCandle = candleStickData[i]\n        candleStickSeries.update(newCandle)\n\n        const delay = (ms) => new Promise(resolverFunc => setTimeout(resolverFunc, ms))\n        await delay(1000)\n\n        previousCandle = newCandle\n    }\n}\n\ngetChartDataAndUpdate()\n\n\n\n//# sourceURL=webpack:///./website/chart_setup.js?\n}");
+eval("{__webpack_require__.a(__webpack_module__, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var lightweight_charts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lightweight-charts */ \"./node_modules/lightweight-charts/dist/lightweight-charts.development.mjs\");\n\n\nconst INITIAL_DATA_EVENT = \"INITIAL DATA\"\nconst NEW_CANDLE_EVENT = \"NEW CANDLE\"\n\nclass PriceDataContainer {\n    constructor() {\n        this.initialCandles = []\n        this.candlesData = []\n        this.currentCandleIndex = 0\n    }\n\n    async initialiseItSelfWithData() {\n        const response = await fetch('./chart_data.json')\n        const candleStickData = await response.json()\n\n        this.initialCandles = candleStickData.splice(0, 25)\n        this.candlesData = candleStickData\n    }\n\n    getNextCandle() {\n        if (this.currentCandleIndex >= this.candlesData.length) {\n            return null\n        }\n        const newCandle = this.candlesData[this.currentCandleIndex]\n        this.currentCandleIndex++\n        return newCandle\n    }\n\n    getInitialData() {\n        return this.initialCandles\n    }\n    \n}\n\nclass PriceDataDistrbuter {\n    constructor() {\n        this.events = {}\n    }\n\n    on(event, callbackFunc) {\n        if (!this.events[event]) {\n            this.events[event] = []\n        }\n        this.events[event].push(callbackFunc)\n    }\n\n    distrbute(event, data) {\n        if (this.events[event]) {\n            this.events[event].forEach(callBackFunc => {\n                callBackFunc(data)\n            })\n        }\n    }\n}\n\nclass Chart {\n    constructor() {\n        this.chartOptions = {\n            crosshair: {\n                mode: lightweight_charts__WEBPACK_IMPORTED_MODULE_0__.CrosshairMode.Normal,\n            }\n        }\n        \n        const chartRectangle = document.querySelector('.main-loop .chart-rectangle')\n        \n        this.chart = (0,lightweight_charts__WEBPACK_IMPORTED_MODULE_0__.createChart)(chartRectangle, this.chartOptions)\n        \n        this.candleStickSeries = this.chart.addSeries(lightweight_charts__WEBPACK_IMPORTED_MODULE_0__.CandlestickSeries, {\n            upColor: '#26a69a',\n            downColor: '#ef5350', \n            borderVisible: false,\n            wickUpColor: '#26a69a',\n            wickDownColor: '#ef5350',\n            lastPriceAnimation: lightweight_charts__WEBPACK_IMPORTED_MODULE_0__.LastPriceAnimationMode.OnDataUpdate\n        })\n        \n        this.candleStickSeries.priceScale().applyOptions({\n            autoScale: true,\n            scaleMargins: {\n                top: 0.2,\n                bottom: 0.2\n            }\n        })\n\n        this.previousCandle = {}\n    }\n\n    initialiseChartWithData(initialCandleData) {\n        this.candleStickSeries.setData(initialCandleData)\n\n        const numCandleSpaceOnRight = 5\n        this.chart.timeScale().applyOptions({\n            rightOffset: numCandleSpaceOnRight\n        })\n        this.chart.timeScale().fitContent()\n\n        this.previousCandle = initialCandleData.at(-1)\n\n        const screenRadius = 50\n        this.candleStickSeries.applyOptions({\n            autoscaleInfoProvider: () => {\n                return {\n                    priceRange: {\n                        minValue: this.previousCandle.close - screenRadius,\n                        maxValue: this.previousCandle.close + screenRadius\n                    }\n                }\n            }\n        })\n    }\n\n    updateChartWithCandle(newCandle) {\n        this.candleStickSeries.update(newCandle)\n        this.previousCandle = newCandle\n    }\n    \n}\n\nconst priceDataContainer = new PriceDataContainer()\nawait priceDataContainer.initialiseItSelfWithData()\n\nconst priceDistrbuter = new PriceDataDistrbuter()\nconst mainChart = new Chart()\n\npriceDistrbuter.on(INITIAL_DATA_EVENT, (data) => {mainChart.initialiseChartWithData(data)})\npriceDistrbuter.distrbute(INITIAL_DATA_EVENT, priceDataContainer.getInitialData())\n\npriceDistrbuter.on(NEW_CANDLE_EVENT, (candle) => {mainChart.updateChartWithCandle(candle)})\n\nconst intervalID = setInterval(() => {\n    const newCandle = priceDataContainer.getNextCandle()\n    if (!newCandle) {\n        clearInterval(intervalID)\n        return\n    }\n\n    priceDistrbuter.distrbute(NEW_CANDLE_EVENT, newCandle)\n}, 1000)\n\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } }, 1);\n\n//# sourceURL=webpack:///./website/chart_setup.js?\n}");
 
 /***/ }
 
@@ -113,6 +113,82 @@ eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var lig
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/async module */
+/******/ 	(() => {
+/******/ 		var hasSymbol = typeof Symbol === "function";
+/******/ 		var webpackQueues = hasSymbol ? Symbol("webpack queues") : "__webpack_queues__";
+/******/ 		var webpackExports = hasSymbol ? Symbol("webpack exports") : "__webpack_exports__";
+/******/ 		var webpackError = hasSymbol ? Symbol("webpack error") : "__webpack_error__";
+/******/ 		
+/******/ 		var resolveQueue = (queue) => {
+/******/ 			if(queue && queue.d < 1) {
+/******/ 				queue.d = 1;
+/******/ 				queue.forEach((fn) => (fn.r--));
+/******/ 				queue.forEach((fn) => (fn.r-- ? fn.r++ : fn()));
+/******/ 			}
+/******/ 		}
+/******/ 		var wrapDeps = (deps) => (deps.map((dep) => {
+/******/ 			if(dep !== null && typeof dep === "object") {
+/******/ 		
+/******/ 				if(dep[webpackQueues]) return dep;
+/******/ 				if(dep.then) {
+/******/ 					var queue = [];
+/******/ 					queue.d = 0;
+/******/ 					dep.then((r) => {
+/******/ 						obj[webpackExports] = r;
+/******/ 						resolveQueue(queue);
+/******/ 					}, (e) => {
+/******/ 						obj[webpackError] = e;
+/******/ 						resolveQueue(queue);
+/******/ 					});
+/******/ 					var obj = {};
+/******/ 		
+/******/ 					obj[webpackQueues] = (fn) => (fn(queue));
+/******/ 					return obj;
+/******/ 				}
+/******/ 			}
+/******/ 			var ret = {};
+/******/ 			ret[webpackQueues] = x => {};
+/******/ 			ret[webpackExports] = dep;
+/******/ 			return ret;
+/******/ 		}));
+/******/ 		__webpack_require__.a = (module, body, hasAwait) => {
+/******/ 			var queue;
+/******/ 			hasAwait && ((queue = []).d = -1);
+/******/ 			var depQueues = new Set();
+/******/ 			var exports = module.exports;
+/******/ 			var currentDeps;
+/******/ 			var outerResolve;
+/******/ 			var reject;
+/******/ 			var promise = new Promise((resolve, rej) => {
+/******/ 				reject = rej;
+/******/ 				outerResolve = resolve;
+/******/ 			});
+/******/ 			promise[webpackExports] = exports;
+/******/ 			promise[webpackQueues] = (fn) => (queue && fn(queue), depQueues.forEach(fn), promise["catch"](x => {}));
+/******/ 			module.exports = promise;
+/******/ 			var handle = (deps) => {
+/******/ 				currentDeps = wrapDeps(deps);
+/******/ 				var fn;
+/******/ 				var getResult = () => (currentDeps.map((d) => {
+/******/ 		
+/******/ 					if(d[webpackError]) throw d[webpackError];
+/******/ 					return d[webpackExports];
+/******/ 				}))
+/******/ 				var promise = new Promise((resolve) => {
+/******/ 					fn = () => (resolve(getResult));
+/******/ 					fn.r = 0;
+/******/ 					var fnQueue = (q) => (q !== queue && !depQueues.has(q) && (depQueues.add(q), q && !q.d && (fn.r++, q.push(fn))));
+/******/ 					currentDeps.map((dep) => (dep[webpackQueues](fnQueue)));
+/******/ 				});
+/******/ 				return fn.r ? promise : getResult();
+/******/ 			}
+/******/ 			var done = (err) => ((err ? reject(promise[webpackError] = err) : outerResolve(exports)), resolveQueue(queue))
+/******/ 			body(handle, done);
+/******/ 			queue && queue.d < 0 && (queue.d = 0);
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports

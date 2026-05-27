@@ -4,11 +4,12 @@ export const TRADE_EXED = 'TRADE EXECUTED'
 export const TRADE_EXE_BOUGHT = 'BUY EXECUTED'
 export const TRADE_EXE_SOLD = 'SELL EXECUTED'
 export const TRADE_CLOSED = 'POSITION CLOSED'
+export const UNREALISED_PROFIT_UPDATE = 'UNREALISED PROFIT UPDATE'
 
 export class TradeExecute {
     constructor(eventBroadCaster) {
         this.eventBroadCaster = eventBroadCaster
-        this.currProfit = 0
+        this.realisedProfit = 0
         this.currCandle
         this.numPositions = 0
         this.isBuy = false
@@ -25,6 +26,26 @@ export class TradeExecute {
 
     updateCurrCandle(newCandle) {
         this.currCandle = newCandle
+        if (this.numPositions !== 0) {
+            this.broadCastUnrealisedProfit()
+        }
+    }
+
+    broadCastUnrealisedProfit() {
+        const message = {
+            unrealisedProfit: 0
+        }
+
+        const difference = this.currCandle.close - this.lastExecutionPrice
+        if (this.numPositions !== 0) {
+            if (this.isBuy === true) {
+                message.unrealisedProfit += difference
+            } else {
+                message.unrealisedProfit -= difference
+            }
+        }
+        
+        this.eventBroadCaster.distribute(UNREALISED_PROFIT_UPDATE, message)
     }
 
     openPosition(tradeType) {
@@ -39,7 +60,7 @@ export class TradeExecute {
                 type: TRADE_EXE_BOUGHT,
                 price: this.currCandle.close,
                 time: this.currCandle.time,
-                currProfit: this.currProfit
+                realisedProfit: this.realisedProfit
             })
         } else if (tradeType === 'sell') {
             this.isBuy = false
@@ -48,7 +69,7 @@ export class TradeExecute {
                 type: TRADE_EXE_SOLD,
                 price: this.currCandle.close,
                 time: this.currCandle.time,
-                currProfit: this.currProfit
+                realisedProfit: this.realisedProfit
             })
         }
         this.lastExecutionPrice = this.currCandle.close
@@ -63,9 +84,9 @@ export class TradeExecute {
 
         const difference = this.currCandle.close - this.lastExecutionPrice
         if (this.isBuy === true) {
-            this.currProfit += difference
+            this.realisedProfit += difference
         } else {
-            this.currProfit -= difference
+            this.realisedProfit -= difference
         }
         this.numPositions--
 
@@ -73,7 +94,11 @@ export class TradeExecute {
             type: TRADE_CLOSED,
             time: this.currCandle.time,
             price: this.currCandle.close,
-            currProfit: this.currProfit
+            realisedProfit: this.realisedProfit
+        })
+
+        this.eventBroadCaster.distribute(UNREALISED_PROFIT_UPDATE, {
+            unrealisedProfit: 0
         })
     }
 }

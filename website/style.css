@@ -162,3 +162,35 @@
   line-height: normal;
   white-space: nowrap;
 }
+
+
+.main-loop .close-button {
+  position: absolute;
+  top: 876px;
+  left: 441px;
+  width: 159px;
+  height: 63px;
+}
+
+.main-loop .close-button-rectangle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 157px;
+  height: 63px;
+  background-color: #afafaf;
+  border-radius: 31.5px;
+}
+
+.main-loop .close-text {
+  position: absolute;
+  top: 14px;
+  left: 49px;
+  font-family: "Roboto-Regular", Helvetica;
+  font-weight: 400;
+  color: #ffffff;
+  font-size: 32px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}

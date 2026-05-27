@@ -62,8 +62,9 @@ class PriceDataDistrbuter {
 class Chart {
     constructor() {
         this.chartOptions = {
-            CrosshairMode: CrosshairMode.Normal,
-            LastPriceAnimationMode: LastPriceAnimationMode.OnDataUpdate
+            crosshair: {
+                mode: CrosshairMode.Normal,
+            }
         }
         
         const chartRectangle = document.querySelector('.main-loop .chart-rectangle')
@@ -75,7 +76,8 @@ class Chart {
             downColor: '#ef5350', 
             borderVisible: false,
             wickUpColor: '#26a69a',
-            wickDownColor: '#ef5350'
+            wickDownColor: '#ef5350',
+            lastPriceAnimation: LastPriceAnimationMode.OnDataUpdate
         })
         
         this.candleStickSeries.priceScale().applyOptions({

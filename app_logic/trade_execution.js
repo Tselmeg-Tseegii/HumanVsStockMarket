@@ -17,9 +17,9 @@ export class TradeExecute {
         this.lastExeCandle = null
         this.tradeHistory = []
 
-        this.buyButton = document.querySelector('.buy-button')
-        this.sellButton = document.querySelector('.sell-button')
-        this.closeButton = document.querySelector('.close-button')
+        this.buyButton = document.querySelector('.main-loop .left-panel .button-row .buy-button')
+        this.sellButton = document.querySelector('.main-loop .left-panel .button-row .sell-button')
+        this.closeButton = document.querySelector('.main-loop .left-panel .button-row .close-button')
 
         this.buyButton.addEventListener('click', () => {this.openPosition('buy')})
         this.sellButton.addEventListener('click', () => {this.openPosition('sell')})

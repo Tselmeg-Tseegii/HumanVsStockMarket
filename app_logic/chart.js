@@ -26,9 +26,9 @@ export class Chart {
             }
         }
         
-        const chartRectangle = document.querySelector('.main-loop .chart-rectangle')
+        this.chartRectangle = document.querySelector('.main-loop .left-panel .chart-rectangle')
         
-        this.chart = createChart(chartRectangle, this.chartOptions)
+        this.chart = createChart(this.chartRectangle, this.chartOptions)
         
         this.candleStickSeries = this.chart.addSeries(CandlestickSeries, {
             upColor: '#26a69a',
@@ -50,6 +50,20 @@ export class Chart {
         this.previousCandle = {}
         this.activePriceLine = null
         this.tradeMarkers = []
+
+        this.resizeObserver = new ResizeObserver(entries => {
+            if (entries.length === 0 | entries[0].target !== this.chartRectangle) {
+                return
+            }
+            const newRect = entries[0].contentRect
+
+            this.chart.applyOptions({
+                width: newRect.width,
+                height: newRect.height
+            })
+        })
+
+        this.resizeObserver.observe(this.chartRectangle)
     }
 
     initialiseChartWithData(initialCandleData) {

@@ -86,7 +86,7 @@
   height: 560px;
 }
 
-.main-loop .trade-history-rectangle {
+.main-loop .trade-history .trade-history-rectangle {
   position: absolute;
   top: 60px;
   left: 0;
@@ -96,7 +96,31 @@
   border-radius: 0px 0px 26px 26px;
 }
 
-.main-loop .header-rectangle {
+.main-loop .trade-history .trade-history-rectangle .list {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 320px;
+  height: 460px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.main-loop .trade-history .trade-history-rectangle .list li {
+  font-family: "Roboto-Regular", Helvetica, sans-serif;
+  font-size: 24px;
+  color: #000000;
+  padding: 16px 10px;
+  border-top: 1px solid #afafaf;
+}
+
+.main-loop .trade-history .trade-history-rectangle .list li:first-child {
+  border-top: none;
+}
+
+.main-loop .trade-history .header-rectangle {
   position: absolute;
   top: 0;
   left: 0;

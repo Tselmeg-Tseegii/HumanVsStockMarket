@@ -5,6 +5,7 @@ export const TRADE_EXE_BOUGHT = 'BUY EXECUTED'
 export const TRADE_EXE_SOLD = 'SELL EXECUTED'
 export const TRADE_CLOSED = 'POSITION CLOSED'
 export const UNREALISED_PROFIT_UPDATE = 'UNREALISED PROFIT UPDATE'
+export const HISTORY_UPDATE = 'NEW HISTORY ITEM'
 
 export class TradeExecute {
     constructor(eventBroadCaster) {
@@ -13,7 +14,8 @@ export class TradeExecute {
         this.currCandle
         this.numPositions = 0
         this.isBuy = false
-        this.lastExecutionPrice = 0
+        this.lastExeCandle = null
+        this.tradeHistory = []
 
         this.buyButton = document.querySelector('.buy-button')
         this.sellButton = document.querySelector('.sell-button')
@@ -36,7 +38,7 @@ export class TradeExecute {
             unrealisedProfit: 0
         }
 
-        const difference = this.currCandle.close - this.lastExecutionPrice
+        const difference = this.currCandle.close - this.lastExeCandle.close
         if (this.numPositions !== 0) {
             if (this.isBuy === true) {
                 message.unrealisedProfit += difference
@@ -72,7 +74,7 @@ export class TradeExecute {
                 realisedProfit: this.realisedProfit
             })
         }
-        this.lastExecutionPrice = this.currCandle.close
+        this.lastExeCandle = this.currCandle
         this.numPositions++
     }
 
@@ -82,13 +84,27 @@ export class TradeExecute {
             return
         }
 
-        const difference = this.currCandle.close - this.lastExecutionPrice
+        const tradeHistoryItem = {}
+        tradeHistoryItem['outcome'] = 0
+
+        const difference = this.currCandle.close - this.lastExeCandle.close
         if (this.isBuy === true) {
             this.realisedProfit += difference
+            tradeHistoryItem['type'] = TRADE_EXE_BOUGHT
+            tradeHistoryItem['outcome'] += difference
         } else {
             this.realisedProfit -= difference
+            tradeHistoryItem['type'] = TRADE_EXE_SOLD
+            tradeHistoryItem['outcome'] -= difference
         }
         this.numPositions--
+
+        tradeHistoryItem['start-time'] = this.lastExeCandle.time
+        tradeHistoryItem['end-time'] = this.currCandle.time
+        tradeHistoryItem['start-price'] = this.lastExeCandle.close
+        tradeHistoryItem['end-price'] = this.currCandle.close
+
+        this.tradeHistory.push(tradeHistoryItem)
 
         this.eventBroadCaster.distribute(TRADE_EXED, {
             type: TRADE_CLOSED,
@@ -100,5 +116,7 @@ export class TradeExecute {
         this.eventBroadCaster.distribute(UNREALISED_PROFIT_UPDATE, {
             unrealisedProfit: 0
         })
+
+        this.eventBroadCaster.distribute(HISTORY_UPDATE, tradeHistoryItem)
     }
 }

@@ -15,6 +15,7 @@ import { EndingStat } from "./ending_stats.js"
 export const INITIAL_DATA_EVENT = "INITIAL DATA"
 export const NEW_CANDLE_EVENT = "NEW CANDLE"
 export const END_OF_DATA = "NO MORE DATA"
+export const SAFE_TO_REDIRECT_END_STATS = "NOW SAFE TO REDIRECT TO END STATISTICS PAGE"
 
 const priceDataContainer = new PriceDataContainer()
 await priceDataContainer.initialiseItSelfWithData()
@@ -25,7 +26,7 @@ const tradeExecuter = new TradeExecute(evenBroadCaster)
 const realisedProfitRender = new RealisedProfitRender()
 const unrealisedProfitRender = new UnrealisedProfitRender()
 const tradeHistoryRender = new TradeHistoryRender()
-const endingStatManager = new EndingStat()
+const endingStatManager = new EndingStat(evenBroadCaster)
 
 evenBroadCaster.on(INITIAL_DATA_EVENT, (data) => {mainChart.initialiseChartWithData(data)})
 evenBroadCaster.distribute(INITIAL_DATA_EVENT, priceDataContainer.getInitialData())
@@ -44,13 +45,14 @@ evenBroadCaster.on(HISTORY_UPDATE, (tradeInfo) => {tradeHistoryRender.updateHist
 
 evenBroadCaster.on(FULL_HISTORY, (tradeHistory) => {endingStatManager.getTradeHistory(tradeHistory)})
 
+evenBroadCaster.on(SAFE_TO_REDIRECT_END_STATS, () => {
+    window.location.href = "ending_stats.html"
+})
+
 const intervalID = setInterval(() => {
     const newCandle = priceDataContainer.getNextCandle()
     if (!newCandle) {
         evenBroadCaster.distribute(END_OF_DATA)
-
-        
-        window.location.href = "ending_stats.html"
 
         clearInterval(intervalID)
         return

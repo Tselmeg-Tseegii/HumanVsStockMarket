@@ -3,7 +3,7 @@ import { TRADE_CLOSED } from "./trade_execution.js"
 
 export class RealisedProfitRender {
     constructor() {
-        this.currentBalanceText = document.querySelector('.main-loop .right-panel .realised-profit .amount-text')
+        this.currentBalanceText = document.querySelector('.main-loop .panels-container .right-panel .realised-profit .amount-text')
         this.currentBalanceText.textContent = `$0.00`
     }
 
@@ -23,7 +23,7 @@ export class RealisedProfitRender {
 
 export class UnrealisedProfitRender {
     constructor() {
-        this.currentBalanceText = document.querySelector('.main-loop .right-panel .unrealised-profit .amount-text')
+        this.currentBalanceText = document.querySelector('.main-loop .panels-container .right-panel .unrealised-profit .amount-text')
         this.currentBalanceText.textContent = `$0.00`
     }
 

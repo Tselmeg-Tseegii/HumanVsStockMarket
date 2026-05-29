@@ -26,7 +26,7 @@ export class Chart {
             }
         }
         
-        this.chartRectangle = document.querySelector('.main-loop .left-panel .chart-rectangle')
+        this.chartRectangle = document.querySelector('.main-loop .panels-container .left-panel .chart-rectangle')
         
         this.chart = createChart(this.chartRectangle, this.chartOptions)
         

@@ -8,45 +8,87 @@
 </head>
 <body>
     <div class="main-loop">
+
+        <header class="end-of-data-texts hidden">
+            <h1 class="main-title">YOU FINISHED</h1>
+            <h2 class="sub-title">You can now interact with the chart to scroll and navigate. You can also see your stats. When you are finished looking, press the button in the corner</h2>
+        </header>
         
-        <div class="left-panel">
-            <div class="chart-rectangle"></div>
-            
-            <div class="button-row">
-                <button class="buy-button">BUY</button>
-                <button class="close-button">CLOSE</button>
-                <button class="sell-button">SELL</button>
-            </div>
-        </div>
-
-        <div class="right-panel">
-            <div class="profit-card realised-profit">
-                <div class="header-text">Realised Profit</div>
-                <div class="amount-text">$0.00</div>
-            </div>
-
-            <div class="profit-card unrealised-profit">
-                <div class="header-text">Unrealised Profit</div>
-                <div class="amount-text">$0.00</div>
-            </div>
-
-            <div class="trade-history">
-                <div class="header-rectangle">
-                    <div class="header-text">Trade History</div>
+        <div class="panels-container">
+            <div class="left-panel">
+                <div class="chart-rectangle"></div>
+                
+                <div class="button-row">
+                    <button class="buy-button">BUY</button>
+                    <button class="close-button">CLOSE</button>
+                    <button class="sell-button">SELL</button>
                 </div>
-
-                <div class="trade-history-content">
-                    <div class="subheading">
-                        <div class="col-num">Number</div>
-                        <div class="col-type">Type</div>
-                        <div class="col-outcome">Outcome</div>
+            </div>
+    
+            <div class="right-panel">
+                <div class="profit-card realised-profit">
+                    <div class="header-text">Realised Profit</div>
+                    <div class="amount-text">$0.00</div>
+                </div>
+    
+                <div class="profit-card unrealised-profit">
+                    <div class="header-text">Unrealised Profit</div>
+                    <div class="amount-text">$0.00</div>
+                </div>
+    
+                <div class="trade-stats-card hidden">
+                    <div class="header-section">
+                        <span class="header-text">Trade Stats</span>
                     </div>
                     
-                    <ul class="list"></ul>
+                    <div class="body-section">
+                        <div class="stat-row">
+                            <span class="text">Net Profit</span>
+                            <span class="amount">$676</span>
+                        </div>
+                
+                        <div class="stat-row">
+                            <span class="text">Number of Trades</span>
+                            <span class="amount">67</span>
+                        </div>
+                
+                        <div class="stat-row">
+                            <span class="text">Win Rate</span>
+                            <span class="amount">67%</span>
+                        </div>
+                
+                        <div class="stat-row">
+                            <span class="text">Buy Win Rate</span>
+                            <span class="amount">76%</span>
+                        </div>
+                
+                        <div class="stat-row">
+                            <span class="text">Sell Win Rate</span>
+                            <span class="amount">50%</span>
+                        </div>
+                    </div>
                 </div>
+    
+                <div class="trade-history">
+                    <div class="header-rectangle">
+                        <div class="header-text">Trade History</div>
+                    </div>
+    
+                    <div class="trade-history-content">
+                        <div class="subheading">
+                            <div class="col-num">Number</div>
+                            <div class="col-type">Type</div>
+                            <div class="col-outcome">Outcome</div>
+                        </div>
+                        
+                        <ul class="list"></ul>
+                    </div>
+                </div>
+    
+                <button class="finished-looking-button hidden">FINISHED LOOKING</button>
+    
             </div>
         </div>
-
     </div>
 
     <script type="module" src="index_deployment.js"></script>

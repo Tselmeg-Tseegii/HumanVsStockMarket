@@ -4,9 +4,11 @@ import { SAVED_TRADE_HISTORY } from "./constants.js"
 export class TradeStats {
     constructor(eventBroadCaster) {
         this.eventBroadCaster = eventBroadCaster
-        this.tradeHistory = sessionStorage.getItem(SAVED_TRADE_HISTORY)
+        this.tradeHistory = []
+    }
 
-        console.log(this.tradeHistory)
+    recieveTradeHistory(tradeHistoryMsg) {
+        this.tradeHistory = tradeHistoryMsg
     }
 
 }

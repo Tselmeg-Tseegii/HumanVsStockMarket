@@ -1,5 +1,4 @@
-import { SAVED_TRADE_HISTORY } from "./constants.js"
-import { SAFE_TO_REDIRECT_END_STATS } from "./game_loop.js"
+import { FULL_TRADE_HISTORY, SAVED_TRADE_HISTORY } from "./constants.js"
 
 export const TRADE_EXED = 'TRADE EXECUTED'
 export const TRADE_EXE_BOUGHT = 'BUY EXECUTED'
@@ -18,9 +17,9 @@ export class TradeExecute {
         this.lastExeCandle = null
         this.tradeHistory = []
 
-        this.buyButton = document.querySelector('.main-loop .left-panel .button-row .buy-button')
-        this.sellButton = document.querySelector('.main-loop .left-panel .button-row .sell-button')
-        this.closeButton = document.querySelector('.main-loop .left-panel .button-row .close-button')
+        this.buyButton = document.querySelector('.main-loop .panels-container .left-panel .button-row .buy-button')
+        this.sellButton = document.querySelector('.main-loop .panels-container .left-panel .button-row .sell-button')
+        this.closeButton = document.querySelector('.main-loop .panels-container .left-panel .button-row .close-button')
 
         this.buyButton.addEventListener('click', () => {this.openPosition('buy')})
         this.sellButton.addEventListener('click', () => {this.openPosition('sell')})
@@ -121,9 +120,7 @@ export class TradeExecute {
         this.eventBroadCaster.distribute(HISTORY_UPDATE, tradeHistoryItem)
     }
 
-    saveHistory() {
-        sessionStorage.setItem(SAVED_TRADE_HISTORY, JSON.stringify(this.tradeHistory))
-
-        this.eventBroadCaster.distribute(SAFE_TO_REDIRECT_END_STATS)
+    saveAndBroadCastHistory() {
+        this.eventBroadCaster.distribute(FULL_TRADE_HISTORY, this.tradeHistory)
     }
 }

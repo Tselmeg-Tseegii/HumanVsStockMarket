@@ -6,6 +6,7 @@ export const TRADE_EXE_SOLD = 'SELL EXECUTED'
 export const TRADE_CLOSED = 'POSITION CLOSED'
 export const UNREALISED_PROFIT_UPDATE = 'UNREALISED PROFIT UPDATE'
 export const HISTORY_UPDATE = 'NEW HISTORY ITEM'
+export const FULL_HISTORY = 'FULL HISTORY TRANSMISSION'
 
 export class TradeExecute {
     constructor(eventBroadCaster) {
@@ -118,5 +119,10 @@ export class TradeExecute {
         })
 
         this.eventBroadCaster.distribute(HISTORY_UPDATE, tradeHistoryItem)
+    }
+
+    saveAndBroadCastHistory() {
+        console.log('hello')
+        this.eventBroadCaster.distribute(FULL_HISTORY, this.tradeHistory)
     }
 }

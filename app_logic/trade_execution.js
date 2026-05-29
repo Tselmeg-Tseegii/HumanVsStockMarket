@@ -1,4 +1,5 @@
-
+import { SAVED_TRADE_HISTORY } from "./constants.js"
+import { SAFE_TO_REDIRECT_END_STATS } from "./game_loop.js"
 
 export const TRADE_EXED = 'TRADE EXECUTED'
 export const TRADE_EXE_BOUGHT = 'BUY EXECUTED'
@@ -6,7 +7,6 @@ export const TRADE_EXE_SOLD = 'SELL EXECUTED'
 export const TRADE_CLOSED = 'POSITION CLOSED'
 export const UNREALISED_PROFIT_UPDATE = 'UNREALISED PROFIT UPDATE'
 export const HISTORY_UPDATE = 'NEW HISTORY ITEM'
-export const FULL_HISTORY = 'FULL HISTORY TRANSMISSION'
 
 export class TradeExecute {
     constructor(eventBroadCaster) {
@@ -121,8 +121,9 @@ export class TradeExecute {
         this.eventBroadCaster.distribute(HISTORY_UPDATE, tradeHistoryItem)
     }
 
-    saveAndBroadCastHistory() {
-        console.log('hello')
-        this.eventBroadCaster.distribute(FULL_HISTORY, this.tradeHistory)
+    saveHistory() {
+        sessionStorage.setItem(SAVED_TRADE_HISTORY, JSON.stringify(this.tradeHistory))
+
+        this.eventBroadCaster.distribute(SAFE_TO_REDIRECT_END_STATS)
     }
 }

@@ -37,6 +37,8 @@ evenBroadCaster.on(NEW_CANDLE_EVENT, (candle) => {tradeExecuter.updateCurrCandle
 evenBroadCaster.on(END_OF_DATA, () => {tradeExecuter.saveAndBroadCastHistory()})
 evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {tradeStatsCalc.recieveTradeHistory(tradeHist)})
 
+evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {mainChart.displayTradeLines(tradeHist)})
+
 evenBroadCaster.on(TRADE_EXED, (tradeInfo) => {mainChart.handleTradeExecution(tradeInfo)})
 evenBroadCaster.on(TRADE_EXED, (tradeInfo) => {realisedProfitRender.updateBalance(tradeInfo)})
 evenBroadCaster.on(UNREALISED_PROFIT_UPDATE, (unrealisedProfitInfo) => {unrealisedProfitRender.updateBalance(unrealisedProfitInfo)})
@@ -45,6 +47,8 @@ evenBroadCaster.on(HISTORY_UPDATE, (tradeInfo) => {tradeHistoryRender.updateHist
 //ending stats sequence
 evenBroadCaster.on(END_OF_DATA, () => {
     const unrealisedProfitPanel = document.querySelector('.main-loop .panels-container .right-panel .unrealised-profit')
+    const realisedProfitPanel = document.querySelector('.main-loop .panels-container .right-panel .realised-profit')
+
     const statsPanel = document.querySelector('.main-loop .panels-container .right-panel .trade-stats-card')
     const finishedButton = document.querySelector('.main-loop .panels-container .right-panel .finished-looking-button')
 
@@ -53,7 +57,13 @@ evenBroadCaster.on(END_OF_DATA, () => {
     finishedMessage.classList.remove('hidden')
 
     unrealisedProfitPanel.classList.add('hidden')
+    realisedProfitPanel.classList.add('hidden')
+
     statsPanel.classList.remove('hidden')
+    tradeStatsCalc.displayStats()
+
+    mainChart.enableNavigation()
+
     finishedButton.classList.remove('hidden')
 
     const buyButton = document.querySelector('.main-loop .panels-container .left-panel .button-row .buy-button')
@@ -66,7 +76,7 @@ evenBroadCaster.on(END_OF_DATA, () => {
 })
 
 evenBroadCaster.on(SAFE_TO_REDIRECT_END_STATS, () => {
-    window.location.href = "ending_stats.html"
+    window.location.href = "ending.html"
 })
 
 const intervalID = setInterval(() => {

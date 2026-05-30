@@ -3,7 +3,8 @@ import {
     createChart,
     createSeriesMarkers,
     CrosshairMode,
-    LastPriceAnimationMode
+    LastPriceAnimationMode,
+    LineSeries
 } from 'lightweight-charts'
 
 import { 
@@ -15,7 +16,8 @@ import {
 import {
     buyBlueColor,
     sellRedColor,
-    closeGreyColor
+    closeGreyColor,
+    greenColor
 } from './constants.js'
 
 export class Chart {
@@ -23,7 +25,9 @@ export class Chart {
         this.chartOptions = {
             crosshair: {
                 mode: CrosshairMode.Normal,
-            }
+            },
+            handleScroll: false,
+            handleScale: false
         }
         
         this.chartRectangle = document.querySelector('.main-loop .panels-container .left-panel .chart-rectangle')
@@ -64,6 +68,16 @@ export class Chart {
         })
 
         this.resizeObserver.observe(this.chartRectangle)
+    }
+
+    enableNavigation() {
+        this.chart.applyOptions({
+            handleScale: true,
+            handleScroll: true
+        })
+        this.chart.priceScale('right').applyOptions({
+            autoScale: false
+        })
     }
 
     initialiseChartWithData(initialCandleData) {
@@ -135,6 +149,25 @@ export class Chart {
         if (tradeInfo['type'] !== TRADE_CLOSED) {
             this.activePriceLine = this.candleStickSeries.createPriceLine(line)
         } 
+    }
+
+    displayTradeLines(tradeHistory) {
+        this.tradeHistoryLineSeries = tradeHistory.map((trade) => {
+            const tradeLineSeries = this.chart.addSeries(LineSeries, {
+                color: (trade['outcome'] > 0) ? greenColor : sellRedColor,
+                lineWidth: 2,
+                lineStyle: 2,
+                priceLineVisible: false,
+                lastValueVisible: false,
+                crosshairMarkerVisible: false
+            })
+
+            tradeLineSeries.setData([
+                { time: trade['start-time'], value: trade['start-price']},
+                { time: trade['end-time'], value: trade['end-price']},
+            ])
+            return tradeLineSeries
+        })
     }
     
 }

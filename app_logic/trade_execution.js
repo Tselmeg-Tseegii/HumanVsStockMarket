@@ -1,4 +1,4 @@
-
+import { FULL_TRADE_HISTORY, SAVED_TRADE_HISTORY } from "./constants.js"
 
 export const TRADE_EXED = 'TRADE EXECUTED'
 export const TRADE_EXE_BOUGHT = 'BUY EXECUTED'
@@ -17,9 +17,9 @@ export class TradeExecute {
         this.lastExeCandle = null
         this.tradeHistory = []
 
-        this.buyButton = document.querySelector('.main-loop .left-panel .button-row .buy-button')
-        this.sellButton = document.querySelector('.main-loop .left-panel .button-row .sell-button')
-        this.closeButton = document.querySelector('.main-loop .left-panel .button-row .close-button')
+        this.buyButton = document.querySelector('.main-loop .panels-container .left-panel .button-row .buy-button')
+        this.sellButton = document.querySelector('.main-loop .panels-container .left-panel .button-row .sell-button')
+        this.closeButton = document.querySelector('.main-loop .panels-container .left-panel .button-row .close-button')
 
         this.buyButton.addEventListener('click', () => {this.openPosition('buy')})
         this.sellButton.addEventListener('click', () => {this.openPosition('sell')})
@@ -118,5 +118,9 @@ export class TradeExecute {
         })
 
         this.eventBroadCaster.distribute(HISTORY_UPDATE, tradeHistoryItem)
+    }
+
+    saveAndBroadCastHistory() {
+        this.eventBroadCaster.distribute(FULL_TRADE_HISTORY, this.tradeHistory)
     }
 }

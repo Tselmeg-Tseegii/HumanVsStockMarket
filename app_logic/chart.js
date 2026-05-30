@@ -3,7 +3,8 @@ import {
     createChart,
     createSeriesMarkers,
     CrosshairMode,
-    LastPriceAnimationMode
+    LastPriceAnimationMode,
+    LineSeries
 } from 'lightweight-charts'
 
 import { 
@@ -15,7 +16,8 @@ import {
 import {
     buyBlueColor,
     sellRedColor,
-    closeGreyColor
+    closeGreyColor,
+    greenColor
 } from './constants.js'
 
 export class Chart {
@@ -23,10 +25,12 @@ export class Chart {
         this.chartOptions = {
             crosshair: {
                 mode: CrosshairMode.Normal,
-            }
+            },
+            handleScroll: false,
+            handleScale: false
         }
         
-        this.chartRectangle = document.querySelector('.main-loop .left-panel .chart-rectangle')
+        this.chartRectangle = document.querySelector('.main-loop .panels-container .left-panel .chart-rectangle')
         
         this.chart = createChart(this.chartRectangle, this.chartOptions)
         
@@ -66,6 +70,16 @@ export class Chart {
         this.resizeObserver.observe(this.chartRectangle)
     }
 
+    enableNavigation() {
+        this.chart.applyOptions({
+            handleScale: true,
+            handleScroll: true
+        })
+        this.chart.priceScale('right').applyOptions({
+            autoScale: false
+        })
+    }
+
     initialiseChartWithData(initialCandleData) {
         this.candleStickSeries.setData(initialCandleData)
 
@@ -99,6 +113,7 @@ export class Chart {
         const newMarker = {
             time: tradeInfo.time,
             position: 'belowBar',
+            size: 0.5
         }
 
         const line = {
@@ -112,19 +127,19 @@ export class Chart {
         if (tradeInfo['type'] === TRADE_EXE_BOUGHT) {
             newMarker['color'] = buyBlueColor
             newMarker['shape'] = 'arrowUp'
-            newMarker['text'] = `BUY @ $${tradeInfo.price}`
+            newMarker['text'] = `BUY`
 
             line['color'] = buyBlueColor
         } else if (tradeInfo['type'] === TRADE_EXE_SOLD) {
             newMarker['color'] = sellRedColor
             newMarker['shape'] = 'arrowDown'
-            newMarker['text'] = `SELL @ $${tradeInfo.price}`
+            newMarker['text'] = `SELL`
 
             line['color'] = sellRedColor
         } else {
             newMarker['color'] = closeGreyColor
             newMarker['shape'] = 'circle'
-            newMarker['text'] = `CLOSED @ $${tradeInfo.price}`
+            newMarker['text'] = `CLOSED`
 
             this.candleStickSeries.removePriceLine(this.activePriceLine)
         }
@@ -135,6 +150,25 @@ export class Chart {
         if (tradeInfo['type'] !== TRADE_CLOSED) {
             this.activePriceLine = this.candleStickSeries.createPriceLine(line)
         } 
+    }
+
+    displayTradeLines(tradeHistory) {
+        this.tradeHistoryLineSeries = tradeHistory.map((trade) => {
+            const tradeLineSeries = this.chart.addSeries(LineSeries, {
+                color: (trade['outcome'] > 0) ? greenColor : sellRedColor,
+                lineWidth: 2,
+                lineStyle: 2,
+                priceLineVisible: false,
+                lastValueVisible: false,
+                crosshairMarkerVisible: false
+            })
+
+            tradeLineSeries.setData([
+                { time: trade['start-time'], value: trade['start-price']},
+                { time: trade['end-time'], value: trade['end-price']},
+            ])
+            return tradeLineSeries
+        })
     }
     
 }

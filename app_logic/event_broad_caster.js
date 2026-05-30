@@ -15,7 +15,11 @@ export class EventBroadCaster {
     distribute(event, data) {
         if (this.events[event]) {
             this.events[event].forEach(callBackFunc => {
-                callBackFunc(data)
+                if (data !== undefined) {
+                    callBackFunc(data)
+                } else {
+                    callBackFunc()
+                }
             })
         }
     }

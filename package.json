@@ -4,8 +4,8 @@
     "build": "webpack --mode production",
     "dev": "webpack --mode development"
   },
-
   "dependencies": {
+    "canvas-confetti": "^1.9.4",
     "express": "^5.2.1",
     "lightweight-charts": "^5.2.0"
   },

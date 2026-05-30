@@ -5,7 +5,7 @@ import {
 
 export class TradeHistoryRender {
     constructor() {
-        this.list = document.querySelector('.main-loop .right-panel .trade-history .trade-history-content .list')
+        this.list = document.querySelector('.main-loop .panels-container .right-panel .trade-history .trade-history-content .list')
         this.numTrades = 0
     }
 

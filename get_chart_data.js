@@ -3,15 +3,14 @@ import path from 'path'
 import {
     fileURLToPath
 } from 'url'
-import { isTypedArray } from 'util/types'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const symbol = 'XAU/USD'
 const timezone = 'UTC'
-const startingDate = '2026-3-1T23:00:00'
-const endingDate = '2026-3-6T21:30:00'
+const startingDate = '2026-3-16T23:00:00'
+const endingDate = '2026-3-17T8:00:00'
 const interval = '15min'
 const order = 'asc'
 const apiKey = process.env.TWELVEDATA_MY_API_KEY

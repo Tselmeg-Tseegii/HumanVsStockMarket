@@ -19,7 +19,18 @@ export class PriceDataContainer {
         }
         const newCandle = this.candlesData[this.currentCandleIndex]
         this.currentCandleIndex++
-        return newCandle
+
+        if (this.currentCandleIndex === this.candlesData.length) {
+            return {
+                candle: newCandle,
+                thereIsMore: false
+            }
+        } else {
+            return {
+                candle: newCandle,
+                thereIsMore: true
+            }
+        }
     }
 
     getInitialData() {

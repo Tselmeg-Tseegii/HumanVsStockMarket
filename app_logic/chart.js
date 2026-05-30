@@ -113,6 +113,7 @@ export class Chart {
         const newMarker = {
             time: tradeInfo.time,
             position: 'belowBar',
+            size: 0.5
         }
 
         const line = {
@@ -126,19 +127,19 @@ export class Chart {
         if (tradeInfo['type'] === TRADE_EXE_BOUGHT) {
             newMarker['color'] = buyBlueColor
             newMarker['shape'] = 'arrowUp'
-            newMarker['text'] = `BUY @ $${tradeInfo.price}`
+            newMarker['text'] = `BUY`
 
             line['color'] = buyBlueColor
         } else if (tradeInfo['type'] === TRADE_EXE_SOLD) {
             newMarker['color'] = sellRedColor
             newMarker['shape'] = 'arrowDown'
-            newMarker['text'] = `SELL @ $${tradeInfo.price}`
+            newMarker['text'] = `SELL`
 
             line['color'] = sellRedColor
         } else {
             newMarker['color'] = closeGreyColor
             newMarker['shape'] = 'circle'
-            newMarker['text'] = `CLOSED @ $${tradeInfo.price}`
+            newMarker['text'] = `CLOSED`
 
             this.candleStickSeries.removePriceLine(this.activePriceLine)
         }

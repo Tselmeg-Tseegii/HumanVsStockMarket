@@ -11,6 +11,7 @@ import { RealisedProfitRender, UnrealisedProfitRender } from "./current_profit_r
 import { TradeHistoryRender } from "./trade_history.js"
 import { FULL_TRADE_HISTORY } from "./constants.js"
 import { TradeStats } from "./stats.js"
+import { doConfettiInRectangle } from "./confetti.js"
 
 export const INITIAL_DATA_EVENT = "INITIAL DATA"
 export const NEW_CANDLE_EVENT = "NEW CANDLE"
@@ -73,6 +74,8 @@ evenBroadCaster.on(END_OF_DATA, () => {
     buyButton.classList.add('hidden')
     sellButton.classList.add('hidden')
     closeButton.classList.add('hidden')
+
+    doConfettiInRectangle('.main-loop .panels-container .left-panel .chart-rectangle', 60, 60, 45)
 })
 
 evenBroadCaster.on(SAFE_TO_REDIRECT_END_STATS, () => {
@@ -80,14 +83,14 @@ evenBroadCaster.on(SAFE_TO_REDIRECT_END_STATS, () => {
 })
 
 const intervalID = setInterval(() => {
-    const newCandle = priceDataContainer.getNextCandle()
-    if (!newCandle) {
+    const response = priceDataContainer.getNextCandle()
+    if (response && !response['thereIsMore']) {
         evenBroadCaster.distribute(END_OF_DATA)
 
         clearInterval(intervalID)
         return
     }
 
-    evenBroadCaster.distribute(NEW_CANDLE_EVENT, newCandle)
+    evenBroadCaster.distribute(NEW_CANDLE_EVENT, response['candle'])
 }, 1000)
 

@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename)
 
 export default {
     entry: {
-        start: './app_logic/start.js',
+        tutorial: './app_logic/tutorial.js',
         ending: './app_logic/ending.js',
         game_loop: './app_logic/game_loop.js'
     },

@@ -80,7 +80,7 @@ evenBroadCaster.on(END_OF_DATA, () => {
 
 const finishedButton = document.querySelector('.main-loop .panels-container .right-panel .finished-looking-button')
 finishedButton.addEventListener('click', () => {
-    window.location.href = "../ending/ending.html"
+    window.location.href = "ending.html"
 })
 
 const intervalID = setInterval(() => {

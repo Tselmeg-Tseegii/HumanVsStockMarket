@@ -1,4 +1,4 @@
-import { FULL_TRADE_HISTORY, SAVED_TRADE_HISTORY } from "./constants.js"
+import { FULL_TRADE_HISTORY, SAVED_TRADE_HISTORY } from "../constants.js"
 
 export const TRADE_EXED = 'TRADE EXECUTED'
 export const TRADE_EXE_BOUGHT = 'BUY EXECUTED'

@@ -6,7 +6,7 @@ export class PriceDataContainer {
     }
 
     async initialiseItSelfWithData() {
-        const response = await fetch('./chart_data.json')
+        const response = await fetch('../chart_data.json')
         const candleStickData = await response.json()
 
         this.initialCandles = candleStickData.splice(0, 25)

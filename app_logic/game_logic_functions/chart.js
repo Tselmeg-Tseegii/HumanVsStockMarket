@@ -18,7 +18,7 @@ import {
     sellRedColor,
     closeGreyColor,
     greenColor
-} from './constants.js'
+} from '../constants.js'
 
 export class Chart {
     constructor() {

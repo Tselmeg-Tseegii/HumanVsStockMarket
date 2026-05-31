@@ -1,4 +1,4 @@
-import { blackColor, greenColor, sellRedColor } from "./constants.js"
+import { blackColor, greenColor, sellRedColor } from "../constants.js"
 import { TRADE_EXE_BOUGHT } from "./trade_execution.js"
 
 

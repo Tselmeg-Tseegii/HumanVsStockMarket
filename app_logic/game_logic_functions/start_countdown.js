@@ -4,7 +4,7 @@ export function startCountDown(startingNum) {
     return new Promise((resolve) => {
         let countDownStart = startingNum
         const countDownNumberElem = document.getElementById('countdown-number')
-        const tutorialOverlay = document.getElementById('tutorial-overlay')
+        const tutorialOverlay = document.getElementById('overlay')
         tutorialOverlay.classList.add('active')
         countDownNumberElem.classList.remove('hidden')
         countDownNumberElem.textContent = ''

@@ -89,27 +89,33 @@ const doTutorial = new PerformTutorial()
 
 evenBroadCaster.on(END_OF_DATA, () => {doTutorial.finishTutorialStep(true)})
 
-await startCountDown(3)
 
-let numIterations = 0
-const gameLoopId = setInterval(() => {
-    if (numIterations === 3) {
-        doTutorial.start()
-    }
+const startButton = document.getElementById('start-button')
+startButton.addEventListener('click', async () => {
+    startButton.classList.add('hidden')
 
-    const response = priceDataContainer.getNextCandle()
-    if (response && !response['thereIsMore'] || response === null) {
-        clearInterval(gameLoopId)
+    await startCountDown(3)
 
-        evenBroadCaster.distribute(END_OF_DATA)
+    let numIterations = 0
+    const gameLoopId = setInterval(() => {
+        if (numIterations === 3) {
+            doTutorial.start()
+        }
 
-        return
-    }
-    if (response) {
-        evenBroadCaster.distribute(NEW_CANDLE_EVENT, response['candle'])
-    }
+        const response = priceDataContainer.getNextCandle()
+        if (response && !response['thereIsMore'] || response === null) {
+            clearInterval(gameLoopId)
 
-    numIterations++
-    
-}, 1000)
+            evenBroadCaster.distribute(END_OF_DATA)
 
+            return
+        }
+        if (response) {
+            evenBroadCaster.distribute(NEW_CANDLE_EVENT, response['candle'])
+        }
+
+        numIterations++
+        
+    }, 1000)
+
+})

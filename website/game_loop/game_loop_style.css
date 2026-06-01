@@ -250,7 +250,7 @@ button:hover {
   display: none !important;
 }
 
-#tutorial-overlay {
+#overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -261,7 +261,7 @@ button:hover {
   display: none;
 }
 
-#tutorial-overlay.active {
+#overlay.active {
   display: block;
 }
 
@@ -319,4 +319,32 @@ button:hover {
   z-index: 1005;    
   color: #ffffff;      
   font-size: 48px;
+}
+
+#start-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1005;    
+  
+  width: fit-content;
+  height: fit-content;
+  
+  padding: 12px 32px;
+  border-radius: 50px;
+  
+  white-space: nowrap; 
+  
+  border: none;
+  background-color: #2962ff;
+  color: #ffffff;
+  font-size: 32px;
+  font-family: inherit;
+  cursor: pointer;
+  
+  display: inline-flex; 
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.2s ease;
 }

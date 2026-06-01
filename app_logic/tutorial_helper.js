@@ -3,7 +3,7 @@
 export class PerformTutorial {
     constructor() {
         this.tooltip = document.getElementById('tutorial-tooltip')
-        this.overlay = document.getElementById('tutorial-overlay')
+        this.overlay = document.getElementById('overlay')
 
         this.currentStep = 0
 

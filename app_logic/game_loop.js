@@ -18,6 +18,7 @@ import {
 import { TradeStats } from "./game_logic_functions/local_stats.js"
 import { doConfettiInRectangle } from "./game_logic_functions/confetti.js"
 import { PerformTutorial, tutorialSteps } from "./tutorial_helper.js"
+import { startCountDown } from "./game_logic_functions/start_countdown.js"
 
 const priceDataContainer = new PriceDataContainer()
 await priceDataContainer.initialiseItSelfWithData('../chart_data.json')
@@ -88,12 +89,17 @@ const doTutorial = new PerformTutorial()
 
 evenBroadCaster.on(END_OF_DATA, () => {doTutorial.finishTutorialStep(true)})
 
-doTutorial.start()
+await startCountDown(3)
 
-const intervalID = setInterval(() => {
+let numIterations = 0
+const gameLoopId = setInterval(() => {
+    if (numIterations === 3) {
+        doTutorial.start()
+    }
+
     const response = priceDataContainer.getNextCandle()
     if (response && !response['thereIsMore'] || response === null) {
-        clearInterval(intervalID)
+        clearInterval(gameLoopId)
 
         evenBroadCaster.distribute(END_OF_DATA)
 
@@ -102,6 +108,8 @@ const intervalID = setInterval(() => {
     if (response) {
         evenBroadCaster.distribute(NEW_CANDLE_EVENT, response['candle'])
     }
+
+    numIterations++
     
 }, 1000)
 

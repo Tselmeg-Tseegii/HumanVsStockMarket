@@ -84,7 +84,9 @@ finishedButton.addEventListener('click', () => {
     window.location.href = "../ending/ending.html"
 })
 
-const doTutorial = new PerformTutorial(tutorialSteps)
+const doTutorial = new PerformTutorial()
+
+evenBroadCaster.on(END_OF_DATA, () => {doTutorial.finishTutorialStep(true)})
 
 doTutorial.start()
 

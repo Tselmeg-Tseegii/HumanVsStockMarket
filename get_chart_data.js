@@ -9,8 +9,8 @@ const __dirname = path.dirname(__filename)
 
 const symbol = 'XAU/USD'
 const timezone = 'UTC'
-const startingDate = '2026-3-17T23:00:00'
-const endingDate = '2026-3-18T8:00:00'
+const startingDate = '2026-3-16T23:00:00'
+const endingDate = '2026-3-17T8:00:00'
 const interval = '15min'
 const order = 'asc'
 const apiKey = process.env.TWELVEDATA_MY_API_KEY
@@ -45,7 +45,7 @@ async function getDataFromAPIAndSetFile() {
         }
     })
 
-    await fs.writeFile(path.join(__dirname, 'website', 'tut_chart_data.json'), JSON.stringify(formattedCandleData, null, 2))
+    await fs.writeFile(path.join(__dirname, 'website', 'chart_data.json'), JSON.stringify(formattedCandleData, null, 2))
 }
 
 getDataFromAPIAndSetFile()

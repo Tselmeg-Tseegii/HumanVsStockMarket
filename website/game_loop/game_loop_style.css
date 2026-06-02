@@ -348,3 +348,23 @@ button:hover {
   align-items: center;
   transition: opacity 0.2s ease;
 }
+
+#start-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-100% - 60px));
+  z-index: 1005;
+  
+  max-width: 340px;
+  width: 100%;
+  text-align: center;
+  
+  color: #cccccc;
+  font-size: 1.2rem;
+  font-weight: 300; 
+  letter-spacing: 1px;
+  
+  background: transparent;
+  border: none;
+}

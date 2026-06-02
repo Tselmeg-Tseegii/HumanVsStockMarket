@@ -1,25 +1,27 @@
-import { Chart } from "./chart.js"
-import { PriceDataContainer } from "./price_container.js"
-import { EventBroadCaster } from "./event_broad_caster.js"
+import { Chart } from "./game_logic_functions/chart.js"
+import { PriceDataContainer } from "./game_logic_functions/price_container.js"
+import { EventBroadCaster } from "./game_logic_functions/event_broad_caster.js"
 import { 
     TradeExecute,
     TRADE_EXED,
     UNREALISED_PROFIT_UPDATE,
     HISTORY_UPDATE
-} from "./trade_execution.js"
-import { RealisedProfitRender, UnrealisedProfitRender } from "./current_profit_render.js"
-import { TradeHistoryRender } from "./trade_history.js"
-import { FULL_TRADE_HISTORY } from "./constants.js"
-import { TradeStats } from "./stats.js"
-import { doConfettiInRectangle } from "./confetti.js"
-
-export const INITIAL_DATA_EVENT = "INITIAL DATA"
-export const NEW_CANDLE_EVENT = "NEW CANDLE"
-export const END_OF_DATA = "NO MORE DATA"
-export const SAFE_TO_REDIRECT_END_STATS = "NOW SAFE TO REDIRECT TO END STATISTICS PAGE"
+} from "./game_logic_functions/trade_execution.js"
+import { RealisedProfitRender, UnrealisedProfitRender } from "./game_logic_functions/current_profit_render.js"
+import { TradeHistoryRender } from "./game_logic_functions/trade_history.js"
+import { 
+    FULL_TRADE_HISTORY,
+    INITIAL_DATA_EVENT,
+    NEW_CANDLE_EVENT,
+    END_OF_DATA
+} from "./constants.js"
+import { TradeStats } from "./game_logic_functions/local_stats.js"
+import { doConfettiInRectangle } from "./game_logic_functions/confetti.js"
+import { PerformTutorial, tutorialSteps } from "./tutorial_helper.js"
+import { startCountDown } from "./game_logic_functions/start_countdown.js"
 
 const priceDataContainer = new PriceDataContainer()
-await priceDataContainer.initialiseItSelfWithData()
+await priceDataContainer.initialiseItSelfWithData('../chart_data.json')
 
 const evenBroadCaster = new EventBroadCaster()
 const mainChart = new Chart()
@@ -80,18 +82,40 @@ evenBroadCaster.on(END_OF_DATA, () => {
 
 const finishedButton = document.querySelector('.main-loop .panels-container .right-panel .finished-looking-button')
 finishedButton.addEventListener('click', () => {
-    window.location.href = "ending.html"
+    window.location.href = "../ending/ending.html"
 })
 
-const intervalID = setInterval(() => {
-    const response = priceDataContainer.getNextCandle()
-    if (response && !response['thereIsMore']) {
-        evenBroadCaster.distribute(END_OF_DATA)
+const doTutorial = new PerformTutorial()
 
-        clearInterval(intervalID)
-        return
-    }
+evenBroadCaster.on(END_OF_DATA, () => {doTutorial.finishTutorialStep(true)})
 
-    evenBroadCaster.distribute(NEW_CANDLE_EVENT, response['candle'])
-}, 1000)
 
+const startButton = document.getElementById('start-button')
+startButton.addEventListener('click', async () => {
+    startButton.classList.add('hidden')
+
+    await startCountDown(3)
+
+    let numIterations = 0
+    const gameLoopId = setInterval(() => {
+        if (numIterations === 3) {
+            doTutorial.start()
+        }
+
+        const response = priceDataContainer.getNextCandle()
+        if (response && !response['thereIsMore'] || response === null) {
+            clearInterval(gameLoopId)
+
+            evenBroadCaster.distribute(END_OF_DATA)
+
+            return
+        }
+        if (response) {
+            evenBroadCaster.distribute(NEW_CANDLE_EVENT, response['candle'])
+        }
+
+        numIterations++
+        
+    }, 1000)
+
+})

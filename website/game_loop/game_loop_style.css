@@ -247,5 +247,104 @@ button:hover {
 }
 
 .hidden {
+  display: none !important;
+}
+
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 999;
   display: none;
+}
+
+#overlay.active {
+  display: block;
+}
+
+.tutorial-highlight {
+  position: relative; 
+  z-index: 1000 !important; 
+  box-shadow: 0 0 20px 8px rgba(255, 255, 255, 0.8); 
+  pointer-events: auto;
+  transition: box-shadow 0.3s ease;
+}
+
+#tutorial-tooltip {
+  position: absolute;
+  z-index: 1001; 
+  background-color: #ffffff;
+  color: #000000;
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-size: 18px;
+  max-width: 250px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  pointer-events: auto; 
+  transition: opacity 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tooltip-button {
+  background-color: #2962ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: opacity 0.2s ease;
+
+  width: auto;     
+  height: auto;    
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.tooltip-button:hover {
+  opacity: 0.8;
+}
+
+#countdown-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1005;    
+  color: #ffffff;      
+  font-size: 48px;
+}
+
+#start-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1005;    
+  
+  width: fit-content;
+  height: fit-content;
+  
+  padding: 12px 32px;
+  border-radius: 50px;
+  
+  white-space: nowrap; 
+  
+  border: none;
+  background-color: #2962ff;
+  color: #ffffff;
+  font-size: 32px;
+  font-family: inherit;
+  cursor: pointer;
+  
+  display: inline-flex; 
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.2s ease;
 }

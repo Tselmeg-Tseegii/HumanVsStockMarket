@@ -1,4 +1,4 @@
-import { blackColor, closeGreyColor, greenColor, sellRedColor } from "./constants.js"
+import { blackColor, closeGreyColor, greenColor, sellRedColor } from "../constants.js"
 import { TRADE_CLOSED } from "./trade_execution.js"
 
 export class RealisedProfitRender {

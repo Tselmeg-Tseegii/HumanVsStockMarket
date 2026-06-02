@@ -18,7 +18,7 @@ import {
     sellRedColor,
     closeGreyColor,
     greenColor
-} from './constants.js'
+} from '../constants.js'
 
 export class Chart {
     constructor() {
@@ -154,6 +154,9 @@ export class Chart {
 
     displayTradeLines(tradeHistory) {
         this.tradeHistoryLineSeries = tradeHistory.map((trade) => {
+            if (trade['start-time'] === trade['end-time']) {
+                return null
+            }
             const tradeLineSeries = this.chart.addSeries(LineSeries, {
                 color: (trade['outcome'] > 0) ? greenColor : sellRedColor,
                 lineWidth: 2,

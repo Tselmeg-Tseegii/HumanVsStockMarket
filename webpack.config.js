@@ -8,8 +8,8 @@ const __dirname = path.dirname(__filename)
 
 export default {
     entry: {
-        index: './app_logic/game_loop.js',
-        ending: './app_logic/ending.js'
+        ending: './app_logic/ending.js',
+        game_loop: './app_logic/game_loop.js'
     },
     output: {
         filename: '[name]_deployment.js',

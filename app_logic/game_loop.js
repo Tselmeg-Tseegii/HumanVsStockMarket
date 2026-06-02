@@ -15,22 +15,34 @@ import {
     NEW_CANDLE_EVENT,
     END_OF_DATA,
     SAVED_GAME_STATE_KEY,
-    GAME_FINISHED
+    GAME_FINISHED,
+    TUTORIAL_FINISHED,
+    TUTORIAL_START_TEXT,
+    GAME_START_TEXT
 } from "./constants.js"
 import { TradeStats } from "./game_logic_functions/local_stats.js"
 import { doConfettiInRectangle } from "./game_logic_functions/confetti.js"
 import { PerformTutorial, tutorialSteps } from "./tutorial_helper.js"
 import { startCountDown } from "./game_logic_functions/start_countdown.js"
 
-
-
 const gameStatus = localStorage.getItem(SAVED_GAME_STATE_KEY)
+let isTutorialMode = false
 if (gameStatus === GAME_FINISHED) {
     window.location.href = '../errors/cant_play_again.html'
+} else if (gameStatus == null) {
+    isTutorialMode = true
 }
 
+
 const priceDataContainer = new PriceDataContainer()
-await priceDataContainer.initialiseItSelfWithData('../chart_data.json')
+
+let dataPath = ''
+if (isTutorialMode === true) {
+    dataPath = '../tut_chart_data.json'
+} else {
+    dataPath = '../chart_data.json'
+}
+await priceDataContainer.initialiseItSelfWithData(dataPath)
 
 const evenBroadCaster = new EventBroadCaster()
 const mainChart = new Chart()
@@ -91,23 +103,34 @@ evenBroadCaster.on(END_OF_DATA, () => {
 
 const finishedButton = document.querySelector('.main-loop .panels-container .right-panel .finished-looking-button')
 finishedButton.addEventListener('click', () => {
-    window.location.href = "../ending/ending.html"
+    if (isTutorialMode === true) {
+        window.location.href = "game_loop.html"
+    } else {
+        window.location.href = "../ending/ending.html"
+    }
+    
 })
 
 const doTutorial = new PerformTutorial()
 
 evenBroadCaster.on(END_OF_DATA, () => {doTutorial.finishTutorialStep(true)})
 
-
+const startText = document.getElementById('start-text')
+if (isTutorialMode === true) {
+    startText.textContent = TUTORIAL_START_TEXT
+} else {
+    startText.textContent = GAME_START_TEXT
+}
 const startButton = document.getElementById('start-button')
 startButton.addEventListener('click', async () => {
     startButton.classList.add('hidden')
+    startText.classList.add('hidden')
 
     await startCountDown(3)
 
     let numIterations = 0
     const gameLoopId = setInterval(() => {
-        if (numIterations === 3) {
+        if (isTutorialMode && numIterations === 3) {
             doTutorial.start()
         }
 
@@ -117,7 +140,11 @@ startButton.addEventListener('click', async () => {
 
             evenBroadCaster.distribute(END_OF_DATA)
 
-            localStorage.setItem(SAVED_GAME_STATE_KEY, GAME_FINISHED)
+            if (isTutorialMode === true) {
+                localStorage.setItem(SAVED_GAME_STATE_KEY, TUTORIAL_FINISHED)
+            } else {
+                localStorage.setItem(SAVED_GAME_STATE_KEY, GAME_FINISHED)
+            }
 
             return
         }

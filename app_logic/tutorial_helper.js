@@ -53,11 +53,6 @@ export class PerformTutorial {
     }
 
     start() {
-        const tutorialStatus = localStorage.getItem(SAVED_GAME_STATE_KEY)
-        if (tutorialStatus === TUTORIAL_FINISHED) {
-            return
-        }
-
         this.overlay.classList.add('active')
 
         this.showTutorialStep(this.currentStep)
@@ -86,8 +81,6 @@ export class PerformTutorial {
             this.showTutorialStep(this.currentStep);
         } else {
             this.overlay.classList.remove('active');
-
-            localStorage.setItem(SAVED_GAME_STATE_KEY, TUTORIAL_FINISHED)
         }
     }
 

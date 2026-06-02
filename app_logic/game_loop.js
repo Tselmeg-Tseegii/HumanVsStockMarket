@@ -13,12 +13,21 @@ import {
     FULL_TRADE_HISTORY,
     INITIAL_DATA_EVENT,
     NEW_CANDLE_EVENT,
-    END_OF_DATA
+    END_OF_DATA,
+    SAVED_GAME_STATE_KEY,
+    GAME_FINISHED
 } from "./constants.js"
 import { TradeStats } from "./game_logic_functions/local_stats.js"
 import { doConfettiInRectangle } from "./game_logic_functions/confetti.js"
 import { PerformTutorial, tutorialSteps } from "./tutorial_helper.js"
 import { startCountDown } from "./game_logic_functions/start_countdown.js"
+
+
+
+const gameStatus = localStorage.getItem(SAVED_GAME_STATE_KEY)
+if (gameStatus === GAME_FINISHED) {
+    window.location.href = '../errors/cant_play_again.html'
+}
 
 const priceDataContainer = new PriceDataContainer()
 await priceDataContainer.initialiseItSelfWithData('../chart_data.json')
@@ -107,6 +116,8 @@ startButton.addEventListener('click', async () => {
             clearInterval(gameLoopId)
 
             evenBroadCaster.distribute(END_OF_DATA)
+
+            localStorage.setItem(SAVED_GAME_STATE_KEY, GAME_FINISHED)
 
             return
         }

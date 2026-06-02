@@ -10,3 +10,10 @@ export const FULL_TRADE_HISTORY = 'FULL TRADE HISTORY IS SENT'
 export const INITIAL_DATA_EVENT = "INITIAL DATA"
 export const NEW_CANDLE_EVENT = "NEW CANDLE"
 export const END_OF_DATA = "NO MORE DATA"
+
+export const SAVED_GAME_STATE_KEY = 'game_progress'
+export const GAME_FINISHED = 'finished playing the game'
+export const TUTORIAL_FINISHED = 'finished the tutorial only'
+
+export const SAVED_SURVEY_STATE_KEY = 'survey_progress'
+export const SURVEY_COMPLETE = 'survey is completed'

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../globals.css">
+    <link rel="stylesheet" href="survey_style.css">
+</head>
+<body>
+
+  <main class="survey-container">
+    <h1>Survey</h1>
+
+    <section class="card">
+      <h2>Background Questions</h2>
+
+      <div class="form-group">
+        <label class="question" for="degree">What is your degree?</label>
+        <input id="degree" name="degree" type="text" placeholder="e.g., Bachelor of Commerce">
+      </div>
+
+      <div class="form-group">
+        <label class="question">What is your year of study?</label>
+        <div class="pill-group">
+          <label class="pill-label"><input type="radio" name="year" value="1"><span class="pill-text">1</span></label>
+          <label class="pill-label"><input type="radio" name="year" value="2"><span class="pill-text">2</span></label>
+          <label class="pill-label"><input type="radio" name="year" value="3"><span class="pill-text">3</span></label>
+          <label class="pill-label"><input type="radio" name="year" value="4"><span class="pill-text">4</span></label>
+          <label class="pill-label"><input type="radio" name="year" value="5+"><span class="pill-text">5+</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="question">What is your engagement with sports betting or similar activities?</label>
+        <div class="radio-stack">
+          <label><input type="radio" name="betting" value="never_no_exposure"> Never done it, minimal exposure</label>
+          <label><input type="radio" name="betting" value="never_friends"> Never done it, but friends do</label>
+          <label><input type="radio" name="betting" value="tried_stopped"> Tried a little, but stopped</label>
+          <label><input type="radio" name="betting" value="sometimes"> I sometimes do it</label>
+          <label><input type="radio" name="betting" value="regularly"> Regularly follow events and bet</label>
+          <label><input type="radio" name="betting" value="other"> Other</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="question">What is your exposure to trading, specifically "day trading"?</label>
+        <div class="radio-stack">
+          <label><input type="radio" name="trading" value="never"> Never heard of it</label>
+          <label><input type="radio" name="trading" value="ads_only"> Only saw ads/social media</label>
+          <label><input type="radio" name="trading" value="watched_videos"> Watched some videos on it</label>
+          <label><input type="radio" name="trading" value="tried"> Tried it</label>
+          <label><input type="radio" name="trading" value="actively"> Actively day trade</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="question">On a scale from 1-10, what is your familiarity with investing?</label>
+        <div class="scale-wrapper">
+          <div class="pill-group scale-group">
+            <label class="pill-label"><input type="radio" name="familiarity" value="1"><span class="pill-text">1</span></label>
+            <label class="pill-label"><input type="radio" name="familiarity" value="2"><span class="pill-text">2</span></label>
+            <label class="pill-label"><input type="radio" name="familiarity" value="3"><span class="pill-text">3</span></label>
+            <label class="pill-label"><input type="radio" name="familiarity" value="4"><span class="pill-text">4</span></label>
+            <label class="pill-label"><input type="radio" name="familiarity" value="5"><span class="pill-text">5</span></label>
+            <label class="pill-label"><input type="radio" name="familiarity" value="6"><span class="pill-text">6</span></label>
+            <label class="pill-label"><input type="radio" name="familiarity" value="7"><span class="pill-text">7</span></label>
+            <label class="pill-label"><input type="radio" name="familiarity" value="8"><span class="pill-text">8</span></label>
+            <label class="pill-label"><input type="radio" name="familiarity" value="9"><span class="pill-text">9</span></label>
+            <label class="pill-label"><input type="radio" name="familiarity" value="10"><span class="pill-text">10</span></label>
+          </div>
+          <div class="scale-labels">
+            <span>Never looked into it</span>
+            <span>Basic understanding</span>
+            <span>Active research/investment</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Scenario Questions</h2>
+
+      <div class="form-group">
+        <label class="question">Scenario 1</label>
+        <p class="description">
+          Imagine you are forced to choose:<br>
+          • <strong>Option A:</strong> A 50% chance to lose $1,000, and a 50% chance to lose $0.<br>
+          • <strong>Option B:</strong> A guaranteed loss of $X.<br><br>
+          What is the maximum guaranteed loss you would accept to avoid the gamble of Option A?
+        </p>
+        <div class="slider-group">
+          <input type="range" min="0" max="1000" step="10" value="0" id="loss-slider" 
+                 oninput="document.getElementById('loss-input').value = this.value">
+          <input type="number" id="loss-input" class="slider-number" min="0" max="1000" value="0"
+                 oninput="document.getElementById('loss-slider').value = this.value">
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 2px solid var(--input-border); margin: 40px 0;">
+
+      <div class="form-group">
+        <label class="question">Scenario 2</label>
+        <p class="description">
+          Imagine you are given $1000. You have the opportunity to invest any portion of it in a risky startup. 
+          One of the scenarios could occur:<br>
+          • The startup has a 50% chance of failing completely and you losing all investments you put in<br>
+          • A 50% chance of wildly succeeding returning 3x your investment<br><br>
+          Either way, you keep the uninvested cash and the investment. What amount are you investing?
+        </p>
+        <div class="slider-group">
+          <input type="range" min="0" max="1000" step="10" value="0" id="invest-slider"
+                 oninput="document.getElementById('invest-input').value = this.value">
+          <input type="number" id="invest-input" class="slider-number" min="0" max="1000" value="0"
+                 oninput="document.getElementById('invest-slider').value = this.value">
+        </div>
+      </div>
+    </section>
+
+    <div class="button-container">
+      <button class="submit-btn">Submit Survey</button>
+    </div>
+  </main>
+
+  <script type="module" src="../survey_deployment.js"></script>
+
+</body>
+</html>

@@ -1,3 +1,4 @@
+import { SAVED_GAME_STATE_KEY, TUTORIAL_FINISHED } from "./constants.js"
 
 
 export class PerformTutorial {
@@ -52,12 +53,21 @@ export class PerformTutorial {
     }
 
     start() {
+        const tutorialStatus = localStorage.getItem(SAVED_GAME_STATE_KEY)
+        if (tutorialStatus === TUTORIAL_FINISHED) {
+            return
+        }
+
         this.overlay.classList.add('active')
 
         this.showTutorialStep(this.currentStep)
     }
 
     finishTutorialStep(forceably = false) {
+        if (this.currentStep >= this.tutorialSteps.length) {
+            return;
+        }
+
         const currStepData = this.tutorialSteps[this.currentStep]
         const currElement = document.querySelector(currStepData['element'])
 
@@ -76,6 +86,8 @@ export class PerformTutorial {
             this.showTutorialStep(this.currentStep);
         } else {
             this.overlay.classList.remove('active');
+
+            localStorage.setItem(SAVED_GAME_STATE_KEY, TUTORIAL_FINISHED)
         }
     }
 
@@ -117,7 +129,6 @@ export class PerformTutorial {
     }
 
     showTutorialStep(currStep) {
-        console.log(currStep)
         const currStepData = this.tutorialSteps[currStep]
         const currElement = document.querySelector(currStepData['element'])
 

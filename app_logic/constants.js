@@ -20,3 +20,11 @@ export const SURVEY_COMPLETE = 'survey is completed'
 
 export const TUTORIAL_START_TEXT = 'This section is the tutorial level. It is shorter than the main game but all mechanics are the same'
 export const GAME_START_TEXT = 'This section is the real game. You only get one try at this stage.'
+export const TUTORIAL_END_TEXT = 'This is the end of the guide. The tutorial will continue for another minute to get you used to the controls. Treat this time as warmup for the next stage'
+
+export const PAUSE_GAME = 'pause the game'
+export const UNPAUSE_GAME = 'un-pause the game'
+
+export const START_BUTTON_TEXT = 'CLICK TO START'
+export const TUTORIAL_FINISH_BUTTON_TEXT = 'CLICK TO CONTINUE'
+

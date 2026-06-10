@@ -16,7 +16,7 @@
   \*****************************/
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-eval("{__webpack_require__.r(__webpack_exports__);\n\n\n\n\n//# sourceURL=webpack:///./app_logic/ending.js?\n}");
+eval("{__webpack_require__.r(__webpack_exports__);\n\r\n\r\n\n\n//# sourceURL=webpack:///./app_logic/ending.js?\n}");
 
 /***/ }
 

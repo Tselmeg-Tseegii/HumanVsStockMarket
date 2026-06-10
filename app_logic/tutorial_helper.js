@@ -1,59 +1,73 @@
-import { SAVED_GAME_STATE_KEY, TUTORIAL_FINISHED } from "./constants.js"
+import { PAUSE_GAME, SAVED_GAME_STATE_KEY, TUTORIAL_END_TEXT, TUTORIAL_FINISH_BUTTON_TEXT, TUTORIAL_FINISHED, UNPAUSE_GAME } from "./constants.js"
 
 
 export class PerformTutorial {
-    constructor() {
+    constructor(eventBroadcaster) {
+        this.eventBroadcaster = eventBroadcaster
         this.tooltip = document.getElementById('tutorial-tooltip')
         this.overlay = document.getElementById('overlay')
 
         this.currentStep = 0
+        this.tutorialStarted = false
 
         this.tutorialSteps = [
             {
                 element: '.chart-rectangle',
                 text: 'Here is the chart that shows the historical price movement of a certain asset',
-                isButton: false
+                isButton: false,
+                needPauseGame: false,
             },
             {
                 element: '.buy-button', 
                 text: 'Click here to BUY one asset at market price, if you predict the price will go UP',
-                isButton: true
+                isButton: true,
+                needPauseGame: true,
             },
             {
                 element: '.chart-rectangle',
                 text: 'You can see the effect of the BUY transaction on the chart',
-                isButton: false
+                isButton: false,
+                needPauseGame: false,
             },
             {
                 element: '.unrealised-profit',
                 text: 'You can see the live value of the open position here',
-                isButton: false
+                isButton: false,
+                needPauseGame: false,
             },
             {
                 element: '.close-button', 
                 text: 'Click here to CLOSE the current trade',
-                isButton: true
+                isButton: true,
+                needPauseGame: true,
             },
             {
                 element: '.chart-rectangle',
                 text: 'You can see the effect of the CLOSE transaction on the chart',
-                isButton: false
+                isButton: false,
+                needPauseGame: false,
             },
             {
                 element: '.realised-profit',
                 text: 'You can see that your unrealised profit has now been realised',
-                isButton: false
+                isButton: false,
+                needPauseGame: true,
             },
             {
                 element: '.sell-button', 
                 text: 'Click here to SELL one asset at market price, if you predict the price will go DOWN',
-                isButton: true
+                isButton: true,
+                needPauseGame: true,
             },
         ]
     }
 
     start() {
+        if (this.tutorialStarted === true) {
+            return
+        }
         this.overlay.classList.add('active')
+        this.tutorialStarted = true
 
         this.showTutorialStep(this.currentStep)
     }
@@ -70,6 +84,10 @@ export class PerformTutorial {
             return
         }
 
+        if (currStepData['needPauseGame'] === true) {
+            this.eventBroadcaster.distribute(UNPAUSE_GAME)
+        }
+
         currElement.classList.remove('tutorial-highlight')
 
         this.tooltip.classList.add('hidden')
@@ -80,8 +98,27 @@ export class PerformTutorial {
         if (this.currentStep < this.tutorialSteps.length && !forceably) {
             this.showTutorialStep(this.currentStep);
         } else {
-            this.overlay.classList.remove('active');
+            this.finish()
         }
+    }
+
+    finish() {
+        this.eventBroadcaster.distribute(PAUSE_GAME)
+        const startText = document.getElementById('start-text')
+        startText.textContent = TUTORIAL_END_TEXT
+        const startButton = document.getElementById('start-button')
+        startButton.textContent = TUTORIAL_FINISH_BUTTON_TEXT
+        startButton.classList.remove('hidden')
+        startText.classList.remove('hidden')
+
+        startButton.addEventListener('click', () => {
+            startButton.classList.add('hidden')
+            startText.classList.add('hidden')
+            this.overlay.classList.remove('active');
+            this.eventBroadcaster.distribute(UNPAUSE_GAME)
+
+        }, {once: true})
+
     }
 
     positionTooltip(targetElement) {
@@ -127,6 +164,11 @@ export class PerformTutorial {
 
         if (!currElement) {
             return
+        }
+
+        if (currStepData['needPauseGame'] === true) {
+            this.eventBroadcaster.distribute(PAUSE_GAME)
+            console.log('attemted to pause game')
         }
 
         currElement.classList.add('tutorial-highlight')

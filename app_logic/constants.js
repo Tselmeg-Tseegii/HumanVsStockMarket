@@ -17,6 +17,7 @@ export const TUTORIAL_FINISHED = 'finished the tutorial only'
 
 export const SAVED_SURVEY_STATE_KEY = 'survey_progress'
 export const SURVEY_COMPLETE = 'survey is completed'
+export const SAVED_SURVEY_KEY = 'survey_key'
 
 export const TUTORIAL_START_TEXT = 'This section is the tutorial level. It is shorter than the main game but all mechanics are the same'
 export const GAME_START_TEXT = 'This section is the real game. You only get one try at this stage.'

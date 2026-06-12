@@ -1,11 +1,11 @@
 import express from 'express'
 import path from 'path'
 import pg, { Pool } from 'pg'
-import cors from 'cors'
 
 import {
     fileURLToPath
 } from 'url'
+import { profitParamSchema, saveDataPayloadSchema } from './data_schema.js'
 
 
 const __filename = fileURLToPath(import.meta.url)
@@ -17,14 +17,9 @@ const PORT = process.env.PORT || 5050
 
 const dbPool = new Pool({
   connectionString: process.env.HUMANS_VS_MARKETS_NEON_DB_CONN_STR,
-  ssl: {
-    rejectUnauthorized: false, 
-  },
 })
 
-app.use(cors())
-
-app.use(express.json())
+app.use(express.json({limit: '100kb'}))
 
 app.use(express.static(path.join(__dirname, 'website')))
 
@@ -35,35 +30,36 @@ if (process.argv[1] === __filename) {
 }
 
 app.post('/saveData', async (req, res) => {
-    let {surveyData, tradeHistoryData} = req.body
-
-    const query = `
-    INSERT INTO user_trading_profiles (
-        degree, year_of_study, betting_experience, trading_experience, 
-        familiarity_score, max_accepted_loss, risky_investment_amount,
-        max_outcome, min_outcome, profit, num_entries, trade_history
-    ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
-    ) RETURNING profile_id;
-    `
-
-    const values = [
-        surveyData.degree,
-        parseInt(surveyData.yearOfStudy),
-        parseInt(surveyData.bettingExperience),
-        parseInt(surveyData.tradingExperience),
-        parseInt(surveyData.familiarityScore),
-        parseInt(surveyData.maxAcceptedLoss),
-        parseInt(surveyData.riskyInvestmentAmount),
-        
-        parseFloat(tradeHistoryData.maxOutcome),
-        parseFloat(tradeHistoryData.minOutcome),
-        parseFloat(tradeHistoryData.profit),
-        tradeHistoryData.history.length,         
-        JSON.stringify(tradeHistoryData.history)  
-    ]
-
     try {
+        const validatedData = saveDataPayloadSchema.parse(req.body)
+
+        const {surveyData, tradeHistoryData} = validatedData
+
+        const query = `
+        INSERT INTO user_trading_profiles (
+            degree, year_of_study, betting_experience, trading_experience, 
+            familiarity_score, max_accepted_loss, risky_investment_amount,
+            max_outcome, min_outcome, profit, num_entries, trade_history
+        ) VALUES (
+            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
+        ) RETURNING profile_id;
+        `
+
+        const values = [
+            surveyData.degree,
+            parseInt(surveyData.yearOfStudy),
+            parseInt(surveyData.bettingExperience),
+            parseInt(surveyData.tradingExperience),
+            parseInt(surveyData.familiarityScore),
+            parseInt(surveyData.maxAcceptedLoss),
+            parseInt(surveyData.riskyInvestmentAmount),
+            
+            parseFloat(tradeHistoryData.maxOutcome),
+            parseFloat(tradeHistoryData.minOutcome),
+            parseFloat(tradeHistoryData.profit),
+            tradeHistoryData.history.length,         
+            JSON.stringify(tradeHistoryData.history)  
+        ]
         const result = await dbPool.query(query, values)
 
         res.status(200).json({
@@ -72,6 +68,13 @@ app.post('/saveData', async (req, res) => {
     } catch (err) {
         console.log(err)
 
+        if (err instanceof z.ZodError) {
+            return res.status(400).json({ 
+                error: 'Invalid input data', 
+                details: err.errors 
+            })
+        }
+
         res.status(500).json({ 
             error: 'error' 
         });
@@ -79,22 +82,21 @@ app.post('/saveData', async (req, res) => {
 })
 
 app.get('/globalStats/:profit', async (req, res) => {
-    const currProfit = parseFloat(req.params.profit)
-
-    if (isNaN(currProfit)) {
-        return res.status(400).json({ error: 'error' })
-    }
-
-    const query = `
-        SELECT 
-            MAX(max_outcome) AS max_max_outcome,
-            MIN(min_outcome) AS min_min_outcome,
-            COUNT(*) AS total_entries,
-            (SELECT COUNT(*) + 1 FROM user_trading_profiles WHERE profit > $1) AS profit_rank
-        FROM user_trading_profiles;
-    `
-
     try {
+        const currProfit = profitParamSchema.parse(req.params.profit)
+
+        if (isNaN(currProfit)) {
+            return res.status(400).json({ error: 'error' })
+        }
+
+        const query = `
+            SELECT 
+                MAX(max_outcome) AS max_max_outcome,
+                MIN(min_outcome) AS min_min_outcome,
+                COUNT(*) AS total_entries,
+                (SELECT COUNT(*) + 1 FROM user_trading_profiles WHERE profit > $1) AS profit_rank
+            FROM user_trading_profiles;
+        `
         const result = await dbPool.query(query, [currProfit])
 
         const stats = result.rows[0]
@@ -108,6 +110,11 @@ app.get('/globalStats/:profit', async (req, res) => {
 
     } catch (error) {
         console.error("globalStats:", error)
+
+        if (error instanceof z.ZodError) {
+            return res.status(400).json({ error: 'Invalid profit parameter' })
+        }
+
         res.status(500).json({ error: "error" })
     }
 })

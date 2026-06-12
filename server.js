@@ -78,5 +78,38 @@ app.post('/saveData', async (req, res) => {
     }
 })
 
+app.get('/globalStats/:profit', async (req, res) => {
+    const currProfit = parseFloat(req.params.profit)
+
+    if (isNaN(currProfit)) {
+        return res.status(400).json({ error: 'error' })
+    }
+
+    const query = `
+        SELECT 
+            MAX(max_outcome) AS max_max_outcome,
+            MIN(min_outcome) AS min_min_outcome,
+            COUNT(*) AS total_entries,
+            (SELECT COUNT(*) + 1 FROM user_trading_profiles WHERE profit > $1) AS profit_rank
+        FROM user_trading_profiles;
+    `
+
+    try {
+        const result = await dbPool.query(query, [currProfit]);
+
+        const stats = result.rows[0];
+
+        res.status(200).json({
+            maxOutcome: parseFloat(stats.max_max_outcome) || 0,
+            minOutcome: parseFloat(stats.min_min_outcome) || 0,
+            totalEntries: parseInt(stats.total_entries, 10) || 0,
+            profitRank: parseInt(stats.profit_rank, 10) || 1
+        });
+
+    } catch (error) {
+        console.error("globalStats:", error);
+        res.status(500).json({ error: "error" });
+    }
+})
 
 export default app

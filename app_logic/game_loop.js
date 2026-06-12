@@ -116,7 +116,11 @@ finishedButton.addEventListener('click', () => {
 let gamePaused = false
 const doTutorial = new PerformTutorial(evenBroadCaster)
 
-evenBroadCaster.on(END_OF_DATA, () => {doTutorial.finishTutorialStep(true)})
+evenBroadCaster.on(END_OF_DATA, () => {
+    if (isTutorialMode) {
+        doTutorial.finishTutorialStep(true)
+    }
+})
 
 evenBroadCaster.on(PAUSE_GAME, () => {gamePaused = true})
 evenBroadCaster.on(UNPAUSE_GAME, () => {gamePaused = false})

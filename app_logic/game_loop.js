@@ -60,7 +60,7 @@ evenBroadCaster.distribute(INITIAL_DATA_EVENT, priceDataContainer.getInitialData
 evenBroadCaster.on(NEW_CANDLE_EVENT, (candle) => {mainChart.updateChartWithCandle(candle)})
 evenBroadCaster.on(NEW_CANDLE_EVENT, (candle) => {tradeExecuter.updateCurrCandle(candle)})
 
-evenBroadCaster.on(END_OF_DATA, () => {tradeExecuter.saveAndBroadCastHistory()})
+evenBroadCaster.on(END_OF_DATA, () => {tradeExecuter.saveAndBroadCastHistory(isTutorialMode)})
 evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {tradeStatsCalc.recieveTradeHistory(tradeHist)})
 
 evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {mainChart.displayTradeLines(tradeHist)})

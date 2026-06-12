@@ -16,31 +16,29 @@
         </header>
         
         <section class="basic-statistics">
-            <div class="stat-card net-profit">
+            <div class="stat-card num-players">
                 <span class="text">Num Players So Far</span>
-                <span class="amount">$676</span>
+                <span class="amount">-</span>
             </div>
 
-            <div class="stat-card num-trades">
+            <div class="stat-card max">
                 <span class="text">Most Money Made</span>
-                <span class="amount">67</span>
+                <span class="amount">-</span>
             </div>
 
-            <div class="stat-card overall-win-rate">
+            <div class="stat-card min">
                 <span class="text">Most Money Lost</span>
-                <span class="amount">67%</span>
+                <span class="amount">-</span>
             </div>
 
-            <div class="stat-card buy-win-rate">
-                <span class="text">Your Ranking</span>
-                <span class="amount">76%</span>
+            <div class="stat-card ranking">
+                <span class="text">Your percentile</span>
+                <span class="amount">-</span>
             </div>
         </section>
 
         <section class="net-profit-distribution">
-            <div class="histogram-placeholder">
-                Histogram Data
-            </div>
+            <canvas id="profitHistogramCanvas"></canvas>
         </section>
 
     </main>

@@ -17,6 +17,18 @@ export const TUTORIAL_FINISHED = 'finished the tutorial only'
 
 export const SAVED_SURVEY_STATE_KEY = 'survey_progress'
 export const SURVEY_COMPLETE = 'survey is completed'
+export const SAVED_SURVEY_KEY = 'survey_key'
 
 export const TUTORIAL_START_TEXT = 'This section is the tutorial level. It is shorter than the main game but all mechanics are the same'
 export const GAME_START_TEXT = 'This section is the real game. You only get one try at this stage.'
+
+export const DATA_SAVED_DB_STATUS_KEY = 'data in db status'
+export const DATA_SAVED_DB_SUCCESSFULLY_ADDED = 'data in db safely'
+export const DATA_SAVED_DB_CURR_ATTEMPT_NUM = 'num attempts to save'
+export const DATA_SAVED_DB_CURR_MAX_ATTEMPTS = 3
+
+export const LAST_SAVED_STAT_TIME_KEY = 'last saved stat time'
+export const LAST_SAVED_HIST_TIME_KEY = 'last saved hist time'
+export const SAVED_STATS_KEY = 'SAVED_STATS'
+export const SAVED_HIST_KEY = 'SAVED_HIST'
+

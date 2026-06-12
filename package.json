@@ -6,8 +6,11 @@
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",
+    "chart.js": "^4.5.1",
+    "cors": "^2.8.6",
     "express": "^5.2.1",
-    "lightweight-charts": "^5.2.0"
+    "lightweight-charts": "^5.2.0",
+    "pg": "^8.21.0"
   },
   "devDependencies": {
     "webpack": "^5.107.2",

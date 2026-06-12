@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename)
 const symbol = 'XAU/USD'
 const timezone = 'UTC'
 const startingDate = '2026-3-1T23:00:00'
-const endingDate = '2026-3-3T8:00:00'
+const endingDate = '2026-3-2T8:00:00'
 //main data range comments
 //3-22 to 3-26 - maybe too crazy of an opening?
 
@@ -48,7 +48,7 @@ async function getDataFromAPIAndSetFile() {
         }
     })
 
-    await fs.writeFile(path.join(__dirname, 'website', 'tut_chart_data.json'), JSON.stringify(formattedCandleData, null, 2))
+    await fs.writeFile(path.join(__dirname, 'website', 'chart_data.json'), JSON.stringify(formattedCandleData, null, 2))
 }
 
 getDataFromAPIAndSetFile()

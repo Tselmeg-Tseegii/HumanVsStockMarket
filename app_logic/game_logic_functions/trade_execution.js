@@ -120,7 +120,46 @@ export class TradeExecute {
         this.eventBroadCaster.distribute(HISTORY_UPDATE, tradeHistoryItem)
     }
 
-    saveAndBroadCastHistory() {
+    prepTradeHistoryForDB() {
+        const simpleTradeHistory = this.tradeHistory.map((item) => {
+            return {
+                type: item['type'],
+                outcome: item['outcome'],
+                startTime: item['start-time'],
+                endTime: item['end-time']
+            }
+        })
+
+        let max = -Infinity
+        let min = Infinity
+        let profit = 0
+        simpleTradeHistory.forEach((item) => {
+            if (item['outcome'] > max) {
+                max = item['outcome']
+            }
+
+            if (item['outcome'] < min) {
+                min = item['outcome']
+            }
+
+            profit += item['outcome']
+        })
+
+        this.finalTradeHistory = {
+            maxOutcome: max,
+            minOutcome: min,
+            profit: profit,
+
+            history: simpleTradeHistory
+        }
+    }
+
+    saveAndBroadCastHistory(isTutorialMode) {
+        if (isTutorialMode === false) {
+            this.prepTradeHistoryForDB()
+            localStorage.setItem(SAVED_TRADE_HISTORY, JSON.stringify(this.finalTradeHistory))
+        }
+
         this.eventBroadCaster.distribute(FULL_TRADE_HISTORY, this.tradeHistory)
     }
 }

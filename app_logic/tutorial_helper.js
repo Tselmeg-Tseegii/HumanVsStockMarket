@@ -98,11 +98,17 @@ export class PerformTutorial {
         if (this.currentStep < this.tutorialSteps.length && !forceably) {
             this.showTutorialStep(this.currentStep);
         } else {
-            this.finish()
+            this.finish(forceably)
         }
     }
 
-    finish() {
+    finish(forceably) {
+
+        if (forceably === true) {
+            this.overlay.classList.remove('active');
+            return
+        } 
+        
         this.eventBroadcaster.distribute(PAUSE_GAME)
         const startText = document.getElementById('start-text')
         startText.textContent = TUTORIAL_END_TEXT

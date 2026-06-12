@@ -95,16 +95,52 @@ app.get('/globalStats/:profit', async (req, res) => {
     `
 
     try {
-        const result = await dbPool.query(query, [currProfit]);
+        const result = await dbPool.query(query, [currProfit])
 
-        const stats = result.rows[0];
+        const stats = result.rows[0]
 
         res.status(200).json({
             maxOutcome: parseFloat(stats.max_max_outcome) || 0,
             minOutcome: parseFloat(stats.min_min_outcome) || 0,
             totalEntries: parseInt(stats.total_entries, 10) || 0,
             profitRank: parseInt(stats.profit_rank, 10) || 1
-        });
+        })
+
+    } catch (error) {
+        console.error("globalStats:", error)
+        res.status(500).json({ error: "error" })
+    }
+})
+
+app.get('/globalStatsHist', async (req, res) => {
+    const query = `
+        WITH stats AS (
+            SELECT 
+                MIN(profit) AS min_profit, 
+                MAX(profit) AS max_profit 
+            FROM user_trading_profiles
+        )
+        SELECT 
+            WIDTH_BUCKET(profit, min_profit, max_profit + 0.000001, 50) AS bin_index,
+            MIN(profit) AS bin_start,
+            MAX(profit) AS bin_end,
+            COUNT(*) AS frequency
+        FROM user_trading_profiles, stats
+        GROUP BY bin_index
+        ORDER BY bin_index ASC;
+    `
+
+    try {
+        const result = await dbPool.query(query);
+
+        const histogramData = result.rows.map(row => ({
+            binIndex: parseInt(row.bin_index, 10),
+            binStart: parseFloat(row.bin_start),
+            binEnd: parseFloat(row.bin_end),
+            count: parseInt(row.frequency, 10)
+        }));
+
+        res.status(200).json(histogramData);
 
     } catch (error) {
         console.error("globalStats:", error);

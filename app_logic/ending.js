@@ -1,4 +1,18 @@
-import { DATA_SAVED_DB_STATUS_KEY, DATA_SAVED_DB_SUCCESSFULLY_ADDED, SAVED_STATS_KEY, SAVED_SURVEY_KEY, SAVED_TRADE_HISTORY } from "./constants.js";
+import { 
+    DATA_SAVED_DB_STATUS_KEY, 
+    DATA_SAVED_DB_SUCCESSFULLY_ADDED, 
+    LAST_SAVED_HIST_TIME_KEY, 
+    LAST_SAVED_STAT_TIME_KEY,
+    SAVED_HIST_KEY, SAVED_STATS_KEY, 
+    SAVED_SURVEY_KEY, 
+    SAVED_TRADE_HISTORY 
+} from "./constants.js";
+
+import { saveData } from "./ending_functions/save_data.js";
+import { getGlobalStats, renderGlobalStats } from "./ending_functions/global_stats.js";
+import { getHistData, renderHist } from "./ending_functions/hist.js";
+import { savedStatsExpired } from "./ending_functions/saved_stat_expired.js";
+
 
 const surveyData = JSON.parse(localStorage.getItem(SAVED_SURVEY_KEY))
 const tradeHistoryData = JSON.parse(localStorage.getItem(SAVED_TRADE_HISTORY))
@@ -9,49 +23,23 @@ if (surveyData === null || tradeHistoryData === null) {
 
 const dataSavedStatus = localStorage.getItem(DATA_SAVED_DB_STATUS_KEY)
 if (dataSavedStatus !== DATA_SAVED_DB_SUCCESSFULLY_ADDED) {
-    console.log('SAVING DATA')
-    const response = await fetch('http://localhost:5050/saveData', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify({
-            surveyData: surveyData,
-            tradeHistoryData: tradeHistoryData
-        }) 
-    });
-
-    const result = await response.json();
-
-    if (response.status === 200) {
-        localStorage.setItem(DATA_SAVED_DB_STATUS_KEY, DATA_SAVED_DB_SUCCESSFULLY_ADDED)
-    }
+    saveData(surveyData, tradeHistoryData)
 }
 
 let globalStats = JSON.parse(localStorage.getItem(SAVED_STATS_KEY))
-if (globalStats === null) {
-    const response = await fetch(`http://localhost:5050/globalStats/${tradeHistoryData['profit']}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json' 
-        },
-    });
-
-    globalStats = await response.json();
-
-    if (response.status === 200) {
-        localStorage.setItem(SAVED_STATS_KEY, JSON.stringify(globalStats))
-    }
+const lastTimeSavedStatStr = localStorage.getItem(LAST_SAVED_STAT_TIME_KEY)
+if (globalStats === null || savedStatsExpired(lastTimeSavedStatStr)) {
+    globalStats = await getGlobalStats(tradeHistoryData['profit'])
 }
 
-const numPlayersElem = document.querySelector('.num-players .amount')
-const maxTradeElem = document.querySelector('.max .amount')
-const minTradeElem = document.querySelector('.min .amount')
-const rankingElem = document.querySelector('.ranking .amount')
+renderGlobalStats(globalStats)
 
-numPlayersElem.textContent = `${globalStats['totalEntries']}`
-maxTradeElem.textContent = `$${globalStats['maxOutcome']}`
-minTradeElem.textContent = `$${globalStats['minOutcome']}`
-rankingElem.textContent = `${((globalStats['profitRank'] / globalStats['totalEntries']) * 100).toFixed(2)}%`
+let histogramData = JSON.parse(localStorage.getItem(SAVED_HIST_KEY))
+const lastTimeSavedHistStr = localStorage.getItem(LAST_SAVED_HIST_TIME_KEY)
+if (histogramData === null || savedStatsExpired(lastTimeSavedHistStr)) {
+    histogramData = await getHistData()
+}
 
-
+console.log(tradeHistoryData['profit'])
+console.log(histogramData)
+renderHist(histogramData, tradeHistoryData['profit'])

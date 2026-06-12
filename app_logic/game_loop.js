@@ -18,7 +18,10 @@ import {
     GAME_FINISHED,
     TUTORIAL_FINISHED,
     TUTORIAL_START_TEXT,
-    GAME_START_TEXT
+    GAME_START_TEXT,
+    PAUSE_GAME,
+    UNPAUSE_GAME,
+    START_BUTTON_TEXT
 } from "./constants.js"
 import { TradeStats } from "./game_logic_functions/local_stats.js"
 import { doConfettiInRectangle } from "./game_logic_functions/confetti.js"
@@ -32,7 +35,6 @@ if (gameStatus === GAME_FINISHED) {
 } else if (gameStatus == null) {
     isTutorialMode = true
 }
-
 
 const priceDataContainer = new PriceDataContainer()
 
@@ -111,9 +113,13 @@ finishedButton.addEventListener('click', () => {
     
 })
 
-const doTutorial = new PerformTutorial()
+let gamePaused = false
+const doTutorial = new PerformTutorial(evenBroadCaster)
 
 evenBroadCaster.on(END_OF_DATA, () => {doTutorial.finishTutorialStep(true)})
+
+evenBroadCaster.on(PAUSE_GAME, () => {gamePaused = true})
+evenBroadCaster.on(UNPAUSE_GAME, () => {gamePaused = false})
 
 const startText = document.getElementById('start-text')
 if (isTutorialMode === true) {
@@ -121,7 +127,9 @@ if (isTutorialMode === true) {
 } else {
     startText.textContent = GAME_START_TEXT
 }
+
 const startButton = document.getElementById('start-button')
+startButton.textContent = START_BUTTON_TEXT
 startButton.addEventListener('click', async () => {
     startButton.classList.add('hidden')
     startText.classList.add('hidden')
@@ -130,7 +138,11 @@ startButton.addEventListener('click', async () => {
 
     let numIterations = 0
     const gameLoopId = setInterval(() => {
-        if (isTutorialMode && numIterations === 3) {
+        if (gamePaused === true) {
+            return
+        }
+
+        if (isTutorialMode) {
             doTutorial.start()
         }
 
@@ -156,4 +168,4 @@ startButton.addEventListener('click', async () => {
         
     }, 1000)
 
-})
+}, {once: true})

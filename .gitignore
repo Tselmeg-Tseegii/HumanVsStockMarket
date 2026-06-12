@@ -1,1 +1,4 @@
 node_modules/
+website/game_loop_deployment.js
+website/ending_deployment.js
+website/survey_deployment.js

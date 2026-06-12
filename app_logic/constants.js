@@ -19,8 +19,15 @@ export const SAVED_SURVEY_STATE_KEY = 'survey_progress'
 export const SURVEY_COMPLETE = 'survey is completed'
 export const SAVED_SURVEY_KEY = 'survey_key'
 
-export const TUTORIAL_START_TEXT = 'This section is the tutorial level. It is shorter than the main game but all mechanics are the same'
-export const GAME_START_TEXT = 'This section is the real game. You only get one try at this stage.'
+export const TUTORIAL_START_TEXT = 'Welcome to the tutorial! This is a quick practice round using the real game mechanics.'
+export const GAME_START_TEXT = 'This is the real deal. You only get one shot, so make it count!'
+export const TUTORIAL_END_TEXT = 'That\'s it for the guide! You have a minute left to practice your controls before the real game begins.'
+
+export const PAUSE_GAME = 'pause the game'
+export const UNPAUSE_GAME = 'un-pause the game'
+
+export const START_BUTTON_TEXT = 'CLICK TO START'
+export const TUTORIAL_FINISH_BUTTON_TEXT = 'CLICK TO CONTINUE'
 
 export const DATA_SAVED_DB_STATUS_KEY = 'data in db status'
 export const DATA_SAVED_DB_SUCCESSFULLY_ADDED = 'data in db safely'

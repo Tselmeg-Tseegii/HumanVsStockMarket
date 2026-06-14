@@ -14,14 +14,14 @@ export const surveyDataSchema = z.object({
 })
 
 
-const tradeHistoryItemSchema = z.object({
+export const tradeHistoryItemSchema = z.object({
     type: z.string().trim().min(1).max(10), 
     outcome: z.number(), 
     startTime: z.number().int().positive(), 
     endTime: z.number().int().positive()
 })
 
-const tradeHistoryDataSchema = z.object({
+export const tradeHistoryDataSchema = z.object({
     maxOutcome: z.number(),
     minOutcome: z.number(),
     profit: z.number(),

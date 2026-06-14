@@ -12,13 +12,31 @@ import { saveData } from "./ending_functions/save_data.js";
 import { getGlobalStats, renderGlobalStats } from "./ending_functions/global_stats.js";
 import { getHistData, renderHist } from "./ending_functions/hist.js";
 import { savedStatsExpired } from "./ending_functions/saved_stat_expired.js";
+import { surveyDataSchema, tradeHistoryDataSchema } from "../data_schema.js";
 
+function getAndValidateData(key, schema) {
+    try {
+        const item = localStorage.getItem(key)
+        if (!item) {
+            return null
+        }
 
-const surveyData = JSON.parse(localStorage.getItem(SAVED_SURVEY_KEY))
-const tradeHistoryData = JSON.parse(localStorage.getItem(SAVED_TRADE_HISTORY))
+        const parsedItem = JSON.parse(item)
+        const validated = schema.parse(parsedItem)
+
+        return validated
+        
+    } catch (error) {
+        return null
+    }
+}
+
+const surveyData = getAndValidateData(SAVED_SURVEY_KEY, surveyDataSchema)
+const tradeHistoryData = getAndValidateData(SAVED_TRADE_HISTORY, tradeHistoryDataSchema)
 
 if (surveyData === null || tradeHistoryData === null) {
     window.location.href = '../errors/not_ended_yet.html'
+    return
 } 
 
 const dataSavedStatus = localStorage.getItem(DATA_SAVED_DB_STATUS_KEY)

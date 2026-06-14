@@ -3,6 +3,7 @@ import { SAVED_SURVEY_KEY, SAVED_SURVEY_STATE_KEY, SURVEY_COMPLETE } from "./con
 const surveyStatus = localStorage.getItem(SAVED_SURVEY_STATE_KEY)
 if (surveyStatus === SURVEY_COMPLETE) {
     window.location.href = '../errors/cant_do_survey_again.html'
+    return
 }
 
 function getRadioValue(name) {

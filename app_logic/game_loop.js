@@ -32,6 +32,7 @@ const gameStatus = localStorage.getItem(SAVED_GAME_STATE_KEY)
 let isTutorialMode = false
 if (gameStatus === GAME_FINISHED) {
     window.location.href = '../errors/cant_play_again.html'
+    return
 } else if (gameStatus == null) {
     isTutorialMode = true
 }

@@ -35,3 +35,23 @@ export const saveDataPayloadSchema = z.object({
 })
 
 export const profitParamSchema = z.coerce.number()
+
+export const histogramBinSchema = z.object({
+    binIndex: z.coerce.number().int(), 
+    
+    binStart: z.coerce.number(), 
+    binEnd: z.coerce.number(),
+    
+    count: z.coerce.number().int().nonnegative() 
+})
+
+export const histogramDataSchema = z.array(histogramBinSchema)
+
+export const globalStatsSchema = z.object({
+    maxOutcome: z.coerce.number(),
+    minOutcome: z.coerce.number(),
+
+    totalEntries: z.coerce.number().int().nonnegative(),
+    
+    profitRank: z.coerce.number().int().positive()
+});

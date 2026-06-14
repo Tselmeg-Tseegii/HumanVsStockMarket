@@ -45,7 +45,16 @@ if (isTutorialMode === true) {
 } else {
     dataPath = '../chart_data.json'
 }
-await priceDataContainer.initialiseItSelfWithData(dataPath)
+
+try {
+    await priceDataContainer.initialiseItSelfWithData(dataPath)
+} catch (error) {
+    console.log('Could not initialise the chart with data:', error)
+
+    window.location.href = '../errors/something_wrong.html'
+    return
+}
+
 
 const evenBroadCaster = new EventBroadCaster()
 const mainChart = new Chart()
@@ -143,34 +152,40 @@ startButton.addEventListener('click', async () => {
 
     let numIterations = 0
     const gameLoopId = setInterval(() => {
-        if (gamePaused === true) {
-            return
-        }
 
-        if (isTutorialMode) {
-            doTutorial.start()
-        }
-
-        const response = priceDataContainer.getNextCandle()
-        if (response && !response['thereIsMore'] || response === null) {
-            clearInterval(gameLoopId)
-
-            evenBroadCaster.distribute(END_OF_DATA)
-
-            if (isTutorialMode === true) {
-                localStorage.setItem(SAVED_GAME_STATE_KEY, TUTORIAL_FINISHED)
-            } else {
-                localStorage.setItem(SAVED_GAME_STATE_KEY, GAME_FINISHED)
+        try {
+            if (gamePaused === true) {
+                return
             }
 
-            return
-        }
-        if (response) {
-            evenBroadCaster.distribute(NEW_CANDLE_EVENT, response['candle'])
-        }
+            if (isTutorialMode) {
+                doTutorial.start()
+            }
 
-        numIterations++
-        
+            const response = priceDataContainer.getNextCandle()
+            if (response && !response['thereIsMore'] || response === null) {
+                clearInterval(gameLoopId)
+
+                evenBroadCaster.distribute(END_OF_DATA)
+
+                if (isTutorialMode === true) {
+                    localStorage.setItem(SAVED_GAME_STATE_KEY, TUTORIAL_FINISHED)
+                } else {
+                    localStorage.setItem(SAVED_GAME_STATE_KEY, GAME_FINISHED)
+                }
+
+                return
+            }
+            if (response) {
+                evenBroadCaster.distribute(NEW_CANDLE_EVENT, response['candle'])
+            }
+
+            numIterations++
+
+        } catch (error) {
+            console.log('Failed to progress to next data:', error)
+            priceDataContainer.resetToPreviousCandle()
+        }
     }, 1000)
 
 }, {once: true})

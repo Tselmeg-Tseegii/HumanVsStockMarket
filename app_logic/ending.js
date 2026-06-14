@@ -43,7 +43,7 @@ async function ending() {
     const dataSavedStatus = localStorage.getItem(DATA_SAVED_DB_STATUS_KEY)
     if (dataSavedStatus !== DATA_SAVED_DB_SUCCESSFULLY_ADDED) {
         try {
-            saveData(surveyData, tradeHistoryData)
+            await saveData(surveyData, tradeHistoryData)
         } catch (error) {
             console.log('Failed to save data:', error)
         }

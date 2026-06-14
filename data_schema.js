@@ -56,7 +56,7 @@ export const globalStatsSchema = z.object({
     profitRank: z.coerce.number().int().positive()
 })
 
-export const candleStickDataSchema = z.object({
+export const candleStickSchema = z.object({
     time: z.coerce.number().int().positive(),
     
     open: z.coerce.number(),
@@ -64,3 +64,5 @@ export const candleStickDataSchema = z.object({
     low: z.coerce.number(),
     close: z.coerce.number()
 });
+
+export const candleStickDataArraySchema = z.array(candleStickSchema)

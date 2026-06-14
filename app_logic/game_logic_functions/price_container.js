@@ -1,4 +1,4 @@
-import { candleStickDataSchema } from "../../data_schema.js"
+import { candleStickDataArraySchema} from "../../data_schema.js"
 
 export class PriceDataContainer {
     constructor() {
@@ -11,7 +11,7 @@ export class PriceDataContainer {
         const response = await fetch(dataPath)
         const candleStickData = await response.json()
 
-        candleStickDataSchema.parse(candleStickData)
+        candleStickDataArraySchema.parse(candleStickData)
 
         this.initialCandles = candleStickData.splice(0, 25)
         this.candlesData = candleStickData

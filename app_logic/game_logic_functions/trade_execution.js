@@ -34,6 +34,9 @@ export class TradeExecute {
     }
 
     broadCastUnrealisedProfit() {
+        if (!this.currCandle || !this.lastExeCandle) {
+            return
+        }
         const message = {
             unrealisedProfit: 0
         }
@@ -51,6 +54,11 @@ export class TradeExecute {
     }
 
     openPosition(tradeType) {
+        if (!this.currCandle) {
+            console.log('No market data yest')
+            return
+        }
+
         if (this.numPositions !== 0) {
             console.log('Cannot have more than one position')
             return

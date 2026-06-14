@@ -1,9 +1,9 @@
 import { FULL_TRADE_HISTORY, SAVED_TRADE_HISTORY } from "../constants.js"
 
 export const TRADE_EXED = 'TRADE EXECUTED'
-export const TRADE_EXE_BOUGHT = 'BUY EXECUTED'
-export const TRADE_EXE_SOLD = 'SELL EXECUTED'
-export const TRADE_CLOSED = 'POSITION CLOSED'
+export const TRADE_EXE_BOUGHT = 'BUY'
+export const TRADE_EXE_SOLD = 'SELL'
+export const TRADE_CLOSED = 'CLOSED'
 export const UNREALISED_PROFIT_UPDATE = 'UNREALISED PROFIT UPDATE'
 export const HISTORY_UPDATE = 'NEW HISTORY ITEM'
 

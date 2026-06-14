@@ -174,7 +174,6 @@ export class PerformTutorial {
 
         if (currStepData['needPauseGame'] === true) {
             this.eventBroadcaster.distribute(PAUSE_GAME)
-            console.log('attemted to pause game')
         }
 
         currElement.classList.add('tutorial-highlight')

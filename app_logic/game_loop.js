@@ -27,67 +27,151 @@ import { TradeStats } from "./game_logic_functions/local_stats.js"
 import { doConfettiInRectangle } from "./game_logic_functions/confetti.js"
 import { PerformTutorial, tutorialSteps } from "./tutorial_helper.js"
 import { startCountDown } from "./game_logic_functions/start_countdown.js"
+import { RedirectNeeded } from "./error.js"
 
-async function gameLoop() {
-    const gameStatus = localStorage.getItem(SAVED_GAME_STATE_KEY)
-    let isTutorialMode = false
-    if (gameStatus === GAME_FINISHED) {
-        window.location.href = '../errors/cant_play_again.html'
-        return
-    } else if (gameStatus == null) {
-        isTutorialMode = true
+class GameLoop {
+    constructor() {
+        this.isTutorialMode = false
+        this.gamePaused = false
+
+        this.priceDataContainer = null
+        this.evenBroadCaster = null
+
+        this.mainChart = null
+        this.tradeExecuter = null
+        this.tradeStatsCalc = null
+        this.doTutorial = null
+
+        this.realisedProfitRender = null
+        this.tradeHistoryRender = null
     }
 
-    const priceDataContainer = new PriceDataContainer()
+    async start() {
+        try {
+            this.checkGameState()
 
-    let dataPath = ''
-    if (isTutorialMode === true) {
-        dataPath = '../tut_chart_data.json'
-    } else {
-        dataPath = '../chart_data.json'
+            const startText = document.getElementById('start-text')
+            if (this.isTutorialMode === true) {
+                startText.textContent = TUTORIAL_START_TEXT
+            } else {
+                startText.textContent = GAME_START_TEXT
+            }
+
+            await this.initialiseGameData()
+
+            this.initialiseFunctionObjects()
+
+            this.bindGameLoopEventsToEventBroadcaster()
+            this.bindGameEndEventsToEventBroadcaster()
+
+            const startButton = document.getElementById('start-button')
+            startButton.textContent = START_BUTTON_TEXT
+            startButton.addEventListener('click', async () => {
+                startButton.classList.add('hidden')
+                startText.classList.add('hidden')
+
+                await startCountDown(3)
+
+                this.mainLoop()
+
+            }, {once: true})
+
+        } catch (error) {
+            if (error instanceof RedirectNeeded) {
+                window.location.href = error.redirectUrl
+                return
+            }
+
+            console.log('Error:', error)
+        }
     }
 
-    try {
-        await priceDataContainer.initialiseItSelfWithData(dataPath)
-    } catch (error) {
-        console.log('Could not initialise the chart with data:', error)
-
-        window.location.href = '../errors/something_wrong.html'
-        return
+    checkGameState() {
+        const gameStatus = localStorage.getItem(SAVED_GAME_STATE_KEY)
+        if (gameStatus === GAME_FINISHED) {
+            throw new RedirectNeeded('../errors/cant_play_again.html')
+        } else if (gameStatus == null) {
+            this.isTutorialMode = true
+        }
     }
 
+    async initialiseGameData() {
+        this.priceDataContainer = new PriceDataContainer()
 
-    const evenBroadCaster = new EventBroadCaster()
-    const mainChart = new Chart()
-    const tradeExecuter = new TradeExecute(evenBroadCaster)
-    const realisedProfitRender = new RealisedProfitRender()
-    const unrealisedProfitRender = new UnrealisedProfitRender()
-    const tradeHistoryRender = new TradeHistoryRender()
-    const tradeStatsCalc = new TradeStats(evenBroadCaster)
+        let dataPath = ''
+        if (this.isTutorialMode === true) {
+            dataPath = '../tut_chart_data.json'
+        } else {
+            dataPath = '../chart_data.json'
+        }
 
-    evenBroadCaster.on(INITIAL_DATA_EVENT, (data) => {mainChart.initialiseChartWithData(data)})
-    evenBroadCaster.distribute(INITIAL_DATA_EVENT, priceDataContainer.getInitialData())
+        try {
+            await this.priceDataContainer.initialiseItSelfWithData(dataPath)
+        } catch (error) {
+            console.log('Could not initialise the chart with data:', error)
 
-    evenBroadCaster.on(NEW_CANDLE_EVENT, (candle) => {mainChart.updateChartWithCandle(candle)})
-    evenBroadCaster.on(NEW_CANDLE_EVENT, (candle) => {tradeExecuter.updateCurrCandle(candle)})
+            throw new RedirectNeeded('../errors/something_wrong.html')
+        }
+    }
 
-    evenBroadCaster.on(END_OF_DATA, () => {tradeExecuter.saveAndBroadCastHistory(isTutorialMode)})
-    evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {tradeStatsCalc.recieveTradeHistory(tradeHist)})
+    initialiseFunctionObjects() {
+        this.evenBroadCaster = new EventBroadCaster()
+        this.mainChart = new Chart()
+        this.tradeExecuter = new TradeExecute(this.evenBroadCaster)
+        this.realisedProfitRender = new RealisedProfitRender()
+        this.unrealisedProfitRender = new UnrealisedProfitRender()
+        this.tradeHistoryRender = new TradeHistoryRender()
+        this.tradeStatsCalc = new TradeStats(this.evenBroadCaster)
+        this.doTutorial = new PerformTutorial(this.evenBroadCaster)
+    }
 
-    evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {mainChart.displayTradeLines(tradeHist)})
+    bindGameLoopEventsToEventBroadcaster() {
+        this.evenBroadCaster.on(PAUSE_GAME, () => {this.gamePaused = true})
+        this.evenBroadCaster.on(UNPAUSE_GAME, () => {this.gamePaused = false})
 
-    evenBroadCaster.on(TRADE_EXED, (tradeInfo) => {mainChart.handleTradeExecution(tradeInfo)})
-    evenBroadCaster.on(TRADE_EXED, (tradeInfo) => {realisedProfitRender.updateBalance(tradeInfo)})
-    evenBroadCaster.on(UNREALISED_PROFIT_UPDATE, (unrealisedProfitInfo) => {unrealisedProfitRender.updateBalance(unrealisedProfitInfo)})
-    evenBroadCaster.on(HISTORY_UPDATE, (tradeInfo) => {tradeHistoryRender.updateHistory(tradeInfo)})
+        this.evenBroadCaster.on(INITIAL_DATA_EVENT, (data) => {this.mainChart.initialiseChartWithData(data)})
+        this.evenBroadCaster.distribute(INITIAL_DATA_EVENT, this.priceDataContainer.getInitialData())
 
-    //ending stats sequence
-    evenBroadCaster.on(END_OF_DATA, () => {
+        this.evenBroadCaster.on(NEW_CANDLE_EVENT, (candle) => {this.mainChart.updateChartWithCandle(candle)})
+        this.evenBroadCaster.on(NEW_CANDLE_EVENT, (candle) => {this.tradeExecuter.updateCurrCandle(candle)})
+
+        this.evenBroadCaster.on(TRADE_EXED, (tradeInfo) => {this.mainChart.handleTradeExecution(tradeInfo)})
+        this.evenBroadCaster.on(TRADE_EXED, (tradeInfo) => {this.realisedProfitRender.updateBalance(tradeInfo)})
+        this.evenBroadCaster.on(UNREALISED_PROFIT_UPDATE, (unrealisedProfitInfo) => {this.unrealisedProfitRender.updateBalance(unrealisedProfitInfo)})
+        this.evenBroadCaster.on(HISTORY_UPDATE, (tradeInfo) => {this.tradeHistoryRender.updateHistory(tradeInfo)})
+    }
+
+    bindGameEndEventsToEventBroadcaster() {
+        this.evenBroadCaster.on(END_OF_DATA, () => {this.tradeExecuter.saveAndBroadCastHistory(this.isTutorialMode)})
+        this.evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {this.tradeStatsCalc.recieveTradeHistory(tradeHist)})
+
+        this.evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {this.mainChart.displayTradeLines(tradeHist)})
+
+        this.evenBroadCaster.on(END_OF_DATA, () => {
+            if (this.isTutorialMode) {
+                this.doTutorial.finishTutorialStep(true)
+            }
+        })
+
+        this.evenBroadCaster.on(END_OF_DATA, () => {
+            this.endingSequence()
+        })
+    }
+
+    endingSequence() {
         const unrealisedProfitPanel = document.querySelector('.main-loop .panels-container .right-panel .unrealised-profit')
         const realisedProfitPanel = document.querySelector('.main-loop .panels-container .right-panel .realised-profit')
 
         const statsPanel = document.querySelector('.main-loop .panels-container .right-panel .trade-stats-card')
         const finishedButton = document.querySelector('.main-loop .panels-container .right-panel .finished-looking-button')
+
+        finishedButton.addEventListener('click', () => {
+            if (this.isTutorialMode === true) {
+                window.location.href = 'game_loop.html'
+            } else {
+                window.location.href = '../ending/ending.html'
+            }
+        })
 
         const finishedMessage = document.querySelector('.main-loop .end-of-data-texts')
 
@@ -97,9 +181,9 @@ async function gameLoop() {
         realisedProfitPanel.classList.add('hidden')
 
         statsPanel.classList.remove('hidden')
-        tradeStatsCalc.displayStats()
+        this.tradeStatsCalc.displayStats()
 
-        mainChart.enableNavigation()
+        this.mainChart.enableNavigation()
 
         finishedButton.classList.remove('hidden')
 
@@ -112,64 +196,27 @@ async function gameLoop() {
         closeButton.classList.add('hidden')
 
         doConfettiInRectangle('.main-loop .panels-container .left-panel .chart-rectangle', 60, 60, 45)
-    })
-
-    const finishedButton = document.querySelector('.main-loop .panels-container .right-panel .finished-looking-button')
-    finishedButton.addEventListener('click', () => {
-        if (isTutorialMode === true) {
-            window.location.href = "game_loop.html"
-        } else {
-            window.location.href = "../ending/ending.html"
-        }
-        
-    })
-
-    let gamePaused = false
-    const doTutorial = new PerformTutorial(evenBroadCaster)
-
-    evenBroadCaster.on(END_OF_DATA, () => {
-        if (isTutorialMode) {
-            doTutorial.finishTutorialStep(true)
-        }
-    })
-
-    evenBroadCaster.on(PAUSE_GAME, () => {gamePaused = true})
-    evenBroadCaster.on(UNPAUSE_GAME, () => {gamePaused = false})
-
-    const startText = document.getElementById('start-text')
-    if (isTutorialMode === true) {
-        startText.textContent = TUTORIAL_START_TEXT
-    } else {
-        startText.textContent = GAME_START_TEXT
     }
 
-    const startButton = document.getElementById('start-button')
-    startButton.textContent = START_BUTTON_TEXT
-    startButton.addEventListener('click', async () => {
-        startButton.classList.add('hidden')
-        startText.classList.add('hidden')
-
-        await startCountDown(3)
-
-        let numIterations = 0
+    mainLoop() {
         const gameLoopId = setInterval(() => {
 
             try {
-                if (gamePaused === true) {
+                if (this.gamePaused === true) {
                     return
                 }
 
-                if (isTutorialMode) {
-                    doTutorial.start()
+                if (this.isTutorialMode) {
+                    this.doTutorial.start()
                 }
 
-                const response = priceDataContainer.getNextCandle()
+                const response = this.priceDataContainer.getNextCandle()
                 if (response && !response['thereIsMore'] || response === null) {
                     clearInterval(gameLoopId)
 
-                    evenBroadCaster.distribute(END_OF_DATA)
+                    this.evenBroadCaster.distribute(END_OF_DATA)
 
-                    if (isTutorialMode === true) {
+                    if (this.isTutorialMode === true) {
                         localStorage.setItem(SAVED_GAME_STATE_KEY, TUTORIAL_FINISHED)
                     } else {
                         localStorage.setItem(SAVED_GAME_STATE_KEY, GAME_FINISHED)
@@ -178,18 +225,17 @@ async function gameLoop() {
                     return
                 }
                 if (response) {
-                    evenBroadCaster.distribute(NEW_CANDLE_EVENT, response['candle'])
+                    this.evenBroadCaster.distribute(NEW_CANDLE_EVENT, response['candle'])
                 }
-
-                numIterations++
 
             } catch (error) {
                 console.log('Failed to progress to next data:', error)
-                priceDataContainer.resetToPreviousCandle()
+                this.priceDataContainer.resetToPreviousCandle()
             }
         }, 1000)
-
-    }, {once: true})
+    }
 }
 
-gameLoop()
+const game = new GameLoop()
+
+game.start()

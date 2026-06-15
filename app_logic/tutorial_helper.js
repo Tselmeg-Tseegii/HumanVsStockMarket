@@ -189,7 +189,7 @@ export class PerformTutorial {
 
             doneButton.addEventListener('click', () => {
                 this.finishTutorialStep()
-            })
+            }, {once: true})
             this.tooltip.appendChild(doneButton)
         } else {
             const finishUp = () => {

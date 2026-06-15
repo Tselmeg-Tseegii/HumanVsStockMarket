@@ -95,7 +95,7 @@ app.get('/globalStats/:profit', async (req, res) => {
                 MAX(max_outcome) AS max_max_outcome,
                 MIN(min_outcome) AS min_min_outcome,
                 COUNT(*) AS total_entries,
-                (SELECT COUNT(*) + 1 FROM user_trading_profiles WHERE profit > $1) AS profit_rank
+                (SELECT COUNT(*) + 1 FROM user_trading_profiles WHERE profit > $1::NUMERIC) AS profit_rank
             FROM user_trading_profiles;
         `
         const result = await dbPool.query(query, [currProfit])

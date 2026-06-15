@@ -1,7 +1,7 @@
 import { DATA_SAVED_DB_STATUS_KEY, DATA_SAVED_DB_SUCCESSFULLY_ADDED } from "../constants.js";
 
 export async function saveData(surveyData, tradeHistoryData) {
-    const response = await fetch('http://localhost:5050/saveData', {
+    const response = await fetch('http://192.168.20.22:5050/saveData', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json' 

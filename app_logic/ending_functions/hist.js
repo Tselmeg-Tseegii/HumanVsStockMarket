@@ -2,7 +2,7 @@ import { LAST_SAVED_HIST_TIME_KEY, SAVED_HIST_KEY } from "../constants.js";
 import Chart from 'chart.js/auto';
 
 export async function getHistData() {
-    const response = await fetch(`http://localhost:5050/globalStatsHist`, {
+    const response = await fetch(`http://192.168.20.22:5050/globalStatsHist`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json' 

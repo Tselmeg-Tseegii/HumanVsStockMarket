@@ -27,6 +27,7 @@ function getAndValidateData(key, schema) {
         return validated
         
     } catch (error) {
+        console.log('Error on trying to read from local storate:', error)
         return null
     }
 }

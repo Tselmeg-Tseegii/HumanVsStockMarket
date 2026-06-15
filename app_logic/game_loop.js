@@ -211,7 +211,7 @@ class GameLoop {
                 }
 
                 const response = this.priceDataContainer.getNextCandle()
-                if (response && !response['thereIsMore'] || response === null) {
+                if (response === null || response['thereIsMore'] === false) {
                     clearInterval(gameLoopId)
 
                     this.evenBroadCaster.distribute(END_OF_DATA)

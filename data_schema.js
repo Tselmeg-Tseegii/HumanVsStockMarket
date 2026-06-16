@@ -53,7 +53,7 @@ export const globalStatsSchema = z.object({
 
     totalEntries: z.coerce.number().int().nonnegative(),
     
-    profitRank: z.coerce.number().int().positive()
+    profitRank: z.coerce.number().int()
 })
 
 export const candleStickSchema = z.object({

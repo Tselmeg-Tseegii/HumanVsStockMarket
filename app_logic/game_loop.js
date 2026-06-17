@@ -23,6 +23,8 @@ import {
     UNPAUSE_GAME,
     START_BUTTON_TEXT,
     PAUSE_GAME_AFTER_A_PERIOD,
+    READY_FOR_REAL,
+    GameStatus,
 
 } from "./constants.js"
 import { TradeStats } from "./game_logic_functions/local_stats.js"
@@ -33,7 +35,8 @@ import { RedirectNeeded } from "./error.js"
 
 class GameLoop {
     constructor() {
-        this.isTutorialMode = false
+        this.gameStatus = GameStatus.firstTutorial
+
         this.gamePaused = false
         this.numCandlesToPauseAfter = 0
         this.pauseGameLater = false
@@ -54,13 +57,6 @@ class GameLoop {
         try {
             this.checkGameState()
 
-            const startText = document.getElementById('start-text')
-            if (this.isTutorialMode === true) {
-                startText.textContent = TUTORIAL_START_TEXT
-            } else {
-                startText.textContent = GAME_START_TEXT
-            }
-
             await this.initialiseGameData()
 
             this.initialiseFunctionObjects()
@@ -68,17 +64,7 @@ class GameLoop {
             this.bindGameLoopEventsToEventBroadcaster()
             this.bindGameEndEventsToEventBroadcaster()
 
-            const startButton = document.getElementById('start-button')
-            startButton.textContent = START_BUTTON_TEXT
-            startButton.addEventListener('click', async () => {
-                startButton.classList.add('hidden')
-                startText.classList.add('hidden')
-
-                await startCountDown(3)
-
-                this.mainLoop()
-
-            }, {once: true})
+            this.setupMenu()
 
         } catch (error) {
             if (error instanceof RedirectNeeded) {
@@ -94,8 +80,12 @@ class GameLoop {
         const gameStatus = localStorage.getItem(SAVED_GAME_STATE_KEY)
         if (gameStatus === GAME_FINISHED) {
             throw new RedirectNeeded('../errors/cant_play_again.html')
-        } else if (gameStatus == null) {
-            this.isTutorialMode = true
+        } else if (gameStatus === null) {
+            this.gameStatus = GameStatus.firstTutorial
+        } else if (gameStatus === READY_FOR_REAL){
+            this.gameStatus = GameStatus.forReal
+        } else {
+            this.gameStatus = GameStatus.doneTutorial
         }
     }
 
@@ -103,7 +93,7 @@ class GameLoop {
         this.priceDataContainer = new PriceDataContainer()
 
         let dataPath = ''
-        if (this.isTutorialMode === true) {
+        if (this.gameStatus !== GameStatus.forReal) {
             dataPath = '../tut_chart_data.json'
         } else {
             dataPath = '../chart_data.json'
@@ -154,13 +144,13 @@ class GameLoop {
     }
 
     bindGameEndEventsToEventBroadcaster() {
-        this.evenBroadCaster.on(END_OF_DATA, () => {this.tradeExecuter.saveAndBroadCastHistory(this.isTutorialMode)})
+        this.evenBroadCaster.on(END_OF_DATA, () => {this.tradeExecuter.saveAndBroadCastHistory(this.gameStatus)})
         this.evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {this.tradeStatsCalc.recieveTradeHistory(tradeHist)})
 
         this.evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {this.mainChart.displayTradeLines(tradeHist)})
 
         this.evenBroadCaster.on(END_OF_DATA, () => {
-            if (this.isTutorialMode) {
+            if (this.gameStatus !== GameStatus.forReal) {
                 this.doTutorial.finishTutorialStep(true)
             }
         })
@@ -178,7 +168,7 @@ class GameLoop {
         const finishedButton = document.querySelector('.main-loop .panels-container .right-panel .finished-looking-button')
 
         finishedButton.addEventListener('click', () => {
-            if (this.isTutorialMode === true) {
+            if (this.gameStatus !== GameStatus.forReal) {
                 window.location.href = 'game_loop.html'
             } else {
                 window.location.href = '../ending/ending.html'
@@ -210,6 +200,53 @@ class GameLoop {
         doConfettiInRectangle('.main-loop .panels-container .left-panel .chart-rectangle', 60, 60, 45)
     }
 
+    setupMenu() {
+        const startText = document.getElementById('start-text')
+        if (this.gameStatus !== GameStatus.forReal) {
+            startText.textContent = TUTORIAL_START_TEXT
+        } else {
+            startText.textContent = GAME_START_TEXT
+        }
+
+        const startButton = document.getElementById('start-button')
+        startButton.textContent = START_BUTTON_TEXT
+        startButton.addEventListener('click', async () => {
+            startButton.classList.add('hidden')
+            startText.classList.add('hidden')
+
+            await startCountDown(3)
+
+            this.mainLoop()
+
+        }, {once: true})
+
+        if (this.gameStatus === GameStatus.forReal) {
+            const redoTutButton = document.getElementById('redo-tut-button')
+            redoTutButton.classList.remove('hidden')
+            redoTutButton.addEventListener('click', async () => {
+                redoTutButton.classList.add('hidden')
+
+                localStorage.setItem(SAVED_GAME_STATE_KEY, TUTORIAL_FINISHED)
+
+                window.location.reload()
+
+            }, {once: true})
+        }
+
+        if (this.gameStatus === GameStatus.doneTutorial) {
+            const fastForwardButton = document.getElementById('fastforward-button')
+            fastForwardButton.classList.remove('hidden')
+            fastForwardButton.addEventListener('click', async () => {
+                fastForwardButton.classList.add('hidden')
+
+                localStorage.setItem(SAVED_GAME_STATE_KEY, READY_FOR_REAL)
+
+                window.location.reload()
+
+            }, {once: true})
+        }
+    }
+
     mainLoop() {
         const gameLoopId = setInterval(() => {
 
@@ -227,7 +264,7 @@ class GameLoop {
                     this.numCandlesToPauseAfter--
                 }
 
-                if (this.isTutorialMode) {
+                if (this.gameStatus !== GameStatus.forReal) {
                     this.doTutorial.start()
                 }
 
@@ -237,10 +274,10 @@ class GameLoop {
 
                     this.evenBroadCaster.distribute(END_OF_DATA)
 
-                    if (this.isTutorialMode === true) {
-                        localStorage.setItem(SAVED_GAME_STATE_KEY, TUTORIAL_FINISHED)
-                    } else {
+                    if (this.gameStatus === GameStatus.forReal) {
                         localStorage.setItem(SAVED_GAME_STATE_KEY, GAME_FINISHED)
+                    } else {
+                        localStorage.setItem(SAVED_GAME_STATE_KEY, READY_FOR_REAL)
                     }
 
                     return

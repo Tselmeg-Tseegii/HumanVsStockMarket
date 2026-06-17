@@ -21,7 +21,7 @@ export class PerformTutorial {
         this.tutorialSteps = [
             {
                 element: '.chart-rectangle',
-                text: 'This chart tracks the asset\'s price over time.',
+                text: 'This chart. This will never stop moving in the real game, it ONLY pauses during the tutorial steps',
                 isButton: false,
                 needPauseGameFully: false,
                 needPauseAfterAPeriodOf: 3,

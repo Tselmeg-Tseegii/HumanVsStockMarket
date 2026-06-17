@@ -14,6 +14,7 @@ export const END_OF_DATA = "NO MORE DATA"
 export const SAVED_GAME_STATE_KEY = 'game_progress'
 export const GAME_FINISHED = 'finished playing the game'
 export const TUTORIAL_FINISHED = 'finished the tutorial only'
+export const READY_FOR_REAL = 'ready for the real game'
 
 export const SAVED_SURVEY_STATE_KEY = 'survey_progress'
 export const SURVEY_COMPLETE = 'survey is completed'
@@ -39,4 +40,10 @@ export const LAST_SAVED_STAT_TIME_KEY = 'last saved stat time'
 export const LAST_SAVED_HIST_TIME_KEY = 'last saved hist time'
 export const SAVED_STATS_KEY = 'SAVED_STATS'
 export const SAVED_HIST_KEY = 'SAVED_HIST'
+
+export const GameStatus = Object.freeze({
+    firstTutorial: 'first tutorial',
+    doneTutorial: 'done tutorial',
+    forReal: 'the real game',
+})
 

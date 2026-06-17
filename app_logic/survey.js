@@ -1,10 +1,10 @@
 import { SAVED_SURVEY_KEY, SAVED_SURVEY_STATE_KEY, SURVEY_COMPLETE } from "./constants.js";
 
 async function survey() {
-    const surveyStatus = localStorage.getItem(SAVED_SURVEY_STATE_KEY)
+    const surveyStatus = localStorage.getItem(SAVED_SURVEY_STATE_KEY);
     if (surveyStatus === SURVEY_COMPLETE) {
-        window.location.href = '../errors/cant_do_survey_again.html'
-        return
+        window.location.href = '../errors/cant_do_survey_again.html';
+        return;
     }
 
     function getRadioValue(name) {
@@ -12,11 +12,82 @@ async function survey() {
         return element ? Number(element.value) : null;
     }
 
-    const submitButton = document.querySelector('.submit-btn')
+    const degreeInput = document.getElementById('degree');
+    const degreeErrorEl = document.getElementById('degree-error');
+    const degreeQuestionLabel = document.querySelector('label[for="degree"]');
+
+    degreeInput.addEventListener('input', (e) => {
+        const currentValue = e.target.value;
+        
+        const invalidCharMatch = currentValue.match(/[^a-zA-Z0-9\s.,'-]/);
+
+        if (invalidCharMatch) {
+            degreeQuestionLabel.classList.add('error');
+            degreeErrorEl.textContent = `You cannot add this. Invalid character detected: "${invalidCharMatch[0]}"`;
+            degreeErrorEl.style.display = 'block';
+            
+        } else if (currentValue.length > 100) {
+            degreeQuestionLabel.classList.add('error');
+            degreeErrorEl.textContent = "Degree name too long (max 100 characters).";
+            degreeErrorEl.style.display = 'block';
+        } else {
+            degreeQuestionLabel.classList.remove('error');
+            degreeErrorEl.style.display = 'none';
+            degreeErrorEl.textContent = '';
+        }
+    });
+
+    const submitButton = document.querySelector('.submit-btn');
     submitButton.addEventListener('click', () => {
+        document.querySelectorAll('.question.error').forEach(el => el.classList.remove('error'));
+        if (degreeErrorEl && !degreeInput.value.match(/[^a-zA-Z0-9\s.,'-]/)) {
+            degreeErrorEl.style.display = 'none';
+            degreeErrorEl.textContent = '';
+        }
+
+        let isValid = true;
+
+        const flagError = (inputName) => {
+            const inputEl = document.querySelector(`input[name="${inputName}"]`);
+            if (inputEl) {
+                inputEl.closest('.form-group').querySelector('.question').classList.add('error');
+            }
+            isValid = false;
+        };
+
+        const degreeValue = degreeInput.value.trim();
+        const invalidCharMatch = degreeValue.match(/[^a-zA-Z0-9\s.,'-]/);
+
+        if (!degreeValue) {
+            degreeQuestionLabel.classList.add('error');
+            degreeErrorEl.textContent = "This field is required.";
+            degreeErrorEl.style.display = 'block';
+            isValid = false;
+        } else if (degreeValue.length > 100) {
+            degreeQuestionLabel.classList.add('error');
+            degreeErrorEl.textContent = "Degree name too long (max 100 characters).";
+            degreeErrorEl.style.display = 'block';
+            isValid = false;
+        } else if (invalidCharMatch) {
+            degreeQuestionLabel.classList.add('error');
+            degreeErrorEl.textContent = `You cannot add this. Invalid character detected: "${invalidCharMatch[0]}"`;
+            degreeErrorEl.style.display = 'block';
+            isValid = false;
+        }
+
+        if (!document.querySelector('input[name="year"]:checked')) flagError('year');
+        if (getRadioValue('betting') === null) flagError('betting');
+        if (getRadioValue('trading') === null) flagError('trading');
+        if (getRadioValue('familiarity') === null) flagError('familiarity');
+
+        if (!isValid) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return; 
+        }
+
         const surveyData = {
-            degree: document.getElementById('degree').value,
-            yearOfStudy: document.querySelector('input[name="year"]:checked') ? parseFloat(document.querySelector('input[name="year"]:checked').value) : null,
+            degree: degreeValue,
+            yearOfStudy: parseFloat(document.querySelector('input[name="year"]:checked').value),
             bettingExperience: getRadioValue('betting'),
             tradingExperience: getRadioValue('trading'),
             familiarityScore: getRadioValue('familiarity'),
@@ -24,12 +95,11 @@ async function survey() {
             riskyInvestmentAmount: Number(document.getElementById('invest-input').value)
         };
 
-        localStorage.setItem(SAVED_SURVEY_KEY, JSON.stringify(surveyData))
+        localStorage.setItem(SAVED_SURVEY_KEY, JSON.stringify(surveyData));
+        localStorage.setItem(SAVED_SURVEY_STATE_KEY, SURVEY_COMPLETE);
 
-        localStorage.setItem(SAVED_SURVEY_STATE_KEY, SURVEY_COMPLETE)
-
-        window.location.href = '../game_loop/game_loop.html'
-    })
+        window.location.href = '../game_loop/game_loop.html';
+    });
 }
 
-survey()
+survey();

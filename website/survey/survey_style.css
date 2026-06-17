@@ -267,3 +267,15 @@
   .submit-btn:hover {
     opacity: 0.8;
   }
+
+  .question.error {
+    color: #ff5252;
+    transition: color 0.2s ease;
+  }
+  
+  .error-message {
+    color: #ff5252;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    display: none; /* Hidden by default */
+  }

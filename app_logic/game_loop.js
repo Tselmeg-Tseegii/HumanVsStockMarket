@@ -21,7 +21,9 @@ import {
     GAME_START_TEXT,
     PAUSE_GAME,
     UNPAUSE_GAME,
-    START_BUTTON_TEXT
+    START_BUTTON_TEXT,
+    PAUSE_GAME_AFTER_A_PERIOD,
+
 } from "./constants.js"
 import { TradeStats } from "./game_logic_functions/local_stats.js"
 import { doConfettiInRectangle } from "./game_logic_functions/confetti.js"
@@ -33,6 +35,8 @@ class GameLoop {
     constructor() {
         this.isTutorialMode = false
         this.gamePaused = false
+        this.numCandlesToPauseAfter = 0
+        this.pauseGameLater = false
 
         this.priceDataContainer = null
         this.evenBroadCaster = null
@@ -127,7 +131,15 @@ class GameLoop {
 
     bindGameLoopEventsToEventBroadcaster() {
         this.evenBroadCaster.on(PAUSE_GAME, () => {this.gamePaused = true})
-        this.evenBroadCaster.on(UNPAUSE_GAME, () => {this.gamePaused = false})
+        this.evenBroadCaster.on(UNPAUSE_GAME, () => {
+            this.gamePaused = false
+            this.numCandlesToPauseAfter = 0
+            this.pauseGameLater = false
+        })
+        this.evenBroadCaster.on(PAUSE_GAME_AFTER_A_PERIOD, (numCandlesToPauseAfter) => {
+            this.numCandlesToPauseAfter = numCandlesToPauseAfter
+            this.pauseGameLater = true
+        })
 
         this.evenBroadCaster.on(INITIAL_DATA_EVENT, (data) => {this.mainChart.initialiseChartWithData(data)})
         this.evenBroadCaster.distribute(INITIAL_DATA_EVENT, this.priceDataContainer.getInitialData())
@@ -204,6 +216,15 @@ class GameLoop {
             try {
                 if (this.gamePaused === true) {
                     return
+                }
+
+                if (this.numCandlesToPauseAfter === 0 && this.pauseGameLater === true) {
+                    this.gamePaused = true
+                    return
+                }
+
+                if (this.numCandlesToPauseAfter > 0 && this.pauseGameLater === true) {
+                    this.numCandlesToPauseAfter--
                 }
 
                 if (this.isTutorialMode) {

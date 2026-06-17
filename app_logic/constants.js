@@ -25,6 +25,7 @@ export const TUTORIAL_END_TEXT = 'That\'s it for the guide! You have a minute le
 
 export const PAUSE_GAME = 'pause the game'
 export const UNPAUSE_GAME = 'un-pause the game'
+export const PAUSE_GAME_AFTER_A_PERIOD = 'pause game after a period'
 
 export const START_BUTTON_TEXT = 'CLICK TO START'
 export const TUTORIAL_FINISH_BUTTON_TEXT = 'CLICK TO CONTINUE'

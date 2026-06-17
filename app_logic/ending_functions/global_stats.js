@@ -2,12 +2,22 @@ import { LAST_SAVED_STAT_TIME_KEY, SAVED_STATS_KEY } from "../constants.js";
 
 
 export async function getGlobalStats(profit) {
-    const response = await fetch(`http://localhost:5050/globalStats/${profit}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json' 
-        },
-    });
+    let response = null
+    if (profit !== null) {
+        response = await fetch(`http://localhost:5050/globalStats?profit=${profit}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json' 
+            },
+        })
+    } else {
+        response = await fetch(`http://localhost:5050/globalStats`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json' 
+            },
+        })
+    }
 
     const globalStats = await response.json();
 
@@ -31,7 +41,10 @@ export function renderGlobalStats(globalStats) {
     minTradeElem.textContent = `$${globalStats['minOutcome']}`
 
     const rank = globalStats['profitRank']
-    const total = globalStats['totalEntries'] + 1
-    rankingElem.textContent = `${((rank / total) * 100).toFixed(2)}%`
+    const total = globalStats['totalEntries']
+    if (rank !== -1) {
+        rankingElem.textContent = `${(((total - rank) / total) * 100).toFixed(2)}%`
+    } else {
+        rankingElem.textContent = 'Error'
+    }
 }
-

@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { raw } from 'express'
 import path from 'path'
 import pg, { Pool } from 'pg'
 import { z } from 'zod'
@@ -82,12 +82,16 @@ app.post('/saveData', async (req, res) => {
     }
 })
 
-app.get('/globalStats/:profit', async (req, res) => {
+app.get('/globalStats', async (req, res) => {
     try {
-        const currProfit = profitParamSchema.parse(req.params.profit)
+        const rawProfit = req.query.profit
+        let currProfit = null
+        if (rawProfit !== undefined && rawProfit !== '') {
+            currProfit = profitParamSchema.parse(rawProfit);
 
-        if (isNaN(currProfit)) {
-            return res.status(400).json({ error: 'error' })
+            if (isNaN(currProfit)) {
+                return res.status(400).json({ error: 'Invalid profit' });
+            }
         }
 
         const query = `
@@ -95,7 +99,10 @@ app.get('/globalStats/:profit', async (req, res) => {
                 MAX(max_outcome) AS max_max_outcome,
                 MIN(min_outcome) AS min_min_outcome,
                 COUNT(*) AS total_entries,
-                (SELECT COUNT(*) + 1 FROM user_trading_profiles WHERE profit > $1) AS profit_rank
+                CASE 
+                    WHEN $1::NUMERIC IS NOT NULL THEN (SELECT COUNT(*) + 1 FROM user_trading_profiles WHERE profit > $1::NUMERIC)
+                    ELSE NULL 
+                END AS profit_rank
             FROM user_trading_profiles;
         `
         const result = await dbPool.query(query, [currProfit])
@@ -106,7 +113,7 @@ app.get('/globalStats/:profit', async (req, res) => {
             maxOutcome: parseFloat(stats.max_max_outcome) || 0,
             minOutcome: parseFloat(stats.min_min_outcome) || 0,
             totalEntries: parseInt(stats.total_entries, 10) || 0,
-            profitRank: parseInt(stats.profit_rank, 10) || 1
+            profitRank: stats.profit_rank ? parseInt(stats.profit_rank, 10) : -1
         })
 
     } catch (error) {

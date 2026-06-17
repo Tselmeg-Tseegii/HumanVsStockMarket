@@ -27,6 +27,7 @@ function getAndValidateData(key, schema) {
         return validated
         
     } catch (error) {
+        console.log('Error on trying to read from local storate:', error)
         return null
     }
 }
@@ -35,13 +36,8 @@ async function ending() {
     const surveyData = getAndValidateData(SAVED_SURVEY_KEY, surveyDataSchema)
     const tradeHistoryData = getAndValidateData(SAVED_TRADE_HISTORY, tradeHistoryDataSchema)
 
-    if (surveyData === null || tradeHistoryData === null) {
-        window.location.href = '../errors/not_ended_yet.html'
-        return
-    } 
-
     const dataSavedStatus = localStorage.getItem(DATA_SAVED_DB_STATUS_KEY)
-    if (dataSavedStatus !== DATA_SAVED_DB_SUCCESSFULLY_ADDED) {
+    if (dataSavedStatus !== DATA_SAVED_DB_SUCCESSFULLY_ADDED && surveyData !== null && tradeHistoryData !== null) {
         try {
             await saveData(surveyData, tradeHistoryData)
         } catch (error) {
@@ -53,7 +49,12 @@ async function ending() {
     const lastTimeSavedStatStr = localStorage.getItem(LAST_SAVED_STAT_TIME_KEY)
     if (globalStats === null || savedStatsExpired(lastTimeSavedStatStr)) {
         try {
-            globalStats = await getGlobalStats(tradeHistoryData['profit'])
+            if (tradeHistoryData !== null) {
+                globalStats = await getGlobalStats(tradeHistoryData['profit'])
+            } else {
+                globalStats = await getGlobalStats(null)
+            }
+            
         } catch (error) {
             console.log('Failed to retrive stats:', error)
         }
@@ -77,7 +78,11 @@ async function ending() {
     }
 
     try {
-        renderHist(histogramData, tradeHistoryData['profit'])
+        if (tradeHistoryData !== null) {
+            renderHist(histogramData, tradeHistoryData['profit'])
+        } else {
+            renderHist(histogramData, null)
+        }
     } catch (error) {
         console.log('Failed to render histogram:', error)
     }

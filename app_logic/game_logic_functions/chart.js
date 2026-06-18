@@ -127,7 +127,7 @@ export class Chart {
         }
         
         if (tradeInfo['type'] === TRADE_EXE_BOUGHT) {
-            newMarker['color'] = tealCol
+            newMarker['color'] = buyBlueColor
             newMarker['shape'] = 'arrowUp'
             newMarker['text'] = `BUY`
 

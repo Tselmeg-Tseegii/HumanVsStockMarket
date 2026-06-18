@@ -56,7 +56,7 @@ export class PerformTutorial {
             },
             {
                 element: '.chart-rectangle',
-                text: 'The gray circle marks exactly where you closed your trade.',
+                text: 'The yello circle marks exactly where you closed your trade.',
                 isButton: false,
                 needPauseGameFully: false,
                 needPauseAfterAPeriodOf: 2,

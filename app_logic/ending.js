@@ -15,6 +15,13 @@ import { savedStatsExpired } from "./ending_functions/saved_stat_expired.js";
 import { globalStatsSchema, histogramDataSchema, surveyDataSchema, tradeHistoryDataSchema } from "../data_schema.js";
 import { showError } from "./error.js";
 
+function hideLoader() {
+    const loader = document.getElementById('loading-overlay');
+    if (loader) {
+        loader.classList.add('hide-loader');
+    }
+}
+
 function getAndValidateData(key, schema) {
     try {
         const item = localStorage.getItem(key)
@@ -60,6 +67,8 @@ async function ending() {
             console.log('Failed to retrive stats:', error)
         }
     }
+
+    hideLoader();
 
     try {
         renderGlobalStats(globalStats)

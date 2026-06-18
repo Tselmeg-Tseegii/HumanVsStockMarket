@@ -21,14 +21,14 @@ export class PerformTutorial {
         this.tutorialSteps = [
             {
                 element: '.chart-rectangle',
-                text: 'This chart. This will never stop moving in the real game, it ONLY pauses during the tutorial steps',
+                text: 'This is the chart. This will never stop moving in the real game, it ONLY pauses during the tutorial steps',
                 isButton: false,
                 needPauseGameFully: false,
                 needPauseAfterAPeriodOf: 2,
             },
             {
                 element: '.buy-button', 
-                text: 'Think the price will go UP? Click BUY to purchase one asset.',
+                text: 'Think the price will go UP? Click here!.',
                 isButton: true,
                 needPauseGameFully: true,
                 needPauseAfterAPeriodOf: 0,
@@ -63,14 +63,14 @@ export class PerformTutorial {
             },
             {
                 element: '.realised-profit',
-                text: 'Your trade is finished, and your profit is now officially added to your balance!',
+                text: 'Your trade is finished, and your profit is now added to your balance!',
                 isButton: false,
                 needPauseGameFully: true,
                 needPauseAfterAPeriodOf: 0,
             },
             {
                 element: '.sell-button', 
-                text: 'Expect a drop? Click SELL to profit if the price goes DOWN.',
+                text: 'Expect the price will go DOWN? Click here!',
                 isButton: false,
                 needPauseGameFully: true,
                 needPauseAfterAPeriodOf: 0,

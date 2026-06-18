@@ -30,7 +30,7 @@ import { TradeStats } from "./game_logic_functions/local_stats.js"
 import { doConfettiInRectangle } from "./game_logic_functions/confetti.js"
 import { PerformTutorial, tutorialSteps } from "./tutorial_helper.js"
 import { startCountDown } from "./game_logic_functions/start_countdown.js"
-import { RedirectNeeded } from "./error.js"
+import { RedirectNeeded, showError } from "./error.js"
 
 class GameLoop {
     constructor() {
@@ -71,7 +71,7 @@ class GameLoop {
                 return
             }
 
-            console.log('Error:', error)
+            showError('Error starting game')
         }
     }
 

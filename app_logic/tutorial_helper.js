@@ -219,9 +219,9 @@ export class PerformTutorial {
             doneButton.textContent = 'Next'
             doneButton.className = 'tooltip-button'
 
-            currElement.disabled = true
+            currElement.style.pointerEvents = 'none'
             doneButton.addEventListener('click', () => {
-                currElement.disabled = false
+                currElement.style.pointerEvents = 'auto'
 
                 this.finishTutorialStep()
             }, {once: true})

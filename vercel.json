@@ -1,0 +1,20 @@
+{
+    "rewrites": [
+      { 
+        "source": "/saveData", 
+        "destination": "/server.js" 
+      },
+      { 
+        "source": "/globalStats", 
+        "destination": "/server.js" 
+      },
+      { 
+        "source": "/globalStatsHist", 
+        "destination": "/server.js" 
+      },
+      { 
+        "source": "/(.*)", 
+        "destination": "/website/$1" 
+      }
+    ]
+  }

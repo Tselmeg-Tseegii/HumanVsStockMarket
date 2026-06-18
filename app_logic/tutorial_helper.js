@@ -21,24 +21,27 @@ export class PerformTutorial {
         this.tutorialSteps = [
             {
                 element: '.chart-rectangle',
-                text: 'This is the chart. This will never stop moving in the real game, it ONLY pauses during the tutorial steps',
+                text: 'This is the chart. This will never stop moving in the real game, it ONLY pauses during the tutorial steps.',
                 isButton: false,
                 needPauseGameFully: false,
                 needPauseAfterAPeriodOf: 2,
+                needDisableButton: false
             },
             {
                 element: '.buy-button', 
-                text: 'Think the price will go UP? Click here!.',
+                text: 'Think the price will go UP? Click here!',
                 isButton: true,
                 needPauseGameFully: true,
                 needPauseAfterAPeriodOf: 0,
+                needDisableButton: false
             },
             {
                 element: '.chart-rectangle',
-                text: 'Your purchase is on the chart! The blue line is your buy price, and the blue arrow marks when you bought in.',
+                text: 'Your trade is on the chart! The blue line shows the price of your trade and the blue arrow shows when you clicked UP.',
                 isButton: false,
                 needPauseGameFully: false,
                 needPauseAfterAPeriodOf: 2,
+                needDisableButton: false
             },
             {
                 element: '.unrealised-profit',
@@ -46,6 +49,7 @@ export class PerformTutorial {
                 isButton: false,
                 needPauseGameFully: false,
                 needPauseAfterAPeriodOf: 2,
+                needDisableButton: false
             },
             {
                 element: '.close-button', 
@@ -53,13 +57,15 @@ export class PerformTutorial {
                 isButton: true,
                 needPauseGameFully: true,
                 needPauseAfterAPeriodOf: 0,
+                needDisableButton: false
             },
             {
                 element: '.chart-rectangle',
-                text: 'The yello circle marks exactly where you closed your trade.',
+                text: 'The yellow circle marks where you closed your trade.',
                 isButton: false,
                 needPauseGameFully: false,
                 needPauseAfterAPeriodOf: 2,
+                needDisableButton: false
             },
             {
                 element: '.realised-profit',
@@ -67,6 +73,7 @@ export class PerformTutorial {
                 isButton: false,
                 needPauseGameFully: true,
                 needPauseAfterAPeriodOf: 0,
+                needDisableButton: false
             },
             {
                 element: '.sell-button', 
@@ -74,6 +81,7 @@ export class PerformTutorial {
                 isButton: false,
                 needPauseGameFully: true,
                 needPauseAfterAPeriodOf: 0,
+                needDisableButton: true
             },
         ]
     }
@@ -211,7 +219,10 @@ export class PerformTutorial {
             doneButton.textContent = 'Next'
             doneButton.className = 'tooltip-button'
 
+            currElement.style.pointerEvents = 'none'
             doneButton.addEventListener('click', () => {
+                currElement.style.pointerEvents = 'auto'
+
                 this.finishTutorialStep()
             }, {once: true})
             this.tooltip.appendChild(doneButton)

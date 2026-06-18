@@ -25,6 +25,7 @@ export class PerformTutorial {
                 isButton: false,
                 needPauseGameFully: false,
                 needPauseAfterAPeriodOf: 2,
+                needDisableButton: false
             },
             {
                 element: '.buy-button', 
@@ -32,6 +33,7 @@ export class PerformTutorial {
                 isButton: true,
                 needPauseGameFully: true,
                 needPauseAfterAPeriodOf: 0,
+                needDisableButton: false
             },
             {
                 element: '.chart-rectangle',
@@ -39,6 +41,7 @@ export class PerformTutorial {
                 isButton: false,
                 needPauseGameFully: false,
                 needPauseAfterAPeriodOf: 2,
+                needDisableButton: false
             },
             {
                 element: '.unrealised-profit',
@@ -46,6 +49,7 @@ export class PerformTutorial {
                 isButton: false,
                 needPauseGameFully: false,
                 needPauseAfterAPeriodOf: 2,
+                needDisableButton: false
             },
             {
                 element: '.close-button', 
@@ -53,6 +57,7 @@ export class PerformTutorial {
                 isButton: true,
                 needPauseGameFully: true,
                 needPauseAfterAPeriodOf: 0,
+                needDisableButton: false
             },
             {
                 element: '.chart-rectangle',
@@ -60,6 +65,7 @@ export class PerformTutorial {
                 isButton: false,
                 needPauseGameFully: false,
                 needPauseAfterAPeriodOf: 2,
+                needDisableButton: false
             },
             {
                 element: '.realised-profit',
@@ -67,6 +73,7 @@ export class PerformTutorial {
                 isButton: false,
                 needPauseGameFully: true,
                 needPauseAfterAPeriodOf: 0,
+                needDisableButton: false
             },
             {
                 element: '.sell-button', 
@@ -74,6 +81,7 @@ export class PerformTutorial {
                 isButton: false,
                 needPauseGameFully: true,
                 needPauseAfterAPeriodOf: 0,
+                needDisableButton: true
             },
         ]
     }
@@ -211,7 +219,10 @@ export class PerformTutorial {
             doneButton.textContent = 'Next'
             doneButton.className = 'tooltip-button'
 
+            currElement.disabled = true
             doneButton.addEventListener('click', () => {
+                currElement.disabled = false
+
                 this.finishTutorialStep()
             }, {once: true})
             this.tooltip.appendChild(doneButton)

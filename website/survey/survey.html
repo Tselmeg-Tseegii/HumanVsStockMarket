@@ -90,7 +90,7 @@
           What is the maximum guaranteed loss you would accept to avoid the gamble of Option A?
         </p>
         <div class="slider-group">
-          <input type="range" min="0" max="1000" step="10" value="0" id="loss-slider" 
+          <input type="range" min="0" max="10000" step="10" value="0" id="loss-slider" 
                  oninput="document.getElementById('loss-input').value = this.value">
           <input type="number" id="loss-input" class="slider-number" min="0" max="1000" value="0"
                  oninput="document.getElementById('loss-slider').value = this.value">
@@ -109,7 +109,7 @@
           Either way, you keep the uninvested cash and the investment. What amount are you investing?
         </p>
         <div class="slider-group">
-          <input type="range" min="0" max="1000" step="10" value="0" id="invest-slider"
+          <input type="range" min="0" max="10000" step="10" value="0" id="invest-slider"
                  oninput="document.getElementById('invest-input').value = this.value">
           <input type="number" id="invest-input" class="slider-number" min="0" max="1000" value="0"
                  oninput="document.getElementById('invest-slider').value = this.value">

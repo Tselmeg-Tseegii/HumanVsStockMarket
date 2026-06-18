@@ -279,3 +279,7 @@
     margin-top: 8px;
     display: none; /* Hidden by default */
   }
+
+  .hidden {
+    display: none !important;
+  }

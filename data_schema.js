@@ -42,7 +42,7 @@ export const saveDataPayloadSchema = z.object({
     tradeHistoryData: tradeHistoryDataSchema
 })
 
-const profitParamSchema = z.string().regex(/^-?\d+(\.\d+)?$/, "Must be a valid number")
+export const profitParamSchema = z.string().regex(/^-?\d+(\.\d+)?$/, "Must be a valid number")
 
 export const histogramBinSchema = z.object({
     binIndex: z.coerce.number().int(), 

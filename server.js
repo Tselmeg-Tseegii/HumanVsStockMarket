@@ -96,11 +96,7 @@ app.get('/globalStats', async (req, res) => {
         const rawProfit = req.query.profit
         let currProfit = null
         if (rawProfit !== undefined && rawProfit !== '') {
-            currProfit = profitParamSchema.parse(rawProfit);
-
-            if (isNaN(currProfit)) {
-                return res.status(400).json({ error: 'Invalid profit' });
-            }
+            currProfit = profitParamSchema.parse(rawProfit); 
         }
 
         const query = `

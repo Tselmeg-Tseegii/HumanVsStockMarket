@@ -17,7 +17,9 @@ import {
     buyBlueColor,
     sellRedColor,
     closeGreyColor,
-    greenColor
+    greenColor,
+    yellowCol,
+    tealCol
 } from '../constants.js'
 
 export class Chart {
@@ -125,7 +127,7 @@ export class Chart {
         }
         
         if (tradeInfo['type'] === TRADE_EXE_BOUGHT) {
-            newMarker['color'] = buyBlueColor
+            newMarker['color'] = tealCol
             newMarker['shape'] = 'arrowUp'
             newMarker['text'] = `BUY`
 
@@ -137,7 +139,7 @@ export class Chart {
 
             line['color'] = sellRedColor
         } else {
-            newMarker['color'] = closeGreyColor
+            newMarker['color'] = yellowCol
             newMarker['shape'] = 'circle'
             newMarker['text'] = `CLOSED`
 

@@ -1,4 +1,12 @@
-import { PAUSE_GAME, SAVED_GAME_STATE_KEY, TUTORIAL_END_TEXT, TUTORIAL_FINISH_BUTTON_TEXT, TUTORIAL_FINISHED, UNPAUSE_GAME } from "./constants.js"
+import { 
+    PAUSE_GAME, 
+    PAUSE_GAME_AFTER_A_PERIOD, 
+    SAVED_GAME_STATE_KEY, 
+    TUTORIAL_END_TEXT, 
+    TUTORIAL_FINISH_BUTTON_TEXT, 
+    TUTORIAL_FINISHED, 
+    UNPAUSE_GAME 
+} from "./constants.js"
 
 
 export class PerformTutorial {
@@ -13,51 +21,59 @@ export class PerformTutorial {
         this.tutorialSteps = [
             {
                 element: '.chart-rectangle',
-                text: 'This chart tracks the asset\'s price over time.',
+                text: 'This chart. This will never stop moving in the real game, it ONLY pauses during the tutorial steps',
                 isButton: false,
-                needPauseGame: false,
+                needPauseGameFully: false,
+                needPauseAfterAPeriodOf: 2,
             },
             {
                 element: '.buy-button', 
                 text: 'Think the price will go UP? Click BUY to purchase one asset.',
                 isButton: true,
-                needPauseGame: true,
+                needPauseGameFully: true,
+                needPauseAfterAPeriodOf: 0,
             },
             {
                 element: '.chart-rectangle',
                 text: 'Your purchase is on the chart! The blue line is your buy price, and the blue arrow marks when you bought in.',
                 isButton: false,
-                needPauseGame: false,
+                needPauseGameFully: false,
+                needPauseAfterAPeriodOf: 2,
             },
             {
                 element: '.unrealised-profit',
                 text: 'Watch your live profit or loss here while the trade is open.',
                 isButton: false,
-                needPauseGame: false,
+                needPauseGameFully: false,
+                needPauseAfterAPeriodOf: 2,
             },
             {
                 element: '.close-button', 
                 text: 'Click here to CLOSE your trade and lock in your result.',
                 isButton: true,
-                needPauseGame: true,
+                needPauseGameFully: true,
+                needPauseAfterAPeriodOf: 0,
             },
             {
                 element: '.chart-rectangle',
                 text: 'The gray circle marks exactly where you closed your trade.',
                 isButton: false,
-                needPauseGame: false,
+                needPauseGameFully: false,
+                needPauseAfterAPeriodOf: 2,
             },
             {
                 element: '.realised-profit',
                 text: 'Your trade is finished, and your profit is now officially added to your balance!',
                 isButton: false,
-                needPauseGame: true,
+                needPauseGameFully: true,
+                needPauseAfterAPeriodOf: 0,
             },
             {
                 element: '.sell-button', 
                 text: 'Expect a drop? Click SELL to profit if the price goes DOWN.',
-                isButton: true,
-                needPauseGame: true,
+                isButton: false,
+                needPauseGameFully: true,
+                needPauseAfterAPeriodOf: 0,
             },
         ]
     }
@@ -84,7 +100,11 @@ export class PerformTutorial {
             return
         }
 
-        if (currStepData['needPauseGame'] === true) {
+        if (currStepData['needPauseGameFully'] === true) {
+            this.eventBroadcaster.distribute(UNPAUSE_GAME)
+        }
+
+        if (currStepData['needPauseAfterAPeriodOf'] > 0) {
             this.eventBroadcaster.distribute(UNPAUSE_GAME)
         }
 
@@ -172,8 +192,12 @@ export class PerformTutorial {
             return
         }
 
-        if (currStepData['needPauseGame'] === true) {
+        if (currStepData['needPauseGameFully'] === true) {
             this.eventBroadcaster.distribute(PAUSE_GAME)
+        }
+
+        if (currStepData['needPauseAfterAPeriodOf'] > 0) {
+            this.eventBroadcaster.distribute(PAUSE_GAME_AFTER_A_PERIOD, currStepData['needPauseAfterAPeriodOf'])
         }
 
         currElement.classList.add('tutorial-highlight')

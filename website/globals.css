@@ -22,3 +22,28 @@ a {
   font-family: "Roboto-Regular";
   src: local("Roboto-Regular");
 }
+
+.error-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  background-color: #f23645;
+  color: #ffffff;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-family: "Roboto-Regular", Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(242, 54, 69, 0.4);
+  z-index: 9999;
+  
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.error-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}

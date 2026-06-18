@@ -66,9 +66,12 @@ button:hover {
   opacity: 0.8;
 }
 
-.buy-button { background-color: #2962ff; }
+.buy-button { background-color: #26a69a; }
 .sell-button { background-color: #f23645; }
-.close-button { background-color: #afafaf; }
+.close-button { 
+  background-color: #ffc107; 
+  width: 250px;
+}
 
 .finished-looking-button { 
   background-color: #2962ff; 
@@ -186,13 +189,14 @@ button:hover {
 .trade-stats-card {
   display: flex;
   flex-direction: column;
-  background-color: #d9d9d9;
+  background-color: var(--stats-bg-color, #ffc107);
   border-radius: 26px;
   overflow: hidden;
+  transition: background-color 0.4s ease, transform 0.4s ease;
 }
 
 .header-section {
-  background-color: #afafaf;
+  background-color: rgba(0, 0, 0, 0.2);
   height: 45px;
   display: flex;
   justify-content: center;
@@ -229,21 +233,32 @@ button:hover {
   text-align: center;
   margin-bottom: 30px;
   width: 100%;
-  margin-top: 40px
+  margin-top: 8vh;
 }
 
 .main-title {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   font-weight: 400;
   letter-spacing: 1.5px;
-  margin-bottom: 10px;
-  color: #cccccc;
+  margin-bottom: 15px;
+  color: #ffc107;
 }
 
 .sub-title {
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   font-weight: 300;
-  color: #cccccc;
+  color: #ffffff;
+}
+
+@keyframes pulse-attention {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(41, 98, 255, 0.7); }
+  50% { transform: scale(1.03); box-shadow: 0 0 20px 10px rgba(41, 98, 255, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(41, 98, 255, 0); }
+}
+
+.attention-grabber {
+  animation: pulse-attention 2s infinite;
+  z-index: 10;
 }
 
 .hidden {
@@ -256,7 +271,7 @@ button:hover {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.9);
   z-index: 999;
   display: none;
 }
@@ -321,28 +336,31 @@ button:hover {
   font-size: 48px;
 }
 
-#start-button {
+#menu-group {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1005;    
+  transform: translate(-50%, -28px);
+  z-index: 1005;
   
+  display: flex;
+  flex-direction: column;
+  gap: 52px; 
   width: fit-content;
-  height: fit-content;
-  
+}
+
+.menu-btn {
+  width: 100%;
+  max-width: 340px; 
   padding: 12px 32px;
   border-radius: 50px;
-  
   white-space: nowrap; 
-  
   border: none;
   background-color: #2962ff;
   color: #ffffff;
   font-size: 32px;
   font-family: inherit;
   cursor: pointer;
-  
   display: inline-flex; 
   justify-content: center;
   align-items: center;
@@ -355,16 +373,18 @@ button:hover {
   left: 50%;
   transform: translate(-50%, calc(-100% - 60px));
   z-index: 1005;
-  
-  max-width: 340px;
+  max-width: 600px;
   width: 100%;
   text-align: center;
-  
   color: #cccccc;
-  font-size: 1.2rem;
+  font-size: 2rem;
   font-weight: 300; 
   letter-spacing: 1px;
-  
   background: transparent;
   border: none;
+}
+
+.ghost-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }

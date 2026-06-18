@@ -2,7 +2,7 @@ import { LAST_SAVED_HIST_TIME_KEY, SAVED_HIST_KEY } from "../constants.js";
 import Chart from 'chart.js/auto';
 
 export async function getHistData() {
-    const response = await fetch(`http://localhost:5050/globalStatsHist`, {
+    const response = await fetch(`http://192.168.20.22:5050/globalStatsHist`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json' 
@@ -21,6 +21,16 @@ export async function getHistData() {
 }
 
 export function renderHist(histogramData, userProfit) {
+    const canvas = document.getElementById('profitHistogramCanvas')
+    const placeholder = document.getElementById('histogram-placeholder')
+    if (histogramData === null) {
+        placeholder.classList.remove('hidden')
+        canvas.classList.add('hidden')
+        return
+    }
+    placeholder.classList.add('hidden')
+    canvas.classList.remove('hidden')
+
     let targetIndex = -1;
     let minDiff = Infinity;
 

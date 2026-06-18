@@ -13,6 +13,7 @@ import { getGlobalStats, renderGlobalStats } from "./ending_functions/global_sta
 import { getHistData, renderHist } from "./ending_functions/hist.js";
 import { savedStatsExpired } from "./ending_functions/saved_stat_expired.js";
 import { globalStatsSchema, histogramDataSchema, surveyDataSchema, tradeHistoryDataSchema } from "../data_schema.js";
+import { showError } from "./error.js";
 
 function getAndValidateData(key, schema) {
     try {
@@ -64,6 +65,7 @@ async function ending() {
         renderGlobalStats(globalStats)
     } catch (error) {
         console.log('Failed to render stats:', error)
+        showError('Error')
     }
 
     let histogramData = getAndValidateData(SAVED_HIST_KEY, histogramDataSchema)
@@ -85,6 +87,7 @@ async function ending() {
         }
     } catch (error) {
         console.log('Failed to render histogram:', error)
+        showError('Error')
     }
 }
 

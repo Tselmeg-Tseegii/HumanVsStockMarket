@@ -16,7 +16,7 @@
 
       <div class="form-group">
         <label class="question" for="degree">What is your degree?</label>
-        <input id="degree" name="degree" type="text" placeholder="e.g., Bachelor of Commerce">
+        <input id="degree" name="degree" type="text" placeholder="e.g., Commerce">
         <div id="degree-error" class="error-message"></div>
       </div>
 
@@ -85,8 +85,8 @@
         <label class="question">Scenario 1</label>
         <p class="description">
           Imagine you are forced to choose:<br>
-          • <strong>Option A:</strong> A 50% chance to lose $1,000, and a 50% chance to lose $0.<br>
-          • <strong>Option B:</strong> A guaranteed loss of $X.<br><br>
+          • <strong>Option A:</strong> A 50% chance to lose $10,000, and a 50% chance to lose $0.<br>
+          • <strong>Option B:</strong> A guaranteed loss of your choosing.<br><br>
           What is the maximum guaranteed loss you would accept to avoid the gamble of Option A?
         </p>
         <div class="slider-group">
@@ -102,7 +102,7 @@
       <div class="form-group">
         <label class="question">Scenario 2</label>
         <p class="description">
-          Imagine you are given $1000. You have the opportunity to invest any portion of it in a risky startup. 
+          Imagine you are given $10,000. You have the opportunity to invest any portion of it in a risky startup. 
           One of the scenarios could occur:<br>
           • The startup has a 50% chance of failing completely and you losing all investments you put in<br>
           • A 50% chance of wildly succeeding returning 3x your investment<br><br>
@@ -121,6 +121,10 @@
       <button class="submit-btn">Submit Survey</button>
     </div>
   </main>
+
+  <div id="error-toast" class="error-toast">
+    <span class="error-text">An error has occurred</span>
+  </div>
 
   <script type="module" src="../survey_deployment.js"></script>
 

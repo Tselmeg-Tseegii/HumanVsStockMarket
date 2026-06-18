@@ -1,4 +1,5 @@
 import { SAVED_SURVEY_KEY, SAVED_SURVEY_STATE_KEY, SURVEY_COMPLETE } from "./constants.js";
+import { showError } from "./error.js";
 
 async function survey() {
     const surveyStatus = localStorage.getItem(SAVED_SURVEY_STATE_KEY);
@@ -82,6 +83,7 @@ async function survey() {
 
         if (!isValid) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            showError('Error: some questions missing or misformatted')
             return; 
         }
 
@@ -102,4 +104,9 @@ async function survey() {
     });
 }
 
-survey();
+try {
+    survey()
+} catch (error) {
+    console.log('Error in survey:', error)
+    showError('Error during survey')
+}

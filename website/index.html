@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="index_style.css">
 </head>
 <body>
+    <script type="module">
+        if (window.innerWidth < 800 || window.innerHeight < 600 || 'ontouchstart' in window) { 
+            window.location.href = '/errors/desktop_only.html'
+        }
+    </script>
 
     <div class="content-wrapper">
         <img src="HumansVsMarket.png" class="hero-image" alt="Human Brain vs Stock Market">

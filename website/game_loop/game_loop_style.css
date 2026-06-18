@@ -186,13 +186,14 @@ button:hover {
 .trade-stats-card {
   display: flex;
   flex-direction: column;
-  background-color: #d9d9d9;
+  background-color: var(--stats-bg-color, #ffc107);
   border-radius: 26px;
   overflow: hidden;
+  transition: background-color 0.4s ease, transform 0.4s ease;
 }
 
 .header-section {
-  background-color: #afafaf;
+  background-color: rgba(0, 0, 0, 0.2);
   height: 45px;
   display: flex;
   justify-content: center;
@@ -229,21 +230,32 @@ button:hover {
   text-align: center;
   margin-bottom: 30px;
   width: 100%;
-  margin-top: 40px
+  margin-top: 8vh;
 }
 
 .main-title {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   font-weight: 400;
   letter-spacing: 1.5px;
-  margin-bottom: 10px;
-  color: #cccccc;
+  margin-bottom: 15px;
+  color: #ffc107;
 }
 
 .sub-title {
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   font-weight: 300;
-  color: #cccccc;
+  color: #ffffff;
+}
+
+@keyframes pulse-attention {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(41, 98, 255, 0.7); }
+  50% { transform: scale(1.03); box-shadow: 0 0 20px 10px rgba(41, 98, 255, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(41, 98, 255, 0); }
+}
+
+.attention-grabber {
+  animation: pulse-attention 2s infinite;
+  z-index: 10;
 }
 
 .hidden {

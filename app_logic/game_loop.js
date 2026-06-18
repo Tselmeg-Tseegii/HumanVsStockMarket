@@ -208,9 +208,15 @@ class GameLoop {
         }
 
         const startButton = document.getElementById('start-button')
+        const redoTutButton = document.getElementById('redo-tut-button')
+        const fastForwardButton = document.getElementById('fastforward-button')
+
         startButton.classList.remove('hidden')
         startButton.addEventListener('click', async () => {
             startButton.classList.add('hidden')
+            redoTutButton.classList.add('hidden')
+            fastForwardButton.classList.add('hidden')
+
             startText.classList.add('hidden')
 
             await startCountDown(3)
@@ -220,10 +226,11 @@ class GameLoop {
         }, {once: true})
 
         if (this.gameStatus === GameStatus.forReal) {
-            const redoTutButton = document.getElementById('redo-tut-button')
             redoTutButton.classList.remove('hidden')
             redoTutButton.addEventListener('click', async () => {
+                startButton.classList.add('hidden')
                 redoTutButton.classList.add('hidden')
+                fastForwardButton.classList.add('hidden')
 
                 localStorage.setItem(SAVED_GAME_STATE_KEY, TUTORIAL_FINISHED)
 
@@ -233,9 +240,10 @@ class GameLoop {
         }
 
         if (this.gameStatus === GameStatus.doneTutorial) {
-            const fastForwardButton = document.getElementById('fastforward-button')
             fastForwardButton.classList.remove('hidden')
             fastForwardButton.addEventListener('click', async () => {
+                startButton.classList.add('hidden')
+                redoTutButton.classList.add('hidden')
                 fastForwardButton.classList.add('hidden')
 
                 localStorage.setItem(SAVED_GAME_STATE_KEY, READY_FOR_REAL)

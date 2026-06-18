@@ -1,4 +1,4 @@
-import { LAST_SAVED_STAT_TIME_KEY, SAVED_STATS_KEY } from "../constants.js";
+import { DATA_SAVED_DB_STATUS_KEY, DATA_SAVED_DB_SUCCESSFULLY_ADDED, LAST_SAVED_STAT_TIME_KEY, SAVED_STATS_KEY } from "../constants.js";
 
 
 export async function getGlobalStats(profit) {
@@ -51,7 +51,16 @@ export function renderGlobalStats(globalStats) {
     }
 
     const rank = globalStats['profitRank']
-    const total = globalStats['totalEntries']
+    let total = globalStats['totalEntries']
+
+    const dataSavedToDBStatus = localStorage.getItem(DATA_SAVED_DB_STATUS_KEY)
+    if (dataSavedToDBStatus !== DATA_SAVED_DB_SUCCESSFULLY_ADDED) {
+        //this accounts for the fact that if the current users data is not saved, the rank is 
+        //calculated in the backend assuming it was saved, but total number is assuming its not saved,
+        //so plus one to account for this to give a accurate ranking.
+        total++
+    }
+
     if (rank !== -1) {
         rankingElem.textContent = `${(((total - rank) / total) * 100).toFixed(2)}%`
     } else {

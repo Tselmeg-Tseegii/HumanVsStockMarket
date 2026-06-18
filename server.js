@@ -136,7 +136,7 @@ app.get('/globalStatsHist', async (req, res) => {
             FROM user_trading_profiles
         )
         SELECT 
-            WIDTH_BUCKET(profit, min_profit, max_profit + 0.000001, 50) AS bin_index,
+            WIDTH_BUCKET(profit, min_profit, max_profit + 0.000001, 10) AS bin_index,
             MIN(profit) AS bin_start,
             MAX(profit) AS bin_end,
             COUNT(*) AS frequency

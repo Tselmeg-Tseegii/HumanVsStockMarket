@@ -21,9 +21,30 @@ export class TradeExecute {
         this.sellButton = document.querySelector('.main-loop .panels-container .left-panel .button-row .sell-button')
         this.closeButton = document.querySelector('.main-loop .panels-container .left-panel .button-row .close-button')
 
-        this.buyButton.addEventListener('click', () => {this.openPosition('buy')})
-        this.sellButton.addEventListener('click', () => {this.openPosition('sell')})
-        this.closeButton.addEventListener('click', () => {this.closePosition()})
+        this.buyButton.addEventListener('click', () => {
+            this.openPosition('buy')
+
+            this.sellButton.classList.add('ghost-hidden')
+            this.buyButton.classList.add('ghost-hidden')
+
+            this.closeButton.classList.remove('ghost-hidden')
+        })
+        this.sellButton.addEventListener('click', () => {
+            this.openPosition('sell')
+
+            this.sellButton.classList.add('ghost-hidden')
+            this.buyButton.classList.add('ghost-hidden')
+
+            this.closeButton.classList.remove('ghost-hidden')
+        })
+        this.closeButton.addEventListener('click', () => {
+            this.closePosition()
+
+            this.sellButton.classList.remove('ghost-hidden')
+            this.buyButton.classList.remove('ghost-hidden')
+
+            this.closeButton.classList.add('ghost-hidden')
+        })
     }
 
     updateCurrCandle(newCandle) {

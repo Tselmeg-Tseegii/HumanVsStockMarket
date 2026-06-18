@@ -12,7 +12,7 @@ const timezone = 'UTC'
 
 //test data range
 const startingDate = '2026-3-1T23:00:00'
-const endingDate = '2026-3-2T8:00:00'
+const endingDate = '2026-3-3T8:00:00'
 
 //good tut range
 // const startingDate = '2026-3-1T23:00:00'

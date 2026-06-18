@@ -66,9 +66,12 @@ button:hover {
   opacity: 0.8;
 }
 
-.buy-button { background-color: #2962ff; }
+.buy-button { background-color: #26a69a; }
 .sell-button { background-color: #f23645; }
-.close-button { background-color: #afafaf; }
+.close-button { 
+  background-color: #ffc107; 
+  width: 250px;
+}
 
 .finished-looking-button { 
   background-color: #2962ff; 
@@ -379,4 +382,9 @@ button:hover {
   letter-spacing: 1px;
   background: transparent;
   border: none;
+}
+
+.ghost-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }

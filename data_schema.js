@@ -9,8 +9,8 @@ export const surveyDataSchema = z.object({
     bettingExperience: z.coerce.number().int().min(0).max(5),
     tradingExperience: z.coerce.number().int().min(0).max(4),
     familiarityScore: z.coerce.number().int().min(1).max(10),
-    maxAcceptedLoss: z.coerce.number().int().min(0).max(1000),
-    riskyInvestmentAmount: z.coerce.number().int().min(0).max(1000)
+    maxAcceptedLoss: z.coerce.number().int().min(0).max(10000),
+    riskyInvestmentAmount: z.coerce.number().int().min(0).max(10000)
 })
 
 

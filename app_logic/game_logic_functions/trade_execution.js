@@ -30,20 +30,20 @@ export class TradeExecute {
             this.closeButton.classList.remove('ghost-hidden')
         })
         this.sellButton.addEventListener('click', () => {
-            this.openPosition('sell')
+            if (this.openPosition('sell') === true) {
+                this.sellButton.classList.add('ghost-hidden')
+                this.buyButton.classList.add('ghost-hidden')
 
-            this.sellButton.classList.add('ghost-hidden')
-            this.buyButton.classList.add('ghost-hidden')
-
-            this.closeButton.classList.remove('ghost-hidden')
+                this.closeButton.classList.remove('ghost-hidden')
+            }
         })
         this.closeButton.addEventListener('click', () => {
-            this.closePosition()
+            if (this.closePosition() === true) {
+                this.sellButton.classList.remove('ghost-hidden')
+                this.buyButton.classList.remove('ghost-hidden')
 
-            this.sellButton.classList.remove('ghost-hidden')
-            this.buyButton.classList.remove('ghost-hidden')
-
-            this.closeButton.classList.add('ghost-hidden')
+                this.closeButton.classList.add('ghost-hidden')
+            }
         })
     }
 
@@ -76,13 +76,13 @@ export class TradeExecute {
 
     openPosition(tradeType) {
         if (!this.currCandle) {
-            console.log('No market data yest')
-            return
+            console.log('No market data yet')
+            return false
         }
 
         if (this.numPositions !== 0) {
             console.log('Cannot have more than one position')
-            return
+            return false
         }
         if (tradeType === 'buy') {
             this.isBuy = true
@@ -105,12 +105,14 @@ export class TradeExecute {
         }
         this.lastExeCandle = this.currCandle
         this.numPositions++
+
+        return true
     }
 
     closePosition() {
         if (this.numPositions === 0) {
             console.log('no trade to close')
-            return
+            return false
         }
 
         const tradeHistoryItem = {}
@@ -147,6 +149,8 @@ export class TradeExecute {
         })
 
         this.eventBroadCaster.distribute(HISTORY_UPDATE, tradeHistoryItem)
+
+        return true
     }
 
     prepTradeHistoryForDB() {

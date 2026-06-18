@@ -1,17 +1,25 @@
 import { z } from 'zod'
 
 export const surveyDataSchema = z.object({
+    isUniversityStudent: z.boolean(),
+    profession: z.string()
+             .trim()
+             .max(100, "Profession name too long")
+             .regex(/^[a-zA-Z0-9\s.,'-]+$|^not applicable$/, "Invalid characters in profession field"),
     degree: z.string()
              .trim()
              .max(100, "Degree name too long")
-             .regex(/^[a-zA-Z0-9\s.,'-]+$/, "Invalid characters in degree field"),
-    yearOfStudy: z.coerce.number().int().min(1).max(5),
+             .regex(/^[a-zA-Z0-9\s.,'-]+$|^not applicable$/, "Invalid characters in degree field"),
+    yearOfStudy: z.union([
+             z.coerce.number().int().min(1).max(5), 
+             z.literal("not applicable")
+    ]),
     bettingExperience: z.coerce.number().int().min(0).max(5),
     tradingExperience: z.coerce.number().int().min(0).max(4),
     familiarityScore: z.coerce.number().int().min(1).max(10),
     maxAcceptedLoss: z.coerce.number().int().min(0).max(10000),
     riskyInvestmentAmount: z.coerce.number().int().min(0).max(10000)
-})
+});
 
 
 export const tradeHistoryItemSchema = z.object({
@@ -34,7 +42,7 @@ export const saveDataPayloadSchema = z.object({
     tradeHistoryData: tradeHistoryDataSchema
 })
 
-export const profitParamSchema = z.coerce.number()
+export const profitParamSchema = z.string().regex(/^-?\d+(\.\d+)?$/, "Must be a valid number")
 
 export const histogramBinSchema = z.object({
     binIndex: z.coerce.number().int(), 

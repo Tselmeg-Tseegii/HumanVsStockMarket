@@ -17,19 +17,37 @@
       <h2>Background Questions</h2>
 
       <div class="form-group">
-        <label class="question" for="degree">What is your degree?</label>
-        <input id="degree" name="degree" type="text" placeholder="e.g., Commerce">
-        <div id="degree-error" class="error-message"></div>
+        <label class="question">Are you a university student?</label>
+        <div class="radio-stack">
+          <label><input type="radio" name="isStudent" value="yes"> Yes</label>
+          <label><input type="radio" name="isStudent" value="no"> No</label>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label class="question">What is your year of study?</label>
-        <div class="pill-group">
-          <label class="pill-label"><input type="radio" name="year" value="1"><span class="pill-text">1</span></label>
-          <label class="pill-label"><input type="radio" name="year" value="2"><span class="pill-text">2</span></label>
-          <label class="pill-label"><input type="radio" name="year" value="3"><span class="pill-text">3</span></label>
-          <label class="pill-label"><input type="radio" name="year" value="4"><span class="pill-text">4</span></label>
-          <label class="pill-label"><input type="radio" name="year" value="5+"><span class="pill-text">5+</span></label>
+      <div id="student-section" class="hidden">
+        <div class="form-group">
+          <label class="question" for="degree">What is your degree?</label>
+          <input id="degree" name="degree" type="text" placeholder="e.g., Commerce">
+          <div id="degree-error" class="error-message"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="question">What is your year of study?</label>
+          <div class="pill-group">
+            <label class="pill-label"><input type="radio" name="year" value="1"><span class="pill-text">1</span></label>
+            <label class="pill-label"><input type="radio" name="year" value="2"><span class="pill-text">2</span></label>
+            <label class="pill-label"><input type="radio" name="year" value="3"><span class="pill-text">3</span></label>
+            <label class="pill-label"><input type="radio" name="year" value="4"><span class="pill-text">4</span></label>
+            <label class="pill-label"><input type="radio" name="year" value="5+"><span class="pill-text">5+</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div id="profession-section" class="hidden">
+        <div class="form-group">
+          <label class="question" for="profession">What is your profession?</label>
+          <input id="profession" name="profession" type="text" placeholder="e.g., Software Engineer">
+          <div id="profession-error" class="error-message"></div>
         </div>
       </div>
 

@@ -32,36 +32,45 @@ if (process.argv[1] === __filename) {
 
 app.post('/saveData', async (req, res) => {
     try {
-        const validatedData = saveDataPayloadSchema.parse(req.body)
+        const validatedData = saveDataPayloadSchema.parse(req.body);
 
-        const {surveyData, tradeHistoryData} = validatedData
+        const { surveyData, tradeHistoryData } = validatedData;
+
+        let parsedYearOfStudy = null
+        if (surveyData.yearOfStudy !== "not applicable") {
+            parsedYearOfStudy = parseInt(surveyData.yearOfStudy, 10)
+        }
 
         const query = `
         INSERT INTO user_trading_profiles (
-            degree, year_of_study, betting_experience, trading_experience, 
-            familiarity_score, max_accepted_loss, risky_investment_amount,
-            max_outcome, min_outcome, profit, num_entries, trade_history
+            is_university_student, profession, degree, year_of_study, 
+            betting_experience, trading_experience, familiarity_score, 
+            max_accepted_loss, risky_investment_amount, max_outcome, 
+            min_outcome, profit, num_entries, trade_history
         ) VALUES (
-            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
+            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
         ) RETURNING profile_id;
-        `
+        `;
 
         const values = [
-            surveyData.degree,
-            parseInt(surveyData.yearOfStudy),
-            parseInt(surveyData.bettingExperience),
-            parseInt(surveyData.tradingExperience),
-            parseInt(surveyData.familiarityScore),
-            parseInt(surveyData.maxAcceptedLoss),
+            surveyData.isUniversityStudent,  
+            surveyData.profession,  
+            surveyData.degree, 
+            parsedYearOfStudy,   
+            parseInt(surveyData.bettingExperience),  
+            parseInt(surveyData.tradingExperience),  
+            parseInt(surveyData.familiarityScore), 
+            parseInt(surveyData.maxAcceptedLoss),  
             parseInt(surveyData.riskyInvestmentAmount),
             
-            parseFloat(tradeHistoryData.maxOutcome),
-            parseFloat(tradeHistoryData.minOutcome),
-            parseFloat(tradeHistoryData.profit),
-            tradeHistoryData.history.length,         
-            JSON.stringify(tradeHistoryData.history)  
-        ]
-        const result = await dbPool.query(query, values)
+            parseFloat(tradeHistoryData.maxOutcome), 
+            parseFloat(tradeHistoryData.minOutcome),  
+            parseFloat(tradeHistoryData.profit), 
+            tradeHistoryData.history.length, 
+            JSON.stringify(tradeHistoryData.history) 
+        ];
+        
+        const result = await dbPool.query(query, values);
 
         res.status(200).json({
             message: 'Saved'
@@ -87,11 +96,7 @@ app.get('/globalStats', async (req, res) => {
         const rawProfit = req.query.profit
         let currProfit = null
         if (rawProfit !== undefined && rawProfit !== '') {
-            currProfit = profitParamSchema.parse(rawProfit);
-
-            if (isNaN(currProfit)) {
-                return res.status(400).json({ error: 'Invalid profit' });
-            }
+            currProfit = profitParamSchema.parse(rawProfit); 
         }
 
         const query = `

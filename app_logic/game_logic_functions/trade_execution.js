@@ -22,12 +22,12 @@ export class TradeExecute {
         this.closeButton = document.querySelector('.main-loop .panels-container .left-panel .button-row .close-button')
 
         this.buyButton.addEventListener('click', () => {
-            this.openPosition('buy')
+            if (this.openPosition('buy') === true) {
+                this.sellButton.classList.add('ghost-hidden')
+                this.buyButton.classList.add('ghost-hidden')
 
-            this.sellButton.classList.add('ghost-hidden')
-            this.buyButton.classList.add('ghost-hidden')
-
-            this.closeButton.classList.remove('ghost-hidden')
+                this.closeButton.classList.remove('ghost-hidden')
+            }
         })
         this.sellButton.addEventListener('click', () => {
             if (this.openPosition('sell') === true) {

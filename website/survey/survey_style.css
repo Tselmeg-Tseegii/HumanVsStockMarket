@@ -283,3 +283,8 @@
   .hidden {
     display: none !important;
   }
+
+  #student-section, 
+  #profession-section {
+    margin-bottom: 32px;
+  }

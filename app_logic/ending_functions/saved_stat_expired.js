@@ -1,3 +1,4 @@
+import { NUM_SECONDS_TO_EXPIRE } from "../constants.js"
 
 export function savedStatsExpired(lastTimeSavedStr) {
     if (lastTimeSavedStr === null) {
@@ -8,7 +9,7 @@ export function savedStatsExpired(lastTimeSavedStr) {
     const now = Date.now()
     const diffSec = Math.floor((now - lastTime) / 1000)
 
-    if (diffSec > 100000) {
+    if (diffSec > NUM_SECONDS_TO_EXPIRE) {
         return true
     } else {
         return false

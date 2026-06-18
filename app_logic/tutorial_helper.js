@@ -24,7 +24,7 @@ export class PerformTutorial {
                 text: 'This chart. This will never stop moving in the real game, it ONLY pauses during the tutorial steps',
                 isButton: false,
                 needPauseGameFully: false,
-                needPauseAfterAPeriodOf: 3,
+                needPauseAfterAPeriodOf: 2,
             },
             {
                 element: '.buy-button', 
@@ -38,14 +38,14 @@ export class PerformTutorial {
                 text: 'Your purchase is on the chart! The blue line is your buy price, and the blue arrow marks when you bought in.',
                 isButton: false,
                 needPauseGameFully: false,
-                needPauseAfterAPeriodOf: 3,
+                needPauseAfterAPeriodOf: 2,
             },
             {
                 element: '.unrealised-profit',
                 text: 'Watch your live profit or loss here while the trade is open.',
                 isButton: false,
                 needPauseGameFully: false,
-                needPauseAfterAPeriodOf: 3,
+                needPauseAfterAPeriodOf: 2,
             },
             {
                 element: '.close-button', 
@@ -59,7 +59,7 @@ export class PerformTutorial {
                 text: 'The gray circle marks exactly where you closed your trade.',
                 isButton: false,
                 needPauseGameFully: false,
-                needPauseAfterAPeriodOf: 3,
+                needPauseAfterAPeriodOf: 2,
             },
             {
                 element: '.realised-profit',

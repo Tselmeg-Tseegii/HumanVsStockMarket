@@ -39,6 +39,7 @@ export const DATA_SAVED_DB_CURR_ATTEMPT_NUM = 'num attempts to save'
 export const DATA_SAVED_DB_CURR_MAX_ATTEMPTS = 3
 
 export const LAST_SAVED_STAT_TIME_KEY = 'last saved stat time'
+export const NUM_SECONDS_TO_EXPIRE = 360
 export const LAST_SAVED_HIST_TIME_KEY = 'last saved hist time'
 export const SAVED_STATS_KEY = 'SAVED_STATS'
 export const SAVED_HIST_KEY = 'SAVED_HIST'

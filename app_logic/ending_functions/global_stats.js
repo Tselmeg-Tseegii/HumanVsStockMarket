@@ -4,14 +4,14 @@ import { LAST_SAVED_STAT_TIME_KEY, SAVED_STATS_KEY } from "../constants.js";
 export async function getGlobalStats(profit) {
     let response = null
     if (profit !== null) {
-        response = await fetch(`http://localhost:5050/globalStats?profit=${profit}`, {
+        response = await fetch(`http://192.168.20.22:5050/globalStats?profit=${profit}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json' 
             },
         })
     } else {
-        response = await fetch(`http://localhost:5050/globalStats`, {
+        response = await fetch(`http://192.168.20.22:5050/globalStats`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json' 

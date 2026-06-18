@@ -21,6 +21,16 @@ export async function getHistData() {
 }
 
 export function renderHist(histogramData, userProfit) {
+    const canvas = document.getElementById('profitHistogramCanvas')
+    const placeholder = document.getElementById('histogram-placeholder')
+    if (histogramData === null) {
+        placeholder.classList.remove('hidden')
+        canvas.classList.add('hidden')
+        return
+    }
+    placeholder.classList.add('hidden')
+    canvas.classList.remove('hidden')
+
     let targetIndex = -1;
     let minDiff = Infinity;
 

@@ -37,8 +37,18 @@ export function renderGlobalStats(globalStats) {
     const rankingElem = document.querySelector('.ranking .amount')
 
     numPlayersElem.textContent = `${globalStats['totalEntries']}`
-    maxTradeElem.textContent = `$${globalStats['maxOutcome']}`
-    minTradeElem.textContent = `$${globalStats['minOutcome']}`
+
+    if (globalStats['maxOutcome'] > 0) {
+        maxTradeElem.textContent = `$${globalStats['maxOutcome'].toFixed(2)}`
+    } else {
+        maxTradeElem.textContent = `-$${Math.abs(globalStats['maxOutcome']).toFixed(2)}`
+    }
+
+    if (globalStats['minOutcome'] > 0) {
+        minTradeElem.textContent = `$${globalStats['minOutcome'].toFixed(2)}`
+    } else {
+        minTradeElem.textContent = `-$${Math.abs(globalStats['minOutcome']).toFixed(2)}`
+    }
 
     const rank = globalStats['profitRank']
     const total = globalStats['totalEntries']

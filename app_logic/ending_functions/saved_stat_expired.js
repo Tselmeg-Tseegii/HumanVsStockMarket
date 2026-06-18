@@ -8,7 +8,7 @@ export function savedStatsExpired(lastTimeSavedStr) {
     const now = Date.now()
     const diffSec = Math.floor((now - lastTime) / 1000)
 
-    if (diffSec > 360) {
+    if (diffSec > 100000) {
         return true
     } else {
         return false

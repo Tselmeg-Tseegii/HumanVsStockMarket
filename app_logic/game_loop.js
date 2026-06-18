@@ -21,7 +21,6 @@ import {
     GAME_START_TEXT,
     PAUSE_GAME,
     UNPAUSE_GAME,
-    START_BUTTON_TEXT,
     PAUSE_GAME_AFTER_A_PERIOD,
     READY_FOR_REAL,
     GameStatus,
@@ -209,7 +208,7 @@ class GameLoop {
         }
 
         const startButton = document.getElementById('start-button')
-        startButton.textContent = START_BUTTON_TEXT
+        startButton.classList.remove('hidden')
         startButton.addEventListener('click', async () => {
             startButton.classList.add('hidden')
             startText.classList.add('hidden')

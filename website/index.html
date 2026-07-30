@@ -5,10 +5,11 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="globals.css">
     <link rel="stylesheet" href="index_style.css">
-
     <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
+    <div class="background-layer"></div>
+
     <script type="module">
         if (window.innerWidth < 800 || window.innerHeight < 600 || 'ontouchstart' in window) { 
             window.location.href = '/errors/desktop_only.html'
@@ -16,30 +17,38 @@
     </script>
 
     <div class="content-wrapper">
-        <img src="HumansVsMarket.png" class="hero-image" alt="Human Brain vs Stock Market">
+        <img src="img/HumansVsMarketNoBackround - Diff.png" class="hero-image" alt="Humans vs Market">
 
-        <header class="end-of-data-texts">
-            <h1 class="main-title">HUMAN BRAIN VS THE STOCK MARKET</h1>
-        </header>
+        <h1 class="main-title">
+            <span class="text-orange">HUMAN BRAIN</span>
+            <span class="text-yellow"> VS </span>
+            <span class="text-green">STOCK MARKET</span>
+        </h1>
+
+        <div class="features-section">
+            <div class="feature-card">
+                <img class="feature-icon clock" src="img/PixelClock.png" alt="Clock">
+                <p>7-10<br>min</p>
+            </div>
+            
+            <div class="feature-card">
+                <img class="feature-icon chart" src="img/PixelChart.png" alt="Chart">
+                <p>Trade on<br>historical data</p>
+            </div>
+
+            <div class="feature-card">
+                <img class="feature-icon trophy" src="img/PixelTrophy.png" alt="Trophy">
+                <p>Compete<br>against others</p>
+            </div>
+        </div>
+
+        <div class="divider-line"></div>
 
         <div class="body-text">
-            <p class="text-block">
-                Thank you for participating in this study.
-            </p>
-            <p class="text-block">
-                This should take 7-10 minutes.
-            </p>
-            <p class="text-block">
-                Our goal is to understand how humans react to price movements relying purely on intuition, 
-                without the aid of algorithms or external information. 
-                
-                Inspired by the recent surge in day trading and sports betting, 
-                this study explores the psychology behind our financial decisions.
-            </p>
-            <p class="text-block">
-                First, you'll answer a few quick background questions and complete a brief tutorial. 
-                Then, you'll jump right into the main task: trading on historical market 
-                data to make as much virtual profit as possible!
+            <p>
+                You’ll complete a quick survey and complete a brief tutorial.<br>
+                Then, you'll jump right into the main task: trading to make as<br>
+                much virtual profit as possible!
             </p>
         </div>
 
@@ -47,7 +56,7 @@
     </div>
 
     <script type="module">
-        const nextButton = document.querySelector('.content-wrapper .next-button')
+        const nextButton = document.querySelector('.next-button')
         nextButton.addEventListener('click', () => {
             window.location.href = 'survey/survey.html'
         })

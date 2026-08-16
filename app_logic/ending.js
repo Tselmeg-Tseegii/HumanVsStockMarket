@@ -46,9 +46,9 @@ async function ending() {
     const chartDataId = getAndValidateData(LAST_PLAYED_DATA_ID, chartDataIdSchema)
 
     const dataSavedStatus = localStorage.getItem(DATA_SAVED_DB_STATUS_KEY)
-    if (dataSavedStatus !== DATA_SAVED_DB_SUCCESSFULLY_ADDED && tradeHistoryData !== null && chartDataId !== null) {
+    if (dataSavedStatus !== DATA_SAVED_DB_SUCCESSFULLY_ADDED && tradeHistoryData !== null) {
         try {
-            await saveData(tradeHistoryData, chartDataId)
+            await saveData(tradeHistoryData)
         } catch (error) {
             console.log('Failed to save data:', error)
         }

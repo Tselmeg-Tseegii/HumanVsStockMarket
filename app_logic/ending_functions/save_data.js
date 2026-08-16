@@ -7,8 +7,7 @@ export async function saveData(tradeHistoryData, chartDataId) {
             'Content-Type': 'application/json' 
         },
         body: JSON.stringify({
-            tradeHistoryData: tradeHistoryData,
-            chartDataId: chartDataId
+            tradeHistoryData: tradeHistoryData
         }) 
     });
 

@@ -16,8 +16,7 @@ export const tradeHistoryDataSchema = z.object({
 })
 
 export const saveDataPayloadSchema = z.object({
-    tradeHistoryData: tradeHistoryDataSchema,
-    chartDataId: chartDataIdSchema
+    tradeHistoryData: tradeHistoryDataSchema
 })
 
 export const profitParamSchema = z.string().regex(/^-?\d+(\.\d+)?$/, "Must be a valid number")

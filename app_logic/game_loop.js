@@ -91,7 +91,7 @@ class GameLoop {
         const playerIntent = localStorage.getItem(PLAYER_GAME_INTENT)
 
         if (playerIntent === PLAYER_WANT_GAME) {
-            if (gameStatus === GAME_FINISHED && lastCompletedChartId === currentChartDataId) {
+            if (gameStatus === GAME_FINISHED && lastCompletedChartId !== null && lastCompletedChartId === currentChartDataId) {
                 throw new RedirectNeeded('../errors/cant_play_again.html')
             } else {
                 this.gameStatus = GameStatus.forReal

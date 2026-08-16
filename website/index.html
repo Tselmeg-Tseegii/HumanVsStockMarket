@@ -60,12 +60,13 @@
     <script type="module">
         const gameButton = document.querySelector('.game-button')
         gameButton.addEventListener('click', () => {
-            localStorage.setItem(SAVED_GAME_STATE_KEY, READY_FOR_REAL)
+            localStorage.setItem('players current intent', 'to game')
             window.location.href = 'game/game_loop.html'
         })
 
         const tutButton = document.querySelector('.game-button')
         tutButton.addEventListener('click', () => {
+            localStorage.setItem('players current intent', 'to tut')
             window.location.href = 'game/game_loop.html'
         })
 

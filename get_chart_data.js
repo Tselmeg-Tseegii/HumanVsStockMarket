@@ -56,12 +56,14 @@ async function getDataFromAPIAndSetFile() {
         }
     })
 
+    const chartDataId = 1
     const finalCandleData = {
-        id: 1,
+        id: chartDataId,
         values: formattedCandleData
     }
 
-    await fs.writeFile(path.join(__dirname, 'website', 'tut_chart_data.json'), JSON.stringify(finalCandleData, null, 2))
+    await fs.writeFile(path.join(__dirname, 'website', 'chart_data.json'), JSON.stringify(finalCandleData, null, 2))
+    await fs.writeFile(path.join(__dirname, 'website', 'chart_data_id.json', chartDataId))
 }
 
 getDataFromAPIAndSetFile()

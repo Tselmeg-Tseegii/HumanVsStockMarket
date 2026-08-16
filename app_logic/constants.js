@@ -14,6 +14,9 @@ export const NEW_CANDLE_EVENT = "NEW CANDLE"
 export const END_OF_DATA = "NO MORE DATA"
 
 export const SAVED_GAME_STATE_KEY = 'game_progress'
+export const PLAYER_GAME_INTENT = 'players current intent'
+export const PLAYER_WANT_GAME = 'to game'
+export const PLAYER_WANT_TUT = 'to tut'
 export const GAME_FINISHED = 'finished playing the game'
 export const TUTORIAL_FINISHED = 'finished the tutorial only'
 export const READY_FOR_REAL = 'ready for the real game'

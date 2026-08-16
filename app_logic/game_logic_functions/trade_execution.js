@@ -1,4 +1,4 @@
-import { FULL_TRADE_HISTORY, GameStatus, SAVED_TRADE_HISTORY } from "../constants.js"
+import { FULL_TRADE_HISTORY, GameStatus, LAST_PLAYED_DATA_ID, SAVED_TRADE_HISTORY } from "../constants.js"
 
 export const TRADE_EXED = 'TRADE EXECUTED'
 export const TRADE_EXE_BOUGHT = 'BUY'
@@ -187,7 +187,7 @@ export class TradeExecute {
         }
     }
 
-    saveAndBroadCastHistory(gameStatus) {
+    saveAndBroadCastHistory(gameStatus, chartDataId) {
         if (this.numPositions !== 0) {
             this.closePosition()
         }
@@ -195,6 +195,7 @@ export class TradeExecute {
         if (gameStatus === GameStatus.forReal) {
             this.prepTradeHistoryForDB()
             localStorage.setItem(SAVED_TRADE_HISTORY, JSON.stringify(this.finalTradeHistory))
+            localStorage.setItem(LAST_PLAYED_DATA_ID, chartDataId)
         }
 
         this.eventBroadCaster.distribute(FULL_TRADE_HISTORY, this.tradeHistory)

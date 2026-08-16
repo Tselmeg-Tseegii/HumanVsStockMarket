@@ -1,20 +1,23 @@
-import { candleStickDataArraySchema} from "../../data_schema.js"
+import { chartDataSchema } from "../../data_schema"
 
 export class PriceDataContainer {
     constructor() {
         this.initialCandles = []
         this.candlesData = []
         this.currentCandleIndex = 0
+        this.chartDataId = 0;
     }
 
     async initialiseItSelfWithData(dataPath) {
         const response = await fetch(dataPath)
         const candleStickData = await response.json()
 
-        candleStickDataArraySchema.parse(candleStickData)
+        chartDataSchema.parse(candleStickData)
 
-        this.initialCandles = candleStickData.splice(0, 25)
+        this.initialCandles = candleStickData['values'].splice(0, 25)
         this.candlesData = candleStickData
+
+        this.chartDataId = candleStickData['id']
     }
 
     getNextCandle() {

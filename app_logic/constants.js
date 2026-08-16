@@ -44,6 +44,8 @@ export const LAST_SAVED_HIST_TIME_KEY = 'last saved hist time'
 export const SAVED_STATS_KEY = 'SAVED_STATS'
 export const SAVED_HIST_KEY = 'SAVED_HIST'
 
+export const LAST_PLAYED_DATA_ID = 'last played data id'
+
 export const GameStatus = Object.freeze({
     firstTutorial: 'first tutorial',
     doneTutorial: 'done tutorial',

@@ -28,12 +28,12 @@
         <div class="features-section">
             <div class="feature-card">
                 <img class="feature-icon clock" src="img/PixelClock.png" alt="Clock">
-                <p>7-10<br>min</p>
+                <p>3-5<br>min</p>
             </div>
             
             <div class="feature-card">
                 <img class="feature-icon chart" src="img/PixelChart.png" alt="Chart">
-                <p>Trade on<br>historical data</p>
+                <p>Fresh new<br>data everyday</p>
             </div>
 
             <div class="feature-card">
@@ -46,20 +46,29 @@
 
         <div class="body-text">
             <p>
-                You’ll complete a quick survey and complete a brief tutorial.<br>
-                Then, you'll jump right into the main task: trading to make as<br>
-                much virtual profit as possible!
+                Your interactions with the game will be recorded for research purposes.
             </p>
         </div>
 
-        <button class="next-button">CLICK TO START</button>
+        <div class="action-button-container">
+            <button class="game-button">TO GAME</button>
+            <button class="tut-button">TO TUTORIAL</button>
+        </div>
+
     </div>
 
     <script type="module">
-        const nextButton = document.querySelector('.next-button')
-        nextButton.addEventListener('click', () => {
-            window.location.href = 'survey/survey.html'
+        const gameButton = document.querySelector('.game-button')
+        gameButton.addEventListener('click', () => {
+            localStorage.setItem(SAVED_GAME_STATE_KEY, READY_FOR_REAL)
+            window.location.href = 'game/game_loop.html'
         })
+
+        const tutButton = document.querySelector('.game-button')
+        tutButton.addEventListener('click', () => {
+            window.location.href = 'game/game_loop.html'
+        })
+
     </script>
 </body>
 </html>

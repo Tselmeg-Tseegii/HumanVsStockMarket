@@ -69,7 +69,7 @@ app.get('/currentChartData', async (req, res) => {
 
         console.log(result)
 
-        chartDataSchema.parse(result)
+        chartDataSchema.parse(result.rows[0].currentChartData)
 
         res.status(200).json(result.rows[0].currentChartData);
     } catch (err) {

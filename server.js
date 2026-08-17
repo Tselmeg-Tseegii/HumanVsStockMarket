@@ -244,10 +244,14 @@ app.get('/createDailyChart', async (req, res) => {
         } else if (dayOfWeek === 0) { 
             //if sunday, add 1 day to make it monday
             newDateStart.setUTCDate(newDateStart.getUTCDate() + 1);
+        } else if (dayOfWeek === 5) {
+            //if friday, add 3 days to make it monday as two full days are needed
+            newDateStart.setUTCDate(newDateStart.getUTCDate() + 3);
         }
 
-        //the new date end is just the date start plus one day
+        //the new date end is just the date start plus one day at 23:00:00
         let newDateEnd = new Date(newDateStart);
+        newDateEnd.setUTCDate(newDateEnd.getUTCDate() + 1);
         newDateEnd.setUTCHours(23, 0, 0, 0);
 
         //get the data from the twelve data api
@@ -298,7 +302,7 @@ async function getChartDataFromTwelveData(startDate, endDate) {
     const startingDate = startDate.toISOString().split('.')[0]
     const endingDate = endDate.toISOString().split('.')[0]
     
-    const interval = '10min'
+    const interval = '15min'
     const order = 'asc'
     const apiKey = process.env.TWELVEDATA_MY_API_KEY
     

@@ -6,7 +6,7 @@ import { z } from 'zod'
 import {
     fileURLToPath
 } from 'url'
-import { profitParamSchema, saveDataPayloadSchema } from './data_schema.js'
+import { chartDataSchema, profitParamSchema, saveDataPayloadSchema } from './data_schema.js'
 
 
 const __filename = fileURLToPath(import.meta.url)
@@ -66,6 +66,10 @@ app.get('/currentChartData', async (req, res) => {
         `
         
         const result = await dbPool.query(query, values);
+
+        console.log(result)
+
+        chartDataSchema.parse(result)
 
         res.status(200).json(result.rows[0].currentChartData);
     } catch (err) {

@@ -11,6 +11,8 @@ export class PriceDataContainer {
     async initialiseItSelfWithData(dataPath) {
         const candleStickData = getLatestChartData(dataPath)
 
+        console.log(candleStickData)
+
         this.initialCandles = candleStickData['values'].splice(0, 25)
         this.candlesData = candleStickData
     }

@@ -1,6 +1,5 @@
-import { chartDataSchema } from "../../data_schema"
-import { CURR_PLAYING_DATA_ID, REAL_GAME_CHART_TYPE } from "../constants";
-import { getLatestChartData } from "./get_from_db";
+
+import { getLatestChartData } from "./get_from_db.js";
 
 export class PriceDataContainer {
     constructor() {

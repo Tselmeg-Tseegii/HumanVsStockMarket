@@ -12,7 +12,7 @@ export class PriceDataContainer {
         const candleStickData = await getLatestChartData(dataPath)
 
         this.initialCandles = candleStickData['values'].splice(0, 25)
-        this.candlesData = candleStickData
+        this.candlesData = candleStickData['values']
     }
 
     getNextCandle() {

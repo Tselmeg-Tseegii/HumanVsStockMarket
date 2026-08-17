@@ -60,7 +60,7 @@ app.get('/currentChartData', async (req, res) => {
         }
 
         const query = `
-        SELECT chartData->$1 AS currentChartData
+        SELECT chartData->$1 AS "currentChartData"
         FROM chart_data_json
         WHERE id = 1
         `

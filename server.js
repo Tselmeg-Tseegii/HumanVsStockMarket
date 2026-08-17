@@ -274,6 +274,8 @@ app.get('/createDailyChart', async (req, res) => {
                 await client.query(insertDatesQuery, [newDateStart, newDateEnd, 'XAU/USD']);
 
                 await client.query('COMMIT');
+
+                res.status(200).json({ message: 'Daily chart update complete' });
             } catch (dbError) {
                 await client.query('ROLLBACK'); 
                 throw dbError; 
@@ -281,10 +283,8 @@ app.get('/createDailyChart', async (req, res) => {
                 client.release();
             }
         } else {
-            console.log("No data returned from getChartDataFromTwelveData");
+            res.status(200).json({ message: 'Chart update fail due to no data available' });
         }
-    
-        res.status(200).json({ message: 'Daily chart update complete' });
         
     } catch (err) {
         console.error("createDailyChart error:", err);
@@ -318,6 +318,8 @@ async function getChartDataFromTwelveData(startDate, endDate) {
     }
 
     const candleData = await response.json()
+
+    console.log(candleData)
 
     if (candleData.status === 'error' || !candleData.values) {
         console.error("TwelveData API Error:", candleData.message || "No values returned");

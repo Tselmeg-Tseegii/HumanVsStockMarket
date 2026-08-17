@@ -313,13 +313,14 @@ async function getChartDataFromTwelveData(startDate, endDate) {
     
     const response = await fetch(dataAPIUrl)
 
+
+
     if (response.status !== 200) {
+        console.log("Twelve data API error status not 200: ", response)
         return null
     }
 
     const candleData = await response.json()
-
-    console.log(candleData)
 
     if (candleData.status === 'error' || !candleData.values) {
         console.error("TwelveData API Error:", candleData.message || "No values returned");

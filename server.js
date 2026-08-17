@@ -49,7 +49,7 @@ app.get('/currentChartData', async (req, res) => {
     try {
         const dataType = req.query.dataType
         const values = []
-        if (rawProfit !== undefined && rawProfit !== '') {
+        if (dataType) {
             if (dataType === 'tutorial') {
                 values.push('tutorial')
             } else if (dataType === 'game'){
@@ -60,7 +60,7 @@ app.get('/currentChartData', async (req, res) => {
         }
 
         const query = `
-        SELECT chartData->>'$1' AS currentChartData
+        SELECT chartData->$1 AS currentChartData
         FROM chart_data_json
         WHERE id = 1
         `
@@ -291,8 +291,8 @@ app.get('/createDailyChart', async (req, res) => {
 async function getChartDataFromTwelveData(startDate, endDate) {
     const symbol = 'XAU/USD'
     const timezone = 'UTC'
-    const startingDate = startDate
-    const endingDate = endDate
+    const startingDate = startDate.toISOString().split('.')[0]
+    const endingDate = endDate.toISOString().split('.')[0]
     
     const interval = '5min'
     const order = 'asc'
@@ -314,6 +314,12 @@ async function getChartDataFromTwelveData(startDate, endDate) {
     }
 
     const candleData = await response.json()
+
+    if (candleData.status === 'error' || !candleData.values) {
+        console.error("TwelveData API Error:", candleData.message || "No values returned");
+        return null;
+    }
+    
     const formattedCandleData = candleData['values'].map(candle => {
 
         const {datetime, open, high, low, close} = candle

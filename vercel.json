@@ -2,7 +2,7 @@
 "crons": [
   {
     "path": "/createNew",
-    "schedule": "0 0 * * *"
+    "schedule": "0 19 * * *"
   }
 ],
 "rewrites": [

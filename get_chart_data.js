@@ -15,12 +15,12 @@ const timezone = 'UTC'
 // const endingDate = '2026-3-3T8:00:00'
 
 // good tut range
-// const startingDate = '2026-3-1T23:00:00'
-// const endingDate = '2026-3-3T00:00:00'
+const startingDate = '2026-3-1T23:00:00'
+const endingDate = '2026-3-3T00:00:00'
 
 //main data range
-const startingDate = '2026-3-22T23:00:00'
-const endingDate = '2026-3-25T00:00:00'
+// const startingDate = '2026-3-22T23:00:00'
+// const endingDate = '2026-3-25T00:00:00'
 
 const interval = '15min'
 const order = 'asc'
@@ -62,7 +62,8 @@ async function getDataFromAPIAndSetFile() {
         values: formattedCandleData
     }
 
-    await fs.writeFile(path.join(__dirname, 'website', 'chart_data.json'), JSON.stringify(finalCandleData, null, 2))
+    // await fs.writeFile(path.join(__dirname, 'website', 'chart_data.json'), JSON.stringify(finalCandleData, null, 2))
+    await fs.writeFile(path.join(__dirname, 'website', 'tut_chart_data.json'), JSON.stringify(finalCandleData, null, 2))
 }
 
 getDataFromAPIAndSetFile()

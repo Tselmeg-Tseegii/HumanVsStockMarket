@@ -27,6 +27,9 @@ import {
     LAST_PLAYED_DATA_ID,
     PLAYER_GAME_INTENT,
     PLAYER_WANT_GAME,
+    CURR_PLAYING_DATA_ID,
+    TUTORIAL_CHART_TYPE,
+    REAL_GAME_CHART_TYPE,
 
 } from "./constants.js"
 import { TradeStats } from "./game_logic_functions/local_stats.js"
@@ -35,6 +38,7 @@ import { PerformTutorial, tutorialSteps } from "./tutorial_helper.js"
 import { startCountDown } from "./game_logic_functions/start_countdown.js"
 import { RedirectNeeded, showError } from "./error.js"
 import { chartDataIdSchema } from "../data_schema.js"
+import { getLatestChartId } from "./game_logic_functions/get_from_db.js"
 
 class GameLoop {
     constructor() {
@@ -83,10 +87,12 @@ class GameLoop {
         const gameStatus = localStorage.getItem(SAVED_GAME_STATE_KEY)
         const lastCompletedChartId = localStorage.getItem(LAST_PLAYED_DATA_ID)
 
-        const response = await fetch('../chart_data_id')
-        const currentChartDataId = await response.json()
+        const currentChartDataId = await getLatestChartId()
+        if (currentChartDataId === null) {
+            throw new RedirectNeeded('../errors/something_wrong.html')
+        }
 
-        chartDataIdSchema.parse(currentChartDataId)
+        localStorage.setItem(CURR_PLAYING_DATA_ID, currentChartDataId)
 
         const playerIntent = localStorage.getItem(PLAYER_GAME_INTENT)
 
@@ -112,9 +118,9 @@ class GameLoop {
 
         let dataPath = ''
         if (this.gameStatus !== GameStatus.forReal) {
-            dataPath = '../tut_chart_data.json'
+            dataPath = TUTORIAL_CHART_TYPE
         } else {
-            dataPath = '../chart_data.json'
+            dataPath = REAL_GAME_CHART_TYPE
         }
 
         try {

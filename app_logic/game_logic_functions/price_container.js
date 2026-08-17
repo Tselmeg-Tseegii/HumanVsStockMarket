@@ -1,4 +1,6 @@
 import { chartDataSchema } from "../../data_schema"
+import { CURR_PLAYING_DATA_ID, REAL_GAME_CHART_TYPE } from "../constants";
+import { getLatestChartData } from "./get_from_db";
 
 export class PriceDataContainer {
     constructor() {
@@ -9,10 +11,7 @@ export class PriceDataContainer {
     }
 
     async initialiseItSelfWithData(dataPath) {
-        const response = await fetch(dataPath)
-        const candleStickData = await response.json()
-
-        chartDataSchema.parse(candleStickData)
+        const candleStickData = getLatestChartData(dataPath)
 
         this.initialCandles = candleStickData['values'].splice(0, 25)
         this.candlesData = candleStickData

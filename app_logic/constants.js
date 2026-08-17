@@ -48,6 +48,10 @@ export const SAVED_STATS_KEY = 'SAVED_STATS'
 export const SAVED_HIST_KEY = 'SAVED_HIST'
 
 export const LAST_PLAYED_DATA_ID = 'last played data id'
+export const CURR_PLAYING_DATA_ID = 'curr playing data id'
+
+export const TUTORIAL_CHART_TYPE = 'tutorial'
+export const REAL_GAME_CHART_TYPE = 'game'
 
 export const GameStatus = Object.freeze({
     firstTutorial: 'first tutorial',

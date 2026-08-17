@@ -19,8 +19,8 @@ const timezone = 'UTC'
 // const endingDate = '2026-3-3T00:00:00'
 
 //main data range
-// const startingDate = '2026-3-22T23:00:00'
-// const endingDate = '2026-3-25T00:00:00'
+const startingDate = '2026-3-22T23:00:00'
+const endingDate = '2026-3-25T00:00:00'
 
 const interval = '15min'
 const order = 'asc'
@@ -63,7 +63,6 @@ async function getDataFromAPIAndSetFile() {
     }
 
     await fs.writeFile(path.join(__dirname, 'website', 'chart_data.json'), JSON.stringify(finalCandleData, null, 2))
-    await fs.writeFile(path.join(__dirname, 'website', 'chart_data_id.json', chartDataId))
 }
 
 getDataFromAPIAndSetFile()

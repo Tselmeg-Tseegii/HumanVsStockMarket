@@ -30,6 +30,50 @@ if (process.argv[1] === __filename) {
     })
 }
 
+app.get('/currentChartId', async (req, res) => {
+    try {
+        const query = `
+        SELECT data_id FROM chart_data ORDER BY data_id DESC LIMIT 1
+        `;
+        
+        const result = await dbPool.query(query);
+
+        res.status(200).json(result.rows[0].data_id);
+    } catch (err) {
+        console.error("currentChartId:", err);
+        res.status(500).json({ error: "error" });
+    }
+})
+
+app.get('/currentChartData', async (req, res) => {
+    try {
+        const dataType = req.query.dataType
+        const values = []
+        if (rawProfit !== undefined && rawProfit !== '') {
+            if (dataType === 'tutorial') {
+                values.push('tutorial')
+            } else if (dataType === 'game'){
+                values.push('currentReal')
+            } else {
+                throw Error('invalid input')
+            }
+        }
+
+        const query = `
+        SELECT chartData->>'$1' AS currentChartData
+        FROM chart_data_json
+        WHERE id = 1
+        `
+        
+        const result = await dbPool.query(query, values);
+
+        res.status(200).json(result.rows[0].currentChartData);
+    } catch (err) {
+        console.error("currentChartId:", err);
+        res.status(500).json({ error: "error" });
+    }
+})
+
 app.post('/saveData', async (req, res) => {
     try {
         const validatedData = saveDataPayloadSchema.parse(req.body);
@@ -164,5 +208,135 @@ app.get('/globalStatsHist', async (req, res) => {
         res.status(500).json({ error: "error" });
     }
 })
+
+app.get('/createDailyChart', async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        //get the most recent chart data
+        const latestQuery = `SELECT date_start, date_end FROM chart_data ORDER BY data_id DESC LIMIT 1`;
+        const latestResult = await dbPool.query(latestQuery);
+        
+        if (latestResult.rows.length === 0) {
+            throw new Error("No existing chart data found in database");
+        }
+
+        const lastDateEnd = new Date(latestResult.rows[0].date_end);
+
+        //calculate the new start date
+        //its lastDateEnd's day + 1 day and set to 00:00:00 time
+        let newDateStart = new Date(lastDateEnd);
+        newDateStart.setUTCDate(newDateStart.getUTCDate() + 1);
+        newDateStart.setUTCHours(0, 0, 0, 0);
+
+        //the starting date has to start on a weekday to avoid weekends
+        const dayOfWeek = newDateStart.getUTCDay();
+        if (dayOfWeek === 6) { 
+            //if saturday, add 2 days to make it monday
+            newDateStart.setUTCDate(newDateStart.getUTCDate() + 2);
+        } else if (dayOfWeek === 0) { 
+            //if sunday, add 1 day to make it monday
+            newDateStart.setUTCDate(newDateStart.getUTCDate() + 1);
+        }
+
+        //the new date end is just the date start plus one day
+        let newDateEnd = new Date(newDateStart);
+        newDateEnd.setUTCHours(23, 0, 0, 0);
+
+        //get the data from the twelve data api
+        const newChartData = await getChartDataFromTwelveData(newDateStart, newDateEnd);
+
+        //update the database
+        if (newChartData) {
+            const client = await dbPool.connect();
+            
+            try {
+                await client.query('BEGIN');
+
+                const updateJsonQuery = `
+                    UPDATE chart_data_json 
+                    SET chartData = jsonb_set(chartData::jsonb, '{currentReal}', $1::jsonb)
+                    WHERE id = 1
+                `;
+                await client.query(updateJsonQuery, [JSON.stringify(newChartData)]);
+
+                const insertDatesQuery = `
+                    INSERT INTO chart_data (date_start, date_end, symbol) 
+                    VALUES ($1, $2, $3)
+                `;
+                await client.query(insertDatesQuery, [newDateStart, newDateEnd, 'XAU/USD']);
+
+                await client.query('COMMIT');
+            } catch (dbError) {
+                await client.query('ROLLBACK'); 
+                throw dbError; 
+            } finally {
+                client.release();
+            }
+        } else {
+            console.log("No data returned from getChartDataFromTwelveData");
+        }
+    
+        res.status(200).json({ message: 'Daily chart update complete' });
+        
+    } catch (err) {
+        console.error("createDailyChart error:", err);
+        res.status(500).json({ error: "Failed to get new chart" });
+    }
+})
+
+async function getChartDataFromTwelveData(startDate, endDate) {
+    const symbol = 'XAU/USD'
+    const timezone = 'UTC'
+    const startingDate = startDate
+    const endingDate = endDate
+    
+    const interval = '5min'
+    const order = 'asc'
+    const apiKey = process.env.TWELVEDATA_MY_API_KEY
+    
+    const dataAPIUrl = [`https://api.twelvedata.com/time_series?`,
+                        `symbol=${symbol}&`,
+                        `timezone=${timezone}&`,
+                        `start_date=${startingDate}&`,
+                        `end_date=${endingDate}&`,
+                        `interval=${interval}&`,
+                        `order=${order}&`,
+                        `apikey=${apiKey}`].join('')
+    
+    const response = await fetch(dataAPIUrl)
+
+    if (response.status !== 200) {
+        return null
+    }
+
+    const candleData = await response.json()
+    const formattedCandleData = candleData['values'].map(candle => {
+
+        const {datetime, open, high, low, close} = candle
+
+        const dateObject = new Date(datetime)
+        const epochSec = Math.floor(dateObject.getTime() / 1000)
+
+        return {
+            time: epochSec,
+            open: Number(open),
+            high: Number(high),
+            low: Number(low),
+            close: Number(close)
+        }
+    })
+    
+    const chartDataId = 1
+    const finalCandleData = {
+        id: chartDataId,
+        values: formattedCandleData
+    }
+
+    return finalCandleData
+}
 
 export default app

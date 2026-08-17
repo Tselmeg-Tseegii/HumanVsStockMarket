@@ -1,4 +1,5 @@
 import { 
+    CURR_PLAYING_DATA_ID,
     DATA_SAVED_DB_STATUS_KEY, 
     DATA_SAVED_DB_SUCCESSFULLY_ADDED, 
     LAST_PLAYED_DATA_ID, 
@@ -43,14 +44,17 @@ function getAndValidateData(key, schema) {
 
 async function ending() {
     const tradeHistoryData = getAndValidateData(SAVED_TRADE_HISTORY, tradeHistoryDataSchema)
-    const chartDataId = getAndValidateData(LAST_PLAYED_DATA_ID, chartDataIdSchema)
+    const lastChartId = getAndValidateData(LAST_PLAYED_DATA_ID, chartDataIdSchema)
+    const currentDataId = getAndValidateData(CURR_PLAYING_DATA_ID, chartDataIdSchema)
 
     const dataSavedStatus = localStorage.getItem(DATA_SAVED_DB_STATUS_KEY)
     if (dataSavedStatus !== DATA_SAVED_DB_SUCCESSFULLY_ADDED && tradeHistoryData !== null) {
-        try {
-            await saveData(tradeHistoryData)
-        } catch (error) {
-            console.log('Failed to save data:', error)
+        if (lastChartId === null || currentDataId !== lastChartId) {
+            try {
+                await saveData(tradeHistoryData, currentDataId)
+            } catch (error) {
+                console.log('Failed to save data:', error)
+            }
         }
     }
 

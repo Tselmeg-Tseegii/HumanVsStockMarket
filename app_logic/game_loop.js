@@ -24,6 +24,12 @@ import {
     PAUSE_GAME_AFTER_A_PERIOD,
     READY_FOR_REAL,
     GameStatus,
+    LAST_PLAYED_DATA_ID,
+    PLAYER_GAME_INTENT,
+    PLAYER_WANT_GAME,
+    CURR_PLAYING_DATA_ID,
+    TUTORIAL_CHART_TYPE,
+    REAL_GAME_CHART_TYPE,
 
 } from "./constants.js"
 import { TradeStats } from "./game_logic_functions/local_stats.js"
@@ -31,6 +37,8 @@ import { doConfettiInRectangle } from "./game_logic_functions/confetti.js"
 import { PerformTutorial, tutorialSteps } from "./tutorial_helper.js"
 import { startCountDown } from "./game_logic_functions/start_countdown.js"
 import { RedirectNeeded, showError } from "./error.js"
+import { chartDataIdSchema } from "../data_schema.js"
+import { getLatestChartId } from "./game_logic_functions/get_from_db.js"
 
 class GameLoop {
     constructor() {
@@ -54,7 +62,7 @@ class GameLoop {
 
     async start() {
         try {
-            this.checkGameState()
+            await this.checkGameState()
 
             await this.initialiseGameData()
 
@@ -75,16 +83,33 @@ class GameLoop {
         }
     }
 
-    checkGameState() {
+    async checkGameState() {
         const gameStatus = localStorage.getItem(SAVED_GAME_STATE_KEY)
-        if (gameStatus === GAME_FINISHED) {
-            throw new RedirectNeeded('../errors/cant_play_again.html')
-        } else if (gameStatus === null) {
-            this.gameStatus = GameStatus.firstTutorial
-        } else if (gameStatus === READY_FOR_REAL){
-            this.gameStatus = GameStatus.forReal
+        const lastCompletedChartId = localStorage.getItem(LAST_PLAYED_DATA_ID)
+
+        const currentChartDataId = await getLatestChartId()
+        if (currentChartDataId === null) {
+            throw new RedirectNeeded('../errors/something_wrong.html')
+        }
+
+        localStorage.setItem(CURR_PLAYING_DATA_ID, currentChartDataId)
+
+        const playerIntent = localStorage.getItem(PLAYER_GAME_INTENT)
+
+        if (playerIntent === PLAYER_WANT_GAME) {
+            if (gameStatus === GAME_FINISHED && lastCompletedChartId !== null && lastCompletedChartId === currentChartDataId) {
+                throw new RedirectNeeded('../errors/cant_play_again.html')
+            } else {
+                this.gameStatus = GameStatus.forReal
+            }
         } else {
-            this.gameStatus = GameStatus.doneTutorial
+            if (gameStatus === null) {
+                this.gameStatus = GameStatus.firstTutorial
+            } else if (gameStatus === READY_FOR_REAL){
+                this.gameStatus = GameStatus.forReal
+            } else {
+                this.gameStatus = GameStatus.doneTutorial
+            }
         }
     }
 
@@ -93,9 +118,9 @@ class GameLoop {
 
         let dataPath = ''
         if (this.gameStatus !== GameStatus.forReal) {
-            dataPath = '../tut_chart_data.json'
+            dataPath = TUTORIAL_CHART_TYPE
         } else {
-            dataPath = '../chart_data.json'
+            dataPath = REAL_GAME_CHART_TYPE
         }
 
         try {
@@ -143,7 +168,9 @@ class GameLoop {
     }
 
     bindGameEndEventsToEventBroadcaster() {
-        this.evenBroadCaster.on(END_OF_DATA, () => {this.tradeExecuter.saveAndBroadCastHistory(this.gameStatus)})
+        this.evenBroadCaster.on(END_OF_DATA, () => {
+            this.tradeExecuter.saveAndBroadCastHistory(this.gameStatus)
+        })
         this.evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {this.tradeStatsCalc.recieveTradeHistory(tradeHist)})
 
         this.evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {this.mainChart.displayTradeLines(tradeHist)})

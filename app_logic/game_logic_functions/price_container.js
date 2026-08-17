@@ -1,4 +1,5 @@
-import { candleStickDataArraySchema} from "../../data_schema.js"
+
+import { getLatestChartData } from "./get_from_db.js";
 
 export class PriceDataContainer {
     constructor() {
@@ -8,13 +9,10 @@ export class PriceDataContainer {
     }
 
     async initialiseItSelfWithData(dataPath) {
-        const response = await fetch(dataPath)
-        const candleStickData = await response.json()
+        const candleStickData = await getLatestChartData(dataPath)
 
-        candleStickDataArraySchema.parse(candleStickData)
-
-        this.initialCandles = candleStickData.splice(0, 25)
-        this.candlesData = candleStickData
+        this.initialCandles = candleStickData['values'].splice(0, 25)
+        this.candlesData = candleStickData['values']
     }
 
     getNextCandle() {

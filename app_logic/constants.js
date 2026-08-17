@@ -14,6 +14,9 @@ export const NEW_CANDLE_EVENT = "NEW CANDLE"
 export const END_OF_DATA = "NO MORE DATA"
 
 export const SAVED_GAME_STATE_KEY = 'game_progress'
+export const PLAYER_GAME_INTENT = 'players current intent'
+export const PLAYER_WANT_GAME = 'to game'
+export const PLAYER_WANT_TUT = 'to tut'
 export const GAME_FINISHED = 'finished playing the game'
 export const TUTORIAL_FINISHED = 'finished the tutorial only'
 export const READY_FOR_REAL = 'ready for the real game'
@@ -23,7 +26,7 @@ export const SURVEY_COMPLETE = 'survey is completed'
 export const SAVED_SURVEY_KEY = 'survey_key'
 
 export const TUTORIAL_START_TEXT = 'Welcome to the tutorial! This is a quick practice round using the real game mechanics.'
-export const GAME_START_TEXT = 'This is the real deal. You only get one shot, so make it count!'
+export const GAME_START_TEXT = 'This is not the tutorial and your actions will be recorded'
 export const TUTORIAL_END_TEXT = 'That\'s it for the guide! You have a minute left to practice your controls before the real game begins.'
 
 export const PAUSE_GAME = 'pause the game'
@@ -43,6 +46,12 @@ export const NUM_SECONDS_TO_EXPIRE = 360
 export const LAST_SAVED_HIST_TIME_KEY = 'last saved hist time'
 export const SAVED_STATS_KEY = 'SAVED_STATS'
 export const SAVED_HIST_KEY = 'SAVED_HIST'
+
+export const LAST_PLAYED_DATA_ID = 'last played data id'
+export const CURR_PLAYING_DATA_ID = 'curr playing data id'
+
+export const TUTORIAL_CHART_TYPE = 'tutorial'
+export const REAL_GAME_CHART_TYPE = 'game'
 
 export const GameStatus = Object.freeze({
     firstTutorial: 'first tutorial',

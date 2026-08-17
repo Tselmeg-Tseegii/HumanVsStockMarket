@@ -1,6 +1,8 @@
 import { 
+    CURR_PLAYING_DATA_ID,
     DATA_SAVED_DB_STATUS_KEY, 
     DATA_SAVED_DB_SUCCESSFULLY_ADDED, 
+    LAST_PLAYED_DATA_ID, 
     LAST_SAVED_HIST_TIME_KEY, 
     LAST_SAVED_STAT_TIME_KEY,
     SAVED_HIST_KEY, SAVED_STATS_KEY, 
@@ -12,7 +14,7 @@ import { saveData } from "./ending_functions/save_data.js";
 import { getGlobalStats, renderGlobalStats } from "./ending_functions/global_stats.js";
 import { getHistData, renderHist } from "./ending_functions/hist.js";
 import { savedStatsExpired } from "./ending_functions/saved_stat_expired.js";
-import { globalStatsSchema, histogramDataSchema, surveyDataSchema, tradeHistoryDataSchema } from "../data_schema.js";
+import { chartDataIdSchema, globalStatsSchema, histogramDataSchema, tradeHistoryDataSchema } from "../data_schema.js";
 import { showError } from "./error.js";
 
 function hideLoader() {
@@ -41,15 +43,18 @@ function getAndValidateData(key, schema) {
 }
 
 async function ending() {
-    const surveyData = getAndValidateData(SAVED_SURVEY_KEY, surveyDataSchema)
     const tradeHistoryData = getAndValidateData(SAVED_TRADE_HISTORY, tradeHistoryDataSchema)
+    const lastChartId = getAndValidateData(LAST_PLAYED_DATA_ID, chartDataIdSchema)
+    const currentDataId = localStorage.getItem(CURR_PLAYING_DATA_ID)
 
     const dataSavedStatus = localStorage.getItem(DATA_SAVED_DB_STATUS_KEY)
-    if (dataSavedStatus !== DATA_SAVED_DB_SUCCESSFULLY_ADDED && surveyData !== null && tradeHistoryData !== null) {
-        try {
-            await saveData(surveyData, tradeHistoryData)
-        } catch (error) {
-            console.log('Failed to save data:', error)
+    if (dataSavedStatus !== DATA_SAVED_DB_SUCCESSFULLY_ADDED && tradeHistoryData !== null) {
+        if (lastChartId === null || currentDataId !== lastChartId) {
+            try {
+                await saveData(tradeHistoryData, currentDataId)
+            } catch (error) {
+                console.log('Failed to save data:', error)
+            }
         }
     }
 

@@ -1,20 +1,30 @@
 {
-    "rewrites": [
-      { 
-        "source": "/saveData", 
-        "destination": "/server.js" 
-      },
-      { 
-        "source": "/globalStats", 
-        "destination": "/server.js" 
-      },
-      { 
-        "source": "/globalStatsHist", 
-        "destination": "/server.js" 
-      },
-      { 
-        "source": "/(.*)", 
-        "destination": "/website/$1" 
-      }
-    ]
+"crons": [
+  {
+    "path": "/createDailyChart",
+    "schedule": "0 19 * * *"
   }
+],
+"rewrites": [
+  { 
+    "source": "/saveData", 
+    "destination": "/server.js" 
+  },
+  { 
+    "source": "/globalStats", 
+    "destination": "/server.js" 
+  },
+  { 
+    "source": "/globalStatsHist", 
+    "destination": "/server.js" 
+  },
+  { 
+    "source": "/createDailyChart", 
+    "destination": "/server.js" 
+  },
+  { 
+    "source": "/(.*)", 
+    "destination": "/website/$1" 
+  }
+]
+}

@@ -30,6 +30,7 @@ import {
     CURR_PLAYING_DATA_ID,
     TUTORIAL_CHART_TYPE,
     REAL_GAME_CHART_TYPE,
+    PLAYER_WANT_TUT,
 
 } from "./constants.js"
 import { TradeStats } from "./game_logic_functions/local_stats.js"
@@ -260,6 +261,7 @@ class GameLoop {
                 fastForwardButton.classList.add('hidden')
 
                 localStorage.setItem(SAVED_GAME_STATE_KEY, TUTORIAL_FINISHED)
+                localStorage.setItem(PLAYER_GAME_INTENT, PLAYER_WANT_TUT)
 
                 window.location.reload()
 
@@ -274,6 +276,7 @@ class GameLoop {
                 fastForwardButton.classList.add('hidden')
 
                 localStorage.setItem(SAVED_GAME_STATE_KEY, READY_FOR_REAL)
+                localStorage.setItem(PLAYER_GAME_INTENT, PLAYER_WANT_GAME)
 
                 window.location.reload()
 

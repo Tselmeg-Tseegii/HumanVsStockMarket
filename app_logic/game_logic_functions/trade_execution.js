@@ -187,7 +187,7 @@ export class TradeExecute {
         }
     }
 
-    saveAndBroadCastHistory(gameStatus, chartDataId) {
+    saveAndBroadCastHistory(gameStatus) {
         if (this.numPositions !== 0) {
             this.closePosition()
         }
@@ -195,7 +195,6 @@ export class TradeExecute {
         if (gameStatus === GameStatus.forReal) {
             this.prepTradeHistoryForDB()
             localStorage.setItem(SAVED_TRADE_HISTORY, JSON.stringify(this.finalTradeHistory))
-            localStorage.setItem(LAST_PLAYED_DATA_ID, chartDataId)
         }
 
         this.eventBroadCaster.distribute(FULL_TRADE_HISTORY, this.tradeHistory)

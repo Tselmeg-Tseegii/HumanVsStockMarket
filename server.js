@@ -336,9 +336,7 @@ async function getChartDataFromTwelveData(startDate, endDate) {
         }
     })
     
-    const chartDataId = 1
     const finalCandleData = {
-        id: chartDataId,
         values: formattedCandleData
     }
 

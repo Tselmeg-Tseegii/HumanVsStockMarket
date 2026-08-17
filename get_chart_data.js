@@ -56,9 +56,7 @@ async function getDataFromAPIAndSetFile() {
         }
     })
 
-    const chartDataId = 1
     const finalCandleData = {
-        id: chartDataId,
         values: formattedCandleData
     }
 

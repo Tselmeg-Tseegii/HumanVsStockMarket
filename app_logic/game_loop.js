@@ -169,7 +169,7 @@ class GameLoop {
 
     bindGameEndEventsToEventBroadcaster() {
         this.evenBroadCaster.on(END_OF_DATA, () => {
-            this.tradeExecuter.saveAndBroadCastHistory(this.gameStatus, this.priceDataContainer.chartDataId)
+            this.tradeExecuter.saveAndBroadCastHistory(this.gameStatus)
         })
         this.evenBroadCaster.on(FULL_TRADE_HISTORY, (tradeHist) => {this.tradeStatsCalc.recieveTradeHistory(tradeHist)})
 

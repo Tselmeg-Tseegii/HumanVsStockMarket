@@ -53,6 +53,5 @@ export const candleStickSchema = z.object({
 export const chartDataIdSchema = z.coerce.number()
 
 export const chartDataSchema = z.object({
-    id: chartDataIdSchema,
     values: z.array(candleStickSchema)
 })

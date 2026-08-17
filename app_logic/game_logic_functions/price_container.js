@@ -6,7 +6,6 @@ export class PriceDataContainer {
         this.initialCandles = []
         this.candlesData = []
         this.currentCandleIndex = 0
-        this.chartDataId = 0;
     }
 
     async initialiseItSelfWithData(dataPath) {
@@ -14,8 +13,6 @@ export class PriceDataContainer {
 
         this.initialCandles = candleStickData['values'].splice(0, 25)
         this.candlesData = candleStickData
-
-        this.chartDataId = candleStickData['id']
     }
 
     getNextCandle() {

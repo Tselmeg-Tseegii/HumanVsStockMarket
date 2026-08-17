@@ -26,7 +26,7 @@ export const SURVEY_COMPLETE = 'survey is completed'
 export const SAVED_SURVEY_KEY = 'survey_key'
 
 export const TUTORIAL_START_TEXT = 'Welcome to the tutorial! This is a quick practice round using the real game mechanics.'
-export const GAME_START_TEXT = 'This is the real deal. You only get one shot, so make it count!'
+export const GAME_START_TEXT = 'This is not the tutorial and your actions will be recorded'
 export const TUTORIAL_END_TEXT = 'That\'s it for the guide! You have a minute left to practice your controls before the real game begins.'
 
 export const PAUSE_GAME = 'pause the game'

@@ -298,7 +298,7 @@ async function getChartDataFromTwelveData(startDate, endDate) {
     const startingDate = startDate.toISOString().split('.')[0]
     const endingDate = endDate.toISOString().split('.')[0]
     
-    const interval = '5min'
+    const interval = '10min'
     const order = 'asc'
     const apiKey = process.env.TWELVEDATA_MY_API_KEY
     

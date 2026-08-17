@@ -1,7 +1,7 @@
 {
 "crons": [
   {
-    "path": "/createNew",
+    "path": "/createDailyChart",
     "schedule": "0 19 * * *"
   }
 ],
@@ -19,7 +19,7 @@
     "destination": "/server.js" 
   },
   { 
-    "source": "/createNew", 
+    "source": "/createDailyChart", 
     "destination": "/server.js" 
   },
   { 

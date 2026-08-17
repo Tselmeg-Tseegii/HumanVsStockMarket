@@ -67,7 +67,7 @@ app.get('/currentChartData', async (req, res) => {
         
         const result = await dbPool.query(query, values);
 
-        console.log(result)
+        console.log(result.rows[0].currentChartData)
 
         chartDataSchema.parse(result.rows[0].currentChartData)
 

@@ -48,8 +48,8 @@ async function ending() {
     const currentDataId = localStorage.getItem(CURR_PLAYING_DATA_ID)
 
     const dataSavedStatus = localStorage.getItem(DATA_SAVED_DB_STATUS_KEY)
-    if (dataSavedStatus !== DATA_SAVED_DB_SUCCESSFULLY_ADDED && tradeHistoryData !== null) {
-        if (lastChartId === null || currentDataId !== lastChartId) {
+    if (tradeHistoryData !== null) {
+        if (dataSavedStatus !== DATA_SAVED_DB_SUCCESSFULLY_ADDED || lastChartId === null || currentDataId !== lastChartId) {
             try {
                 await saveData(tradeHistoryData, currentDataId)
             } catch (error) {
